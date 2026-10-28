@@ -1,58 +1,120 @@
-s = 's = %r\nprint(s %% s)'
-print(s % s)
-import os
-import chromadb
-from chromadb.utils import embedding_functions
+import random
 
-# 1. Initialize the Chroma Client (Persistent Storage)
-chroma_client = chromadb.PersistentClient(path="./chroma_code_db")
+class Card:
+    def __init__(self, name, card_type, shard_cost, strength=0, chroma_gain=0, achrom_drain=0):
+        self.name = name
+        self.card_type = card_type       # 'Character', 'Location', 'Object', 'Action'
+        self.shard_cost = shard_cost     # Shards spent to deploy
+        self.strength = strength         # Combat power
+        self.chroma_gain = chroma_gain   # Shards gained at turn end
+        self.achrom_drain = achrom_drain # Shards drained from enemy at turn end
 
-# 2. Use a standard embedding function (Default or OpenAI)
-# For OpenAI, use: embedding_functions.OpenAIEmbeddingFunction(api_key="YOUR_KEY")
-sentence_transformer_ef = embedding_functions.DefaultEmbeddingFunction()
+class Player:
+    def __init__(self, name, deck):
+        self.name = name
+        self.shards = 10                 # Both players start at 10 Shards
+        self.deck = deck
+        random.shuffle(self.deck)
+        self.hand = [self.deck.pop() for _ in range(4)] # Initial draw
+        self.canvas = []                 # Active playing field
+        self.dregs = []                  # Discard pile
 
-# 3. Create or get the collection for your codebase
-collection = chroma_client.get_or_create_collection(
-    name="my_codebase", 
-    embedding_function=sentence_transformer_ef
-)
+    def play_card(self, card_name, target_enemy=None):
+        card = next((c for c in self.hand if c.name.lower() == card_name.lower()), None)
+        if not card:
+            print(f"❌ {card_name} is not in your hand.")
+            return False
+        
+        if self.shards < card.shard_cost:
+            print(f"❌ Not enough shards! Needs {card.shard_cost}, you have {self.shards}.")
+            return False
 
-# 4. Helper to ingest code snippets with metadata
-def add_code_to_chroma(file_path: str, snippet_id: str, code_content: str, line_start: int):
-    collection.add(
-        documents=[code_content],
-        metadatas=[{"file_path": file_path, "line_start": line_start}],
-        ids=[snippet_id]
-    )
-    print(f"Ingested {snippet_id} from {file_path}")
+        self.shards -= card.shard_cost
+        self.hand.remove(card)
+        
+        if card.card_type == 'Action':
+            print(f"✨ {self.name} casts Action: {card.name}!")
+            if card.achrom_drain > 0 and target_enemy:
+                drain = min(target_enemy.shards, card.achrom_drain)
+                target_enemy.shards -= drain
+                self.shards += drain
+                print(f"🩸 Stole {drain} shards from {target_enemy.name}!")
+            self.dregs.append(card)
+        else:
+            print(f"🃏 Deployed {card.card_type}: {card.name} to the Canvas.")
+            self.canvas.append(card)
+        return True
 
-# Example Ingestion
-sample_code = """
-def calculate_fibonacci(n):
-    if n <= 0:
-        return 0
-    elif n == 1:
-        return 1
-    return calculate_fibonacci(n-1) + calculate_fibonacci(n-2)
-"""
-add_code_to_chroma(
-    file_path="math_utils.py", 
-    snippet_id="fib_001", 
-    code_content=sample_code, 
-    line_start=1
-)
+    def resolve_canvas_phase(self, enemy):
+        """End of turn shard modification based on Canvas cards"""
+        for card in self.canvas:
+            if card.chroma_gain > 0:
+                self.shards += card.chroma_gain
+                print(f"☀️ {card.name} generated +{card.chroma_gain} Chroma Shards for {self.name}.")
+            if card.achrom_drain > 0:
+                drain = min(enemy.shards, card.achrom_drain)
+                enemy.shards -= drain
+                self.shards += drain
+                print(f"🔮 {card.name} drained {drain} Achrom Shards from {enemy.name}.")
 
-# 5. Query the codebase using semantic natural language
-def query_codebase(user_query: str, num_results: int = 1):
-    results = collection.query(
-        query_texts=[user_query],
-        n_results=num_results
-    )
-    return results
+    def draw_card(self):
+        if self.deck:
+            card = self.deck.pop()
+            self.hand.append(card)
+            print(f"📥 {self.name} drew a card.")
+        else:
+            print(f"⚠️ {self.name}'s Palette (deck) is empty!")
 
-# Example Query
-search_result = query_codebase("Find the function that computes a recursive sequence")
-print("\n--- Search Results ---")
-for doc, metadata in zip(search_result['documents'][0], search_result['metadatas'][0]):
-    print(f"Found in {metadata['file_path']} (Line {metadata['line_start']}):")
-    print(doc)
+    def show_status(self):
+        print(f"\n=== {self.name} | Shards: {self.shards} ===")
+        print(f"Canvas: {[c.name for c in self.canvas] if self.canvas else '[Empty]'}")
+        print(f"Hand: {[c.name for c in self.hand]}")
+
+# --- Game Setup & Card Definition Pool ---
+def create_sample_deck():
+    return [
+        Card("Curdle Hill Zealot", "Character", shard_cost=2, strength=2, chroma_gain=1),
+        Card("Draco Temple Guard", "Character", shard_cost=3, strength=4, chroma_gain=0, achrom_drain=1),
+        Card("Flutterby Pixie", "Character", shard_cost=1, strength=1, chroma_gain=2),
+        Card("Achromic Surge", "Action", shard_cost=2, achrom_drain=3),
+        Card("Wishwell Nexus", "Location", shard_cost=4, chroma_gain=3),
+        Card("Scepter of Achrom", "Object", shard_cost=2, achrom_drain=1)
+    ]
+
+# --- Quick Simulation Loop ---
+player1 = Player("Chroma Nexus", create_sample_deck() + create_sample_deck())
+player2 = Player("Achrom Zealot", create_sample_deck() + create_sample_deck())
+
+print("⚔️ ARCHROMA ENGINES ONLINE ⚔️")
+turn = 1
+
+while player1.shards > 0 and player2.shards > 0 and player1.shards < 30 and player2.shards < 30:
+    print(f"\n--- TURN {turn} ---")
+    current_player = player1 if turn % 2 != 0 else player2
+    opponent = player2 if turn % 2 != 0 else player1
+    
+    current_player.show_status()
+    
+    # Simple automated AI action choice: Play the first affordable card
+    playable_cards = [c for c in current_player.hand if c.shard_cost <= current_player.shards]
+    if playable_cards:
+        chosen_card = playable_cards[0]
+        current_player.play_card(chosen_card.name, target_enemy=opponent)
+    else:
+        print(f"💤 {current_player.name} passes card deployment.")
+        
+    # End of turn phase
+    current_player.resolve_canvas_phase(opponent)
+    current_player.draw_card()
+    
+    # Check Win Conditions
+    if current_player.shards >= 30 or opponent.shards <= 0:
+        break
+        
+    turn += 1
+
+print("\n🏆 GAME OVER 🏆")
+if player1.shards >= 30 or player2.shards <= 0:
+    print(f"🎉 Player 1 ({player1.name}) Wins!")
+elif player2.shards >= 30 or player1.shards <= 0:
+    print(f"🎉 Player 2 ({player2.name}) Wins!")
