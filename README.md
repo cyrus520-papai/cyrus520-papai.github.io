@@ -1,518 +1,194 @@
+achroma-clone/
+├── app/
+│   ├── layout.tsx       # Root layout, fonts, Global Navigation
+│   ├── page.tsx         # Rich landing page with hero banners & news
+│   ├── cards/
+│   │   └── page.tsx     # Card database with interactive state filters
+│   └── lore/
+│       └── page.tsx     # Narrative lore explorer UI
+├── data/
+│   └── cards.json       # Structured card dataset matrix
+└── package.json         # Build pipeline dependencies
+```
 
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Achroma App</title>
-  <style>
-    :root {
-      --achroma: #808080;
-      --achroma-1: #717171;
-      --achroma-2: #7a7a7a;
-      --achroma-3: #8b8b8b;
-      --achroma-4: #a0a0a0;
-      --panel: rgba(255,255,255,0.08);
-      --panel-strong: rgba(255,255,255,0.13);
-      --line: rgba(0,0,0,0.18);
-      --text: rgba(255,255,255,0.96);
-      --muted: rgba(255,255,255,0.75);
-      --shadow: rgba(0,0,0,0.26);
-    }
+## How to Deploy
+1. Extract the code files into your local directory.
+2. Run `npm install` to install Next.js, React, and Tailwind.
+3. Run `npm run dev` to launch the local staging server.
 
-    * { box-sizing: border-box; }
 
-    html, body {
-      margin: 0;
-      width: 100%;
-      height: 100%;
-      background: #000;
-      color: var(--text);
-      font-family: Arial, Helvetica, sans-serif;
-      overflow: hidden;
-    }
+=== FILE: app/layout.tsx ===
+import React from 'react';
+import './globals.css'; // Assume tailwind directives are here
 
-    body {
-      display: grid;
-      place-items: center;
-    }
+export const metadata = {
+  title: 'Achroma Realm | TCG Database & Lore',
+  description: 'Explore the card universe, dive into deep game mechanics, and unlock faction archives.',
+};
 
-    .window {
-      width: min(1000px, 92vw);
-      height: min(620px, 82vh);
-      background: var(--achroma);
-      border: 1px solid rgba(0,0,0,0.25);
-      box-shadow: 0 28px 60px var(--shadow), inset 0 1px 0 rgba(255,255,255,0.12);
-      position: relative;
-      overflow: hidden;
-    }
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en">
+      <body className="bg-slate-950 text-slate-100 min-h-screen font-sans flex flex-col justify-between">
+        <header className="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-50 px-6 py-4">
+          <div className="max-w-7xl mx-auto flex justify-between items-center">
+            <a href="/" className="text-2xl font-black tracking-widest text-indigo-400 hover:text-indigo-300">
+              ACHROMA<span className="text-white">REALM</span>
+            </a>
+            <nav className="flex space-x-6 text-sm font-medium tracking-wide">
+              <a href="/cards" className="hover:text-indigo-400 transition-colors">Card Database</a>
+              <a href="/lore" className="hover:text-indigo-400 transition-colors">Lore Archives</a>
+              <a href="#" className="hover:text-indigo-400 transition-colors">How to Play</a>
+            </nav>
+          </div>
+        </header>
 
-    .window::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0) 18%, rgba(0,0,0,0.04) 100%);
-      pointer-events: none;
-    }
+        <main className="flex-grow">{children}</main>
 
-    .titlebar {
-      position: relative;
-      z-index: 1;
-      height: 58px;
-      background: var(--achroma-2);
-      border-bottom: 1px solid var(--line);
-      display: flex;
-      align-items: center;
-      padding: 0 18px;
-    }
+        <footer className="border-t border-slate-900 bg-black/40 text-center py-6 text-xs text-slate-500">
+          &copy; {new Date().getFullYear()} Achroma Realm. Independent developer concept framework.
+        </footer>
+      </body>
+    </html>
+  );
+}
 
-    .traffic {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      width: 110px;
-      z-index: 2;
-    }
 
-    .dot {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      border: 1px solid rgba(0,0,0,0.15);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.2);
-    }
+=== FILE: app/page.tsx ===
+import React from 'react';
 
-    .dot:nth-child(1) { background: #dbdbdb; }
-    .dot:nth-child(2) { background: #d2d2d2; }
-    .dot:nth-child(3) { background: #c8c8c8; }
-
-    .tab-title {
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      text-transform: uppercase;
-      letter-spacing: 0.14em;
-      font-size: 14px;
-      font-weight: 700;
-      color: rgba(255,255,255,0.96);
-    }
-
-    .toolbar {
-      position: relative;
-      z-index: 1;
-      height: 60px;
-      background: var(--achroma-3);
-      border-bottom: 1px solid var(--line);
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 0 16px;
-    }
-
-    .nav-btn {
-      width: 26px;
-      height: 26px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(0,0,0,0.12);
-      position: relative;
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.12);
-    }
-
-    .nav-btn::before {
-      content: "";
-      position: absolute;
-      width: 8px;
-      height: 8px;
-      border: 2px solid rgba(255,255,255,0.9);
-      border-top: 0;
-      border-right: 0;
-      left: 10px;
-      top: 8px;
-      transform: rotate(45deg);
-    }
-
-    .nav-btn.forward { transform: rotate(180deg); }
-
-    .address {
-      flex: 1;
-      height: 34px;
-      border-radius: 18px;
-      background: rgba(255,255,255,0.11);
-      border: 1px solid rgba(0,0,0,0.14);
-      display: flex;
-      align-items: center;
-      padding: 0 16px;
-      color: var(--text);
-      font-size: 13px;
-      letter-spacing: 0.04em;
-    }
-
-    .lock {
-      width: 10px;
-      height: 10px;
-      border: 2px solid rgba(255,255,255,0.82);
-      border-radius: 3px;
-      margin-right: 10px;
-      position: relative;
-      flex-shrink: 0;
-    }
-
-    .lock::before {
-      content: "";
-      position: absolute;
-      width: 9px;
-      height: 7px;
-      border: 2px solid rgba(255,255,255,0.82);
-      border-bottom: 0;
-      border-radius: 9px 9px 0 0;
-      left: -2px;
-      top: -9px;
-    }
-
-    .app {
-      position: relative;
-      z-index: 1;
-      height: calc(100% - 118px);
-      background: linear-gradient(180deg, #8b8b8b 0%, #7c7c7c 100%);
-      display: flex;
-    }
-
-    .sidebar {
-      width: 220px;
-      background: rgba(255,255,255,0.04);
-      border-right: 1px solid var(--line);
-      padding: 16px 12px 8px;
-    }
-
-    .brand {
-      height: 42px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      letter-spacing: 0.14em;
-      font-size: 12px;
-      font-weight: 700;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.96);
-    }
-
-    .nav-list {
-      display: grid;
-      gap: 8px;
-      margin-top: 10px;
-    }
-
-    .nav-item {
-      height: 34px;
-      border-radius: 10px;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(0,0,0,0.08);
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      padding: 0 12px;
-      letter-spacing: 0.09em;
-      text-transform: uppercase;
-      font-size: 10px;
-      color: rgba(255,255,255,0.85);
-    }
-
-    .nav-item.active {
-      background: rgba(255,255,255,0.12);
-      color: rgba(255,255,255,1);
-    }
-
-    .main {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      padding: 18px 18px 12px;
-    }
-
-    .hero {
-      height: 130px;
-      border-radius: 16px;
-      background:
-        linear-gradient(135deg, rgba(255,255,255,0.16), rgba(255,255,255,0.04)),
-        linear-gradient(120deg, rgba(255,255,255,0.08), transparent 40%);
-      border: 1px solid rgba(0,0,0,0.14);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(90deg, rgba(255,255,255,0.08), transparent 46%, rgba(0,0,0,0.06));
-    }
-
-    .hero-row {
-      position: absolute;
-      left: 18px;
-      right: 18px;
-      bottom: 16px;
-      display: flex;
-      align-items: end;
-      gap: 12px;
-    }
-
-    .hero-bar {
-      border-radius: 8px;
-      background: rgba(255,255,255,0.15);
-      height: 14px;
-    }
-
-    .hero-bar:nth-child(1) { width: 42%; height: 18px; }
-    .hero-bar:nth-child(2) { width: 26%; }
-    .hero-bar:nth-child(3) { width: 16%; }
-
-    .section-head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 2px;
-      font-size: 10px;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.92);
-    }
-
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 12px;
-    }
-
-    .card {
-      height: 146px;
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(0,0,0,0.12);
-      border-radius: 14px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .card::before {
-      content: "";
-      position: absolute;
-      left: 12px;
-      right: 12px;
-      top: 12px;
-      height: 72px;
-      border-radius: 10px;
-      background: rgba(255,255,255,0.12);
-      border: 1px solid rgba(0,0,0,0.08);
-    }
-
-    .card::after {
-      content: "";
-      position: absolute;
-      left: 12px;
-      right: 28px;
-      bottom: 14px;
-      height: 12px;
-      border-radius: 8px;
-      background: rgba(255,255,255,0.12);
-    }
-
-    .mini-dot {
-      position: absolute;
-      right: 12px;
-      top: 12px;
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.18);
-      border: 1px solid rgba(0,0,0,0.12);
-    }
-
-    .bottom-grid {
-      display: grid;
-      grid-template-columns: 1.6fr 1fr;
-      gap: 14px;
-      flex: 1;
-      min-height: 0;
-    }
-
-    .panel {
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(0,0,0,0.12);
-      border-radius: 14px;
-      padding: 12px;
-    }
-
-    .chat-list {
-      display: grid;
-      gap: 8px;
-      margin-top: 10px;
-    }
-
-    .chat-line {
-      height: 28px;
-      border-radius: 8px;
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(0,0,0,0.08);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .chat-line::before {
-      content: "";
-      position: absolute;
-      left: 10px;
-      top: 9px;
-      width: 52%;
-      height: 9px;
-      border-radius: 6px;
-      background: rgba(255,255,255,0.12);
-    }
-
-    .voice-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 8px;
-      margin-top: 10px;
-    }
-
-    .voice-pill {
-      height: 42px;
-      border-radius: 10px;
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(0,0,0,0.08);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .voice-pill::before {
-      content: "";
-      position: absolute;
-      left: 10px;
-      top: 11px;
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.12);
-    }
-
-    .voice-pill::after {
-      content: "";
-      position: absolute;
-      left: 38px;
-      top: 15px;
-      width: 46%;
-      height: 10px;
-      border-radius: 6px;
-      background: rgba(255,255,255,0.12);
-    }
-
-    @media (max-width: 860px) {
-      .sidebar { display: none; }
-      .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .bottom-grid { grid-template-columns: 1fr; }
-    }
-  </style>
-</head>
-<body>
-  <div class="window">
-    <div class="titlebar">
-      <div class="traffic">
-        <div class="dot"></div>
-        <div class="dot"></div>
-        <div class="dot"></div>
+export default function HomePage() {
+  return (
+    <div className="relative isolate overflow-hidden">
+      {/* Hero Accent Background */}
+      <div className="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80">
+        <div className="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-indigo-500 to-purple-600 opacity-20 sm:left-[calc(50%-30rem)] sm:w-[72rem]"></div>
       </div>
-      <div class="tab-title">ACHROMA</div>
-    </div>
 
-    <div class="toolbar">
-      <div class="nav-btn"></div>
-      <div class="nav-btn forward"></div>
-      <div class="address">
-        <span class="lock"></span>
-        achroma.example
+      <div className="max-w-5xl mx-auto px-6 py-24 text-center">
+        <span className="inline-flex items-center rounded-full bg-indigo-500/10 px-3 py-1 text-xs font-medium text-indigo-400 ring-1 ring-inset ring-indigo-500/20 mb-4">
+          New Expansion Out Now
+        </span>
+        <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-white mb-6">
+          Unleash the Power of <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400">Chromas</span>
+        </h1>
+        <p className="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto mb-10 leading-relaxed">
+          Dive into a stunning tactical card adventure. Track stats, craft your ultimate deck, and explore the shifting timelines of the Achroma universe.
+        </p>
+        <div className="flex justify-center gap-4">
+          <a href="/cards" className="rounded-md bg-indigo-600 px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 transition-all">
+            Browse Card Codex
+          </a>
+          <a href="/lore" className="rounded-md border border-slate-700 bg-slate-900/50 px-6 py-3 text-sm font-semibold hover:bg-slate-800 transition-all">
+            Read Chronicles
+          </a>
+        </div>
       </div>
     </div>
+  );
+}
 
-    <div class="app">
-      <aside class="sidebar">
-        <div class="brand">Portal</div>
-        <div class="nav-list">
-          <div class="nav-item active">Home</div>
-          <div class="nav-item">Games</div>
-          <div class="nav-item">Movies</div>
-          <div class="nav-item">Chat</div>
-          <div class="nav-item">Voice</div>
-          <div class="nav-item">Friends</div>
+
+=== FILE: data/cards.json ===
+[
+  {
+    "id": "1",
+    "name": "Chroma Dragon",
+    "faction": "Magus",
+    "type": "Character",
+    "rarity": "Legendary",
+    "cost": 5,
+    "text": "When deployed, steal 2 Shards from your opponent.",
+    "image": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=400&q=80"
+  },
+  {
+    "id": "2",
+    "name": "Cursed Relic",
+    "faction": "Occult",
+    "type": "Object",
+    "rarity": "Rare",
+    "cost": 2,
+    "text": "All characters lose 1 Health at the start of each turn.",
+    "image": "https://images.unsplash.com/photo-1519074069444-1ba4aaf7207c?w=400&q=80"
+  },
+  {
+    "id": "3",
+    "name": "Paladin Shield",
+    "faction": "Spiritual",
+    "type": "Action",
+    "rarity": "Common",
+    "cost": 3,
+    "text": "Give targeted ally +3 Armor until the next round.",
+    "image": "https://images.unsplash.com/photo-1599733589046-10c005739ef9?w=400&q=80"
+  }
+]
+
+=== FILE: app/cards/page.tsx ===
+'use client';
+import React, { useState } from 'react';
+import cardData from '../../data/cards.json';
+
+export default function CardsDatabasePage() {
+  const [factionFilter, setFactionFilter] = useState('All');
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const filteredCards = cardData.filter(card => {
+    const matchesFaction = factionFilter === 'All' || card.faction === factionFilter;
+    const matchesSearch = card.name.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesFaction && matchesSearch;
+  });
+
+  return (
+    <div className="max-w-7xl mx-auto px-6 py-12">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 pb-8 border-b border-slate-800 mb-10">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight text-white">Card Codex</h1>
+          <p className="text-slate-400 text-sm mt-1">Filter, examine, and research card attributes in real-time.</p>
         </div>
-      </aside>
-
-      <main class="main">
-        <div class="hero">
-          <div class="hero-row">
-            <div class="hero-bar"></div>
-            <div class="hero-bar"></div>
-            <div class="hero-bar"></div>
-          </div>
+        <div className="flex flex-wrap gap-3">
+          <input 
+            type="text" 
+            placeholder="Search cards..." 
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="bg-slate-900 border border-slate-700 rounded-md px-4 py-2 text-sm focus:outline-none focus:border-indigo-500 w-64"
+          />
+          <select 
+            value={factionFilter} 
+            onChange={(e) => setFactionFilter(e.target.value)}
+            className="bg-slate-900 border border-slate-700 rounded-md px-4 py-2 text-sm focus:outline-none focus:border-indigo-500"
+          >
+            <option value="All">All Factions</option>
+            <option value="Magus">Magus</option>
+            <option value="Occult">Occult</option>
+            <option value="Spiritual">Spiritual</option>
+          </select>
         </div>
+      </div>
 
-        <div class="section">
-          <div class="section-head">
-            <span>Featured Games</span>
-            <span>More</span>
-          </div>
-          <div class="cards">
-            <div class="card"><div class="mini-dot"></div></div>
-            <div class="card"><div class="mini-dot"></div></div>
-            <div class="card"><div class="mini-dot"></div></div>
-            <div class="card"><div class="mini-dot"></div></div>
-          </div>
-        </div>
-
-        <div class="section">
-          <div class="section-head">
-            <span>Trending Movies</span>
-            <span>More</span>
-          </div>
-          <div class="cards">
-            <div class="card"><div class="mini-dot"></div></div>
-            <div class="card"><div class="mini-dot"></div></div>
-            <div class="card"><div class="mini-dot"></div></div>
-            <div class="card"><div class="mini-dot"></div></div>
-          </div>
-        </div>
-
-        <div class="bottom-grid">
-          <div class="panel">
-            <div class="section-head">
-              <span>Live Chat</span>
-              <span>Open</span>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {filteredCards.map(card => (
+          <div key={card.id} className="group relative rounded-xl border border-slate-800 bg-slate-900/50 p-4 hover:border-slate-700 transition-all flex flex-col justify-between hover:shadow-xl overflow-hidden">
+            <div>
+              <div className="aspect-square w-full rounded-lg overflow-hidden bg-slate-800 mb-4 relative">
+                <img src={card.image} alt={card.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"/>
+                <div className="absolute top-2 right-2 bg-indigo-600 text-white font-bold text-xs px-2 py-1 rounded-full shadow-md">
+                  Cost: {card.cost}
+                </div>
+              </div>
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-xs uppercase tracking-wider text-indigo-400 font-semibold">{card.faction}</span>
+                <span className="text-xs text-slate-500">{card.type}</span>
+              </div>
+              <h3 className="font-bold text-lg text-white mb-2 group-hover:text-indigo-400 transition-colors">{card.name}</h3>
+              <p className="text-sm text-slate-400 leading-relaxed bg-slate-950/60 p-2 rounded border border-slate-800/40">{card.text}</p>
             </div>
-
-            <div class="chat-list">
-              <div class="chat-line"></div>
-              <div class="chat-line"></div>
-              <div class="chat-line"></div>
-              <div class="chat-line"></div>
+            <div className="mt-4 pt-3 border-t border-slate-800/60 text-right">
+              <span className="text-xs font-medium text-slate-500 px-2 py-0.5 rounded bg-slate-800/40 border border-slate-700/30">{card.rarity}</span>
             </div>
           </div>
-
-          <div class="panel">
-            <div class="section-head">
-              <span>Voice Chat</span>
-              <span>Live</span>
-            </div>
-
-            <div class="voice-grid">
-              <div class="voice-pill"></div>
-              <div class="voice-pill"></div>
-              <div class="voice-pill"></div>
-              <div class="voice-pill"></div>
-            </div>
-          </div>
-        </div>
-      </main>
+        ))}
+      </div>
     </div>
-  </div>
-</body>
-</html>
+  );
+}
