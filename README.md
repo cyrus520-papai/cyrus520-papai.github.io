@@ -1,30 +1,5 @@
-achroma-clone/
-├── app/
-│   ├── layout.tsx       # Root layout, fonts, Global Navigation
-│   ├── page.tsx         # Rich landing page with hero banners & news
-│   ├── cards/
-│   │   └── page.tsx     # Card database with interactive state filters
-│   └── lore/
-│       └── page.tsx     # Narrative lore explorer UI
-├── data/
-│   └── cards.json       # Structured card dataset matrix
-└── package.json         # Build pipeline dependencies
-```
-
-## How to Deploy
-1. Extract the code files into your local directory.
-2. Run `npm install` to install Next.js, React, and Tailwind.
-3. Run `npm run dev` to launch the local staging server.
 
 
-=== FILE: app/layout.tsx ===
-import React from 'react';
-import './globals.css'; // Assume tailwind directives are here
-
-export const metadata = {
-  title: 'Achroma Realm | TCG Database & Lore',
-  description: 'Explore the card universe, dive into deep game mechanics, and unlock faction archives.',
-};
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
