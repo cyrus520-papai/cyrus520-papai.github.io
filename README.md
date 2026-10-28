@@ -1,169 +1,233 @@
+// ==========================================
+// 1. DATA LAYER: data/cards.json
+// ==========================================
+/*
+[
+  {
+    "id": "1",
+    "name": "Achromax, The Unraveler",
+    "faction": "Chroma",
+    "type": "Character",
+    "cost": 5,
+    "rarity": "Legendary",
+    "rules": "When Achromax enters the battlefield, drain 2 Shards from your opponent.",
+    "imageUrl": "https://unsplash.com"
+  },
+  {
+    "id": "2",
+    "name": "Shard Burst",
+    "faction": "Achros",
+    "type": "Action",
+    "cost": 2,
+    "rarity": "Rare",
+    "rules": "Gain 3 temporary Shards this turn.",
+    "imageUrl": "https://unsplash.com"
+  },
+  {
+    "id": "3",
+    "name": "Crystalline Golem",
+    "faction": "Chroma",
+    "type": "Character",
+    "cost": 3,
+    "rarity": "Common",
+    "rules": "Prevent the first 1 damage dealt to this character each turn.",
+    "imageUrl": "https://unsplash.com"
+  }
+]
+*/
 
+// ==========================================
+// 2. MAIN LAYOUT: app/layout.tsx
+// ==========================================
+import React from 'react';
+import './globals.css'; // Contains standard Tailwind directives
 
+export const metadata = {
+  title: 'Chroma Nexus | Card Database',
+  description: 'Explore the cards, lore, and strategies of the realm.',
+};
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <html lang="en">
-      <body className="bg-slate-950 text-slate-100 min-h-screen font-sans flex flex-col justify-between">
-        <header className="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-50 px-6 py-4">
-          <div className="max-w-7xl mx-auto flex justify-between items-center">
-            <a href="/" className="text-2xl font-black tracking-widest text-indigo-400 hover:text-indigo-300">
-              ACHROMA<span className="text-white">REALM</span>
-            </a>
-            <nav className="flex space-x-6 text-sm font-medium tracking-wide">
-              <a href="/cards" className="hover:text-indigo-400 transition-colors">Card Database</a>
-              <a href="/lore" className="hover:text-indigo-400 transition-colors">Lore Archives</a>
-              <a href="#" className="hover:text-indigo-400 transition-colors">How to Play</a>
-            </nav>
+    <html lang="en" className="dark">
+      <body className="bg-slate-950 text-slate-100 min-h-screen font-sans selection:bg-purple-600 selection:text-white">
+        {/* Global Navigation Header */}
+        <header className="sticky top-0 z-50 bg-slate-900/80 backdrop-blur-md border-b border-slate-800 px-6 py-4 flex justify-between items-center">
+          <div className="flex items-center space-x-3">
+            <div className="w-8 h-8 rounded-md bg-gradient-to-tr from-purple-600 to-indigo-500 animate-pulse" />
+            <span className="text-xl font-bold tracking-wider uppercase bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">
+              CHROMA NEXUS
+            </span>
           </div>
+          <nav className="hidden md:flex space-x-8 text-sm font-medium tracking-wide">
+            <a href="/" className="hover:text-purple-400 transition-colors">Home</a>
+            <a href="/cards" className="text-purple-400 border-b-2 border-purple-500 pb-1">Card Database</a>
+            <a href="#" className="hover:text-purple-400 transition-colors">Lore Chronicles</a>
+            <a href="#" className="hover:text-purple-400 transition-colors">Decks</a>
+          </nav>
+          <button className="bg-purple-600 hover:bg-purple-700 text-white font-semibold text-xs uppercase px-5 py-2.5 rounded shadow-lg shadow-purple-900/30 transition-all active:scale-95">
+            Launch App
+          </button>
         </header>
 
-        <main className="flex-grow">{children}</main>
+        {/* Dynamic View Wrapper */}
+        <main>{children}</main>
 
-        <footer className="border-t border-slate-900 bg-black/40 text-center py-6 text-xs text-slate-500">
-          &copy; {new Date().getFullYear()} Achroma Realm. Independent developer concept framework.
+        {/* Global Footer */}
+        <footer className="border-t border-slate-900 bg-slate-950 text-center py-8 text-sm text-slate-500">
+          <p>© {new Date().getFullYear()} Chroma Nexus. Inspired by tactical TCG universes.</p>
         </footer>
       </body>
     </html>
   );
 }
 
-
-=== FILE: app/page.tsx ===
-import React from 'react';
-
-export default function HomePage() {
-  return (
-    <div className="relative isolate overflow-hidden">
-      {/* Hero Accent Background */}
-      <div className="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80">
-        <div className="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-indigo-500 to-purple-600 opacity-20 sm:left-[calc(50%-30rem)] sm:w-[72rem]"></div>
-      </div>
-
-      <div className="max-w-5xl mx-auto px-6 py-24 text-center">
-        <span className="inline-flex items-center rounded-full bg-indigo-500/10 px-3 py-1 text-xs font-medium text-indigo-400 ring-1 ring-inset ring-indigo-500/20 mb-4">
-          New Expansion Out Now
-        </span>
-        <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-white mb-6">
-          Unleash the Power of <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400">Chromas</span>
-        </h1>
-        <p className="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto mb-10 leading-relaxed">
-          Dive into a stunning tactical card adventure. Track stats, craft your ultimate deck, and explore the shifting timelines of the Achroma universe.
-        </p>
-        <div className="flex justify-center gap-4">
-          <a href="/cards" className="rounded-md bg-indigo-600 px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 transition-all">
-            Browse Card Codex
-          </a>
-          <a href="/lore" className="rounded-md border border-slate-700 bg-slate-900/50 px-6 py-3 text-sm font-semibold hover:bg-slate-800 transition-all">
-            Read Chronicles
-          </a>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-
-=== FILE: data/cards.json ===
-[
-  {
-    "id": "1",
-    "name": "Chroma Dragon",
-    "faction": "Magus",
-    "type": "Character",
-    "rarity": "Legendary",
-    "cost": 5,
-    "text": "When deployed, steal 2 Shards from your opponent.",
-    "image": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=400&q=80"
-  },
-  {
-    "id": "2",
-    "name": "Cursed Relic",
-    "faction": "Occult",
-    "type": "Object",
-    "rarity": "Rare",
-    "cost": 2,
-    "text": "All characters lose 1 Health at the start of each turn.",
-    "image": "https://images.unsplash.com/photo-1519074069444-1ba4aaf7207c?w=400&q=80"
-  },
-  {
-    "id": "3",
-    "name": "Paladin Shield",
-    "faction": "Spiritual",
-    "type": "Action",
-    "rarity": "Common",
-    "cost": 3,
-    "text": "Give targeted ally +3 Armor until the next round.",
-    "image": "https://images.unsplash.com/photo-1599733589046-10c005739ef9?w=400&q=80"
-  }
-]
-
-=== FILE: app/cards/page.tsx ===
+// ==========================================
+// 3. INTERACTIVE CARD PORTAL: app/cards/page.tsx
+// ==========================================
 'use client';
-import React, { useState } from 'react';
-import cardData from '../../data/cards.json';
 
-export default function CardsDatabasePage() {
-  const [factionFilter, setFactionFilter] = useState('All');
-  const [searchQuery, setSearchQuery] = useState('');
+import { useState, useMemo } from 'react';
 
-  const filteredCards = cardData.filter(card => {
-    const matchesFaction = factionFilter === 'All' || card.faction === factionFilter;
-    const matchesSearch = card.name.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesFaction && matchesSearch;
-  });
+// local placeholder matching data/cards.json structural parameters
+const sampleCards = [
+  {
+    id: "1",
+    name: "Achromax, The Unraveler",
+    faction: "Chroma",
+    type: "Character",
+    cost: 5,
+    rarity: "Legendary",
+    rules: "When Achromax enters the battlefield, drain 2 Shards from your opponent.",
+    imageUrl: "https://unsplash.com"
+  },
+  {
+    id: "2",
+    name: "Shard Burst",
+    faction: "Achros",
+    type: "Action",
+    cost: 2,
+    rarity: "Rare",
+    rules: "Gain 3 temporary Shards this turn.",
+    imageUrl: "https://unsplash.com"
+  },
+  {
+    id: "3",
+    name: "Crystalline Golem",
+    faction: "Chroma",
+    type: "Character",
+    cost: 3,
+    rarity: "Common",
+    rules: "Prevent the first 1 damage dealt to this character each turn.",
+    imageUrl: "https://unsplash.com"
+  }
+];
+
+export default function CardDatabase() {
+  const [search, setSearch] = useState('');
+  const [selectedFaction, setSelectedFaction] = useState('All');
+
+  // Client-side execution filtering matrix
+  const filteredCards = useMemo(() => {
+    return sampleCards.filter((card) => {
+      const matchesSearch = card.name.toLowerCase().includes(search.toLowerCase()) ||
+                            card.rules.toLowerCase().includes(search.toLowerCase());
+      const matchesFaction = selectedFaction === 'All' || card.faction === selectedFaction;
+      return matchesSearch && matchesFaction;
+    });
+  }, [search, selectedFaction]);
 
   return (
-    <div className="max-w-7xl mx-auto px-6 py-12">
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 pb-8 border-b border-slate-800 mb-10">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight text-white">Card Codex</h1>
-          <p className="text-slate-400 text-sm mt-1">Filter, examine, and research card attributes in real-time.</p>
-        </div>
-        <div className="flex flex-wrap gap-3">
-          <input 
-            type="text" 
-            placeholder="Search cards..." 
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="bg-slate-900 border border-slate-700 rounded-md px-4 py-2 text-sm focus:outline-none focus:border-indigo-500 w-64"
-          />
-          <select 
-            value={factionFilter} 
-            onChange={(e) => setFactionFilter(e.target.value)}
-            className="bg-slate-900 border border-slate-700 rounded-md px-4 py-2 text-sm focus:outline-none focus:border-indigo-500"
-          >
-            <option value="All">All Factions</option>
-            <option value="Magus">Magus</option>
-            <option value="Occult">Occult</option>
-            <option value="Spiritual">Spiritual</option>
-          </select>
-        </div>
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+      {/* Dynamic Header Node */}
+      <div className="mb-10 text-center md:text-left">
+        <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl bg-gradient-to-r from-purple-400 to-indigo-300 bg-clip-text text-transparent">
+          Card Codex
+        </h1>
+        <p className="mt-2 text-slate-400 max-w-xl">
+          Query values, inspect gameplay rules, and filter down specific mechanics across entire regional card expansions instantly.
+        </p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {filteredCards.map(card => (
-          <div key={card.id} className="group relative rounded-xl border border-slate-800 bg-slate-900/50 p-4 hover:border-slate-700 transition-all flex flex-col justify-between hover:shadow-xl overflow-hidden">
-            <div>
-              <div className="aspect-square w-full rounded-lg overflow-hidden bg-slate-800 mb-4 relative">
-                <img src={card.image} alt={card.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"/>
-                <div className="absolute top-2 right-2 bg-indigo-600 text-white font-bold text-xs px-2 py-1 rounded-full shadow-md">
-                  Cost: {card.cost}
-                </div>
-              </div>
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-xs uppercase tracking-wider text-indigo-400 font-semibold">{card.faction}</span>
-                <span className="text-xs text-slate-500">{card.type}</span>
-              </div>
-              <h3 className="font-bold text-lg text-white mb-2 group-hover:text-indigo-400 transition-colors">{card.name}</h3>
-              <p className="text-sm text-slate-400 leading-relaxed bg-slate-950/60 p-2 rounded border border-slate-800/40">{card.text}</p>
-            </div>
-            <div className="mt-4 pt-3 border-t border-slate-800/60 text-right">
-              <span className="text-xs font-medium text-slate-500 px-2 py-0.5 rounded bg-slate-800/40 border border-slate-700/30">{card.rarity}</span>
+      {/* Control Filtering Layer */}
+      <div className="bg-slate-900 border border-slate-800 p-6 rounded-xl mb-8 flex flex-col md:flex-row gap-4 items-center justify-between">
+        <div className="w-full md:w-1/2">
+          <label htmlFor="search" className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Search Cards</label>
+          <input
+            id="search"
+            type="text"
+            placeholder="Search by card name, keyword or rules text..."
+            className="w-full bg-slate-950 border border-slate-700 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </div>
+
+        <div className="w-full md:w-auto flex flex-col sm:flex-row gap-2 self-end md:self-auto">
+          <div className="w-full">
+            <span className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Faction Alliance</span>
+            <div className="inline-flex rounded-lg p-1 bg-slate-950 border border-slate-800">
+              {['All', 'Chroma', 'Achros'].map((faction) => (
+                <button
+                  key={faction}
+                  onClick={() => setSelectedFaction(faction)}
+                  className={`px-4 py-1.5 rounded-md text-xs font-medium uppercase tracking-wider transition ${
+                    selectedFaction === faction
+                      ? 'bg-purple-600 text-white shadow'
+                      : 'text-slate-400 hover:text-white'
+                  }`}
+                >
+                  {faction}
+                </button>
+              ))}
             </div>
           </div>
-        ))}
+        </div>
       </div>
-    </div>
-  );
-}
+
+      {/* UI Result Matrix */}
+      {filteredCards.length === 0 ? (
+        <div className="text-center py-20 border border-dashed border-slate-800 rounded-xl bg-slate-900/30">
+          <p className="text-slate-400">No archival instances match your active layout filtering metrics.</p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {filteredCards.map((card) => (
+            <div
+              key={card.id}
+              className="group bg-slate-900 border border-slate-800/80 rounded-xl overflow-hidden hover:border-purple-500/50 shadow-xl transition-all hover:-translate-y-1 duration-300"
+            >
+              {/* Graphic Render Wrapper */}
+              <div className="relative aspect-[3/4] bg-slate-950 w-full overflow-hidden border-b border-slate-800">
+                <img
+                  src={card.imageUrl}
+                  alt={card.name}
+                  loading="lazy"
+                  className="object-cover w-full h-full transition duration-500 group-hover:scale-105 opacity-80 group-hover:opacity-100"
+                />
+                {/* Cost Badge Node */}
+                <div className="absolute top-3 right-3 w-8 h-8 rounded-full bg-slate-950/90 border border-purple-500 flex items-center justify-center font-bold text-sm text-purple-400 backdrop-blur-sm">
+                  {card.cost}
+                </div>
+                {/* Faction Subtag Overlay */}
+                <div className="absolute bottom-2 left-2 px-2 py-0.5 rounded bg-slate-900/90 text-[10px] font-bold tracking-widest uppercase border border-slate-700 backdrop-blur-sm">
+                  {card.faction}
+                </div>
+              </div>
+
+              {/* Text Meta Descriptions Container */}
+              <div className="p-4">
+                <div className="flex justify-between items-start gap-2 mb-1">
+                  <h3 className="font-bold text-base tracking-wide text-white group-hover:text-purple-300 transition-colors line-clamp-1">
+                    {card.name}
+                  </h3>
+                </div>
+                <div className="flex gap-2 mb-3 text-[11px] font-medium tracking-wide">
+                  <span className="text-slate-400">{card.type}</span>
+                  <span className="text-slate-600">•</span>
+                  <span className={`
+                    ${card.rarity === 'Legendary' ? 'text-amber-400' : ''}
