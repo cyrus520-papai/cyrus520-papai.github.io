@@ -3,20 +3,20 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Browser Mock</title>
+  <title>Exact Browser Mock</title>
   <style>
     :root{
       --bg:#000000;
-      --browser:#7a7a7a;
-      --browser2:#818181;
-      --browser3:#8b8b8b;
-      --windowtop:#818181;
+      --outer:#7a7a7a;
+      --outer-2:#7e7e7e;
+      --topbar:#7e7e7e;
       --toolbar:#8d8d8d;
       --page:#8a8a8a;
-      --panel:#9a9a9a;
+      --page2:#9c9c9c;
       --line:rgba(0,0,0,0.18);
-      --text:#f3f3f3;
-      --muted:rgba(255,255,255,0.8);
+      --text:rgba(255,255,255,0.92);
+      --muted:rgba(255,255,255,0.72);
+      --darktext:rgba(0,0,0,0.70);
     }
 
     * { box-sizing: border-box; }
@@ -25,7 +25,8 @@
       margin:0;
       width:100%;
       height:100%;
-      background:#000;
+      background:var(--bg);
+      overflow:hidden;
       font-family: Arial, Helvetica, sans-serif;
     }
 
@@ -34,43 +35,45 @@
       align-items:flex-end;
       justify-content:center;
       padding:0;
-      overflow:hidden;
     }
 
-    .frame{
+    .canvas{
+      position:relative;
       width: 870px;
       height: 560px;
-      position:relative;
-      background: var(--browser);
-      border: 1px solid rgba(0,0,0,0.22);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
-      margin-bottom:0;
+      background: var(--outer);
+      border: 1px solid rgba(0,0,0,0.18);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
     }
 
     .doctype{
       position:absolute;
-      left: 20px;
+      left: 18px;
       top: 12px;
-      font: 700 15px "Courier New", monospace;
-      color: rgba(0,0,0,0.72);
+      font-family: "Courier New", monospace;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--darktext);
       letter-spacing: 0.01em;
+      user-select:none;
     }
 
     .browser{
       position:absolute;
-      left: 18px;
-      right: 18px;
+      left: 16px;
+      right: 16px;
       top: 42px;
-      bottom: 14px;
-      background: var(--browser);
-      border: 1px solid rgba(0,0,0,0.18);
+      bottom: 16px;
+      background: var(--outer);
+      border: 1px solid rgba(0,0,0,0.16);
+      overflow:hidden;
     }
 
-    .titlebar{
-      height: 58px;
-      background: var(--windowtop);
-      border-bottom: 1px solid var(--line);
+    .browser-top{
       position:relative;
+      height: 54px;
+      background: var(--topbar);
+      border-bottom: 1px solid var(--line);
       display:flex;
       align-items:center;
       padding-left: 14px;
@@ -79,7 +82,7 @@
     .traffic{
       display:flex;
       align-items:center;
-      gap:10px;
+      gap: 10px;
       z-index:2;
     }
 
@@ -87,101 +90,99 @@
       width: 12px;
       height: 12px;
       border-radius:50%;
-      background: rgba(255,255,255,0.75);
-      border: 1px solid rgba(0,0,0,0.18);
+      border: 1px solid rgba(0,0,0,0.15);
+      background: rgba(255,255,255,0.76);
       box-shadow: inset 0 1px 0 rgba(255,255,255,0.18);
     }
 
     .dot:nth-child(1){ background:#d8d8d8; }
     .dot:nth-child(2){ background:#d0d0d0; }
-    .dot:nth-child(3){ background:#c6c6c6; }
+    .dot:nth-child(3){ background:#c8c8c8; }
 
     .title{
       position:absolute;
       left:50%;
       transform:translateX(-50%);
-      color: rgba(255,255,255,0.95);
+      color: rgba(255,255,255,0.92);
       font-size: 15px;
-      font-weight:700;
+      font-weight: 700;
       letter-spacing: 0.10em;
       text-transform: uppercase;
       user-select:none;
     }
 
     .toolbar{
-      height: 58px;
+      position:relative;
+      height: 60px;
       background: var(--toolbar);
       border-bottom: 1px solid var(--line);
       display:flex;
       align-items:center;
-      gap:12px;
+      gap: 12px;
       padding: 0 16px;
     }
 
     .nav{
-      width:27px;
-      height:27px;
+      width: 22px;
+      height: 22px;
       border-radius:50%;
-      background: rgba(255,255,255,0.07);
       border: 1px solid rgba(0,0,0,0.12);
+      background: rgba(255,255,255,0.08);
       position:relative;
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.12);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.10);
     }
 
     .nav::before{
       content:"";
       position:absolute;
-      width:8px;
-      height:8px;
-      border:2px solid rgba(255,255,255,0.85);
-      border-top:0;
-      border-right:0;
-      left: 10px;
-      top: 8px;
+      width: 7px;
+      height: 7px;
+      border: 2px solid rgba(255,255,255,0.85);
+      border-top: 0;
+      border-right: 0;
+      left: 8px;
+      top: 6px;
       transform: rotate(45deg);
-    }
-
-    .nav.back{
-      margin-right: -4px;
     }
 
     .nav.forward{
       transform: rotate(180deg);
+      margin-left: -2px;
     }
 
     .address{
       flex:1;
-      height:34px;
+      height: 32px;
       background: rgba(255,255,255,0.10);
-      border:1px solid rgba(0,0,0,0.15);
-      border-radius:18px;
+      border: 1px solid rgba(0,0,0,0.12);
+      border-radius: 17px;
       display:flex;
       align-items:center;
-      color: rgba(255,255,255,0.88);
-      padding: 0 16px;
-      font-size: 14px;
-      letter-spacing:0.03em;
+      padding: 0 14px;
+      color: rgba(255,255,255,0.92);
+      font-size: 13px;
+      letter-spacing: 0.02em;
       user-select:none;
     }
 
     .lock{
+      width: 10px;
+      height: 10px;
+      border: 2px solid rgba(255,255,255,0.8);
+      border-radius: 3px;
       position:relative;
-      width:10px;
-      height:10px;
-      border:2px solid rgba(255,255,255,0.82);
-      border-radius:3px;
-      margin-right:10px;
+      margin-right:9px;
       flex-shrink:0;
     }
 
     .lock::before{
       content:"";
       position:absolute;
-      width:9px;
-      height:7px;
-      border:2px solid rgba(255,255,255,0.82);
+      width: 9px;
+      height: 7px;
+      border: 2px solid rgba(255,255,255,0.8);
       border-bottom:0;
-      border-radius:9px 9px 0 0;
+      border-radius: 8px 8px 0 0;
       left:-2px;
       top:-9px;
     }
@@ -190,10 +191,10 @@
       position:absolute;
       left:0;
       right:0;
-      top:116px;
+      top: 114px;
       bottom:0;
       background: var(--page);
-      padding: 18px 14px 0 14px;
+      padding: 18px 18px 0 18px;
     }
 
     .page-inner{
@@ -204,13 +205,13 @@
       border: 1px solid rgba(0,0,0,0.06);
     }
 
-    .label{
+    .page-label{
       position:absolute;
       left: 18px;
-      top: 16px;
-      color: rgba(255,255,255,0.95);
+      top: 18px;
+      color: rgba(255,255,255,0.92);
       font-size: 15px;
-      font-weight:700;
+      font-weight: 700;
       letter-spacing: 0.12em;
       text-transform: uppercase;
       user-select:none;
@@ -219,11 +220,11 @@
     .bars{
       position:absolute;
       left: 18px;
-      top: 60px;
-      width: 61%;
+      top: 54px;
+      width: 62%;
       display:flex;
       flex-direction:column;
-      gap: 16px;
+      gap: 15px;
     }
 
     .bar{
@@ -232,26 +233,26 @@
       background: rgba(255,255,255,0.12);
     }
 
-    .bar:nth-child(2){ width: 83%; }
-    .bar:nth-child(3){ width: 62%; }
+    .bar:nth-child(2){ width: 78%; }
+    .bar:nth-child(3){ width: 58%; }
 
     .card{
       position:absolute;
       left: 18px;
-      bottom: 16px;
+      bottom: 18px;
       width: 200px;
       height: 120px;
-      background: rgba(255,255,255,0.08);
-      border:1px solid rgba(0,0,0,0.09);
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(0,0,0,0.10);
     }
   </style>
 </head>
 <body>
-  <div class="frame">
+  <div class="canvas">
     <div class="doctype">&lt;!DOCTYPE html&gt;</div>
 
     <div class="browser">
-      <div class="titlebar">
+      <div class="browser-top">
         <div class="traffic">
           <div class="dot"></div>
           <div class="dot"></div>
@@ -261,7 +262,7 @@
       </div>
 
       <div class="toolbar">
-        <div class="nav back"></div>
+        <div class="nav"></div>
         <div class="nav forward"></div>
 
         <div class="address">
@@ -272,7 +273,7 @@
 
       <div class="page">
         <div class="page-inner">
-          <div class="label">BROWSER PAGE</div>
+          <div class="page-label">BROWSER PAGE</div>
 
           <div class="bars">
             <div class="bar"></div>
