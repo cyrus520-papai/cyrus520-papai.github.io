@@ -3,183 +3,125 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Achroma Browser</title>
+  <title>Achroma Browser Mock</title>
   <style>
     :root {
-      --achroma: #808080;
-      --achroma-1: #6b6b6b;
-      --achroma-2: #7a7a7a;
-      --achroma-3: #8b8b8b;
-      --achroma-4: #9a9a9a;
-      --achroma-5: #b2b2b2;
-      --chrome: #7d7d7d;
-      --chrome-dark: #666666;
-      --chrome-light: #a3a3a3;
-      --surface: #8f8f8f;
-      --surface-2: #9f9f9f;
-      --line: rgba(0,0,0,0.18);
-      --shadow: rgba(0,0,0,0.25);
-      --text: #f4f4f4;
-      --muted: #efefef;
-      --glass: rgba(255,255,255,0.08);
+      --bg: #000000;
+      --window-bg: #7a7a7a;
+      --window-dark: #6b6b6b;
+      --window-mid: #8b8b8b;
+      --window-light: #a3a3a3;
+      --page-bg: #8f8f8f;
+      --panel-bg: rgba(255,255,255,0.08);
+      --soft-line: rgba(0,0,0,0.18);
+      --text: rgba(255,255,255,0.95);
+      --muted: rgba(255,255,255,0.75);
     }
 
     * { box-sizing: border-box; }
 
     html, body {
-      height: 100%;
       margin: 0;
-      background: var(--achroma);
-      font-family: "Segoe UI", Arial, sans-serif;
+      width: 100%;
+      height: 100%;
+      background: var(--bg);
+      font-family: Arial, Helvetica, sans-serif;
     }
 
     body {
-      display: grid;
-      place-items: center;
-    }
-
-    .window {
-      width: min(1080px, 90vw);
-      height: min(760px, 82vh);
-      background: var(--chrome);
-      border: 2px solid rgba(0,0,0,0.28);
-      border-radius: 18px;
-      box-shadow:
-        0 28px 70px rgba(0,0,0,0.28),
-        inset 0 1px 0 rgba(255,255,255,0.18);
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
       overflow: hidden;
-      position: relative;
     }
 
-    .window::before {
-      content: "";
+    .browser {
+      width: 870px;
+      height: 560px;
+      background: var(--window-bg);
+      border: 1px solid rgba(0,0,0,0.22);
+      position: relative;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.12),
+        0 0 0 1px rgba(255,255,255,0.03);
+    }
+
+    .doctype {
       position: absolute;
-      inset: 0;
-      background: linear-gradient(
-        180deg,
-        rgba(255,255,255,0.08),
-        rgba(255,255,255,0) 18%,
-        rgba(0,0,0,0.05) 100%
-      );
-      pointer-events: none;
+      left: 22px;
+      top: 10px;
+      font-family: "Courier New", monospace;
+      font-size: 14px;
+      font-weight: 700;
+      color: rgba(0,0,0,0.72);
+      letter-spacing: 0.02em;
+      user-select: none;
     }
 
     .titlebar {
-      height: 64px;
-      background: var(--achroma);
-      border-bottom: 1px solid var(--line);
+      position: absolute;
+      left: 18px;
+      right: 18px;
+      top: 38px;
+      height: 56px;
+      background: var(--window-mid);
+      border: 1px solid var(--soft-line);
       display: flex;
       align-items: center;
-      padding: 0 18px;
-      gap: 14px;
-      position: relative;
-      z-index: 1;
+      justify-content: space-between;
+      padding: 0 14px;
     }
 
     .traffic {
       display: flex;
-      gap: 8px;
       align-items: center;
-      margin-right: 8px;
+      gap: 10px;
+      width: 76px;
+      padding-left: 2px;
     }
 
     .dot {
-      width: 13px;
-      height: 13px;
+      width: 12px;
+      height: 12px;
       border-radius: 50%;
       background: rgba(255,255,255,0.7);
-      border: 1px solid rgba(0,0,0,0.12);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.35);
+      border: 1px solid rgba(0,0,0,0.18);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.25);
     }
 
-    .dot:nth-child(1) { background: #d7d7d7; }
-    .dot:nth-child(2) { background: #cfcfcf; }
-    .dot:nth-child(3) { background: #c6c6c6; }
+    .dot:nth-child(1) { background: #d9d9d9; }
+    .dot:nth-child(2) { background: #d1d1d1; }
+    .dot:nth-child(3) { background: #c9c9c9; }
 
-    .tabs {
-      display: flex;
-      align-items: end;
-      gap: 8px;
-      flex: 1;
-      min-width: 0;
-    }
-
-    .tab {
-      min-width: 160px;
-      max-width: 230px;
-      height: 36px;
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(0,0,0,0.16);
-      border-bottom: none;
-      border-radius: 12px 12px 0 0;
-      color: var(--text);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 0 18px;
-      font-size: 11px;
+    .tablabel {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 15px;
+      font-weight: 700;
       letter-spacing: 0.08em;
+      color: rgba(255,255,255,0.9);
       text-transform: uppercase;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      opacity: 0.82;
-    }
-
-    .tab.active {
-      opacity: 1;
-      background: rgba(255,255,255,0.12);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.18);
+      user-select: none;
     }
 
     .toolbar {
-      height: 58px;
-      background: var(--achroma-2);
-      border-bottom: 1px solid var(--line);
+      position: absolute;
+      left: 18px;
+      right: 18px;
+      top: 94px;
+      height: 62px;
+      background: var(--window-light);
+      border: 1px solid var(--soft-line);
       display: flex;
       align-items: center;
       gap: 12px;
       padding: 0 16px;
-      position: relative;
-      z-index: 1;
     }
 
-    .nav-btn {
-      width: 30px;
-      height: 30px;
+    .nav {
+      width: 26px;
+      height: 26px;
       border-radius: 50%;
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(0,0,0,0.18);
-      position: relative;
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.12);
-    }
-
-    .nav-btn::before {
-      content: "";
-      position: absolute;
-      width: 8px;
-      height: 8px;
-      border: 2px solid rgba(255,255,255,0.9);
-      border-top: 0;
-      border-right: 0;
-      left: 11px;
-      top: 9px;
-      transform: rotate(45deg);
-    }
-
-    .nav-btn.forward {
-      transform: rotate(180deg);
-    }
-
-    .address {
-      flex: 1;
-      height: 36px;
-      border-radius: 19px;
-      background: rgba(255,255,255,0.09);
-      border: 1px solid rgba(0,0,0,0.18);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
-      display: flex;
-      align-items: center;
-      padding: 0 16px;
-      color: var(--muted);*
+      background: rgba(255,255,255,0.08);*
 
