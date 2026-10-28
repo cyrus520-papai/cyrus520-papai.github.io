@@ -3,231 +3,183 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Disguised Browser</title>
+  <title>Achroma Browser</title>
   <style>
     :root {
       --achroma: #808080;
-      --dark: #666666;
-      --light: #9a9a9a;
-      --panel: #a0a0a0;
-      --text: #ffffff;
-      --shadow: rgba(0,0,0,0.22);
+      --achroma-1: #6b6b6b;
+      --achroma-2: #7a7a7a;
+      --achroma-3: #8b8b8b;
+      --achroma-4: #9a9a9a;
+      --achroma-5: #b2b2b2;
+      --chrome: #7d7d7d;
+      --chrome-dark: #666666;
+      --chrome-light: #a3a3a3;
+      --surface: #8f8f8f;
+      --surface-2: #9f9f9f;
+      --line: rgba(0,0,0,0.18);
+      --shadow: rgba(0,0,0,0.25);
+      --text: #f4f4f4;
+      --muted: #efefef;
+      --glass: rgba(255,255,255,0.08);
     }
 
     * { box-sizing: border-box; }
 
-    body {
+    html, body {
+      height: 100%;
       margin: 0;
-      min-height: 100vh;
+      background: var(--achroma);
+      font-family: "Segoe UI", Arial, sans-serif;
+    }
+
+    body {
       display: grid;
       place-items: center;
-      background: var(--achroma);
-      font-family: Arial, sans-serif;
     }
 
-    .browser {
-      width: 860px;
-      max-width: 90vw;
-      background: var(--panel);
-      border: 2px solid #6d6d6d;
-      border-radius: 14px;
-      box-shadow: 0 18px 40px var(--shadow);
+    .window {
+      width: min(1080px, 90vw);
+      height: min(760px, 82vh);
+      background: var(--chrome);
+      border: 2px solid rgba(0,0,0,0.28);
+      border-radius: 18px;
+      box-shadow:
+        0 28px 70px rgba(0,0,0,0.28),
+        inset 0 1px 0 rgba(255,255,255,0.18);
       overflow: hidden;
+      position: relative;
     }
 
-    .browser-top {
-      height: 52px;
+    .window::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        180deg,
+        rgba(255,255,255,0.08),
+        rgba(255,255,255,0) 18%,
+        rgba(0,0,0,0.05) 100%
+      );
+      pointer-events: none;
+    }
+
+    .titlebar {
+      height: 64px;
       background: var(--achroma);
+      border-bottom: 1px solid var(--line);
       display: flex;
       align-items: center;
-      padding: 0 14px;
-      gap: 10px;
-      border-bottom: 2px solid #707070;
+      padding: 0 18px;
+      gap: 14px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .traffic {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      margin-right: 8px;
     }
 
     .dot {
-      width: 12px;
-      height: 12px;
+      width: 13px;
+      height: 13px;
       border-radius: 50%;
-      background: #d9d9d9;
-      border: 1px solid rgba(0,0,0,0.2);
+      background: rgba(255,255,255,0.7);
+      border: 1px solid rgba(0,0,0,0.12);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.35);
+    }
+
+    .dot:nth-child(1) { background: #d7d7d7; }
+    .dot:nth-child(2) { background: #cfcfcf; }
+    .dot:nth-child(3) { background: #c6c6c6; }
+
+    .tabs {
+      display: flex;
+      align-items: end;
+      gap: 8px;
+      flex: 1;
+      min-width: 0;
     }
 
     .tab {
-      flex: 0 0 160px;
-      height: 32px;
-      background: #7e7e7e;
-      border: 1px solid #666;
+      min-width: 160px;
+      max-width: 230px;
+      height: 36px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(0,0,0,0.16);
       border-bottom: none;
-      border-radius: 10px 10px 0 0;
+      border-radius: 12px 12px 0 0;
+      color: var(--text);
       display: flex;
       align-items: center;
       justify-content: center;
-      color: var(--text);
-      font-size: 12px;
-      letter-spacing: 0.04em;
+      padding: 0 18px;
+      font-size: 11px;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      opacity: 0.82;
     }
 
-    .browser-toolbar {
-      height: 54px;
-      background: #8a8a8a;
-      border-bottom: 2px solid #707070;
+    .tab.active {
+      opacity: 1;
+      background: rgba(255,255,255,0.12);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.18);
+    }
+
+    .toolbar {
+      height: 58px;
+      background: var(--achroma-2);
+      border-bottom: 1px solid var(--line);
       display: flex;
       align-items: center;
-      padding: 0 14px;
       gap: 12px;
+      padding: 0 16px;
+      position: relative;
+      z-index: 1;
     }
 
     .nav-btn {
-      width: 26px;
-      height: 26px;
+      width: 30px;
+      height: 30px;
       border-radius: 50%;
-      background: #b3b3b3;
-      border: 1px solid rgba(0,0,0,0.25);
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(0,0,0,0.18);
       position: relative;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.12);
     }
 
     .nav-btn::before {
       content: "";
       position: absolute;
-      inset: 8px;
-      border: 2px solid #5a5a5a;
+      width: 8px;
+      height: 8px;
+      border: 2px solid rgba(255,255,255,0.9);
       border-top: 0;
       border-right: 0;
+      left: 11px;
+      top: 9px;
       transform: rotate(45deg);
     }
 
-    .nav-btn.back::before {
-      transform: rotate(225deg);
-      left: 11px;
+    .nav-btn.forward {
+      transform: rotate(180deg);
     }
 
     .address {
       flex: 1;
-      height: 34px;
-      background: #a1a1a1;
-      border: 1px solid #696969;
-      border-radius: 17px;
+      height: 36px;
+      border-radius: 19px;
+      background: rgba(255,255,255,0.09);
+      border: 1px solid rgba(0,0,0,0.18);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
       display: flex;
       align-items: center;
       padding: 0 16px;
-      color: #efefef;
-      font-size: 14px;
-      letter-spacing: 0.02em;
-    }
-
-    .browser-body {
-      height: 420px;
-      background: linear-gradient(180deg, #8e8e8e 0%, #7f7f7f 100%);
-      position: relative;
-      padding: 18px;
-    }
-
-    .page {
-      width: 100%;
-      height: 100%;
-      background: #9b9b9b;
-      border: 1px solid #686868;
-      border-radius: 8px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .page-header {
-      height: 52px;
-      background: rgba(255,255,255,0.08);
-      border-bottom: 1px solid rgba(0,0,0,0.18);
-      display: flex;
-      align-items: center;
-      padding: 0 18px;
-      color: #f5f5f5;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      font-size: 12px;
-    }
-
-    .columns {
-      display: grid;
-      grid-template-columns: 1.2fr 2.2fr;
-      height: calc(100% - 52px);
-    }
-
-    .sidebar {
-      background: rgba(255,255,255,0.06);
-      border-right: 1px solid rgba(0,0,0,0.18);
-      padding: 20px 16px;
-    }
-
-    .menu-item {
-      height: 18px;
-      background: rgba(255,255,255,0.12);
-      border-radius: 8px;
-      margin-bottom: 14px;
-    }
-
-    .content {
-      padding: 22px 24px;
-    }
-
-    .hero {
-      width: 100%;
-      height: 120px;
-      background: rgba(255,255,255,0.12);
-      border-radius: 10px;
-      margin-bottom: 20px;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 14px;
-    }
-
-    .card {
-      height: 120px;
-      background: rgba(255,255,255,0.1);
-      border-radius: 10px;
-    }
-  </style>
-</head>
-<body>
-  <div class="browser">
-    <div class="browser-top">
-      <div class="dot"></div>
-      <div class="dot"></div>
-      <div class="dot"></div>
-      <div class="tab">Achroma</div>
-    </div>
-
-    <div class="browser-toolbar">
-      <div class="nav-btn back"></div>
-      <div class="nav-btn" style="transform: rotate(180deg);"></div>
-      <div class="address">achroma.example</div>
-    </div>
-
-    <div class="browser-body">
-      <div class="page">
-        <div class="page-header">Browser Page</div>
-        <div class="columns">
-          <div class="sidebar">
-            <div class="menu-item" style="width: 78%;"></div>
-            <div class="menu-item" style="width: 92%;"></div>
-            <div class="menu-item" style="width: 64%;"></div>
-            <div class="menu-item" style="width: 88%;"></div>
-          </div>
-          <div class="content">
-            <div class="hero"></div>
-            <div class="grid">
-              <div class="card"></div>
-              <div class="card"></div>
-              <div class="card"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</body>
-</html>
+      color: var(--muted);*
+
