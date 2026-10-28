@@ -3,368 +3,286 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Achroma Browser Mock</title>
+  <title>Browser Mock</title>
   <style>
-    :root {
-      --bg: #000000;
-      --chrome-1: #777777;
-      --chrome-2: #7e7e7e;
-      --chrome-3: #8e8e8e;
-      --chrome-4: #a2a2a2;
-      --surface: #8b8b8b;
-      --surface-2: #959595;
-      --panel: rgba(255,255,255,0.06);
-      --line: rgba(0,0,0,0.18);
-      --text: rgba(255,255,255,0.96);
-      --muted: rgba(255,255,255,0.8);
-      --shadow: rgba(0,0,0,0.28);
+    :root{
+      --bg:#000000;
+      --browser:#7a7a7a;
+      --browser2:#818181;
+      --browser3:#8b8b8b;
+      --windowtop:#818181;
+      --toolbar:#8d8d8d;
+      --page:#8a8a8a;
+      --panel:#9a9a9a;
+      --line:rgba(0,0,0,0.18);
+      --text:#f3f3f3;
+      --muted:rgba(255,255,255,0.8);
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
-    html, body {
-      margin: 0;
-      width: 100%;
-      height: 100%;
-      background: var(--bg);
+    html, body{
+      margin:0;
+      width:100%;
+      height:100%;
+      background:#000;
       font-family: Arial, Helvetica, sans-serif;
-      overflow: hidden;
     }
 
-    body {
-      display: grid;
-      place-items: end center;
+    body{
+      display:flex;
+      align-items:flex-end;
+      justify-content:center;
+      padding:0;
+      overflow:hidden;
     }
 
-    .window {
-      width: min(900px, 90vw);
-      height: min(580px, 80vh);
-      background: var(--chrome-1);
-      border: 1px solid rgba(0,0,0,0.25);
-      box-shadow:
-        0 26px 52px var(--shadow),
-        inset 0 1px 0 rgba(255,255,255,0.14);
-      position: relative;
-      overflow: hidden;
+    .frame{
+      width: 870px;
+      height: 560px;
+      position:relative;
+      background: var(--browser);
+      border: 1px solid rgba(0,0,0,0.22);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
+      margin-bottom:0;
     }
 
-    .window::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(
-        180deg,
-        rgba(255,255,255,0.08),
-        rgba(255,255,255,0) 18%,
-        rgba(0,0,0,0.04) 100%
-      );
-      pointer-events: none;
+    .doctype{
+      position:absolute;
+      left: 20px;
+      top: 12px;
+      font: 700 15px "Courier New", monospace;
+      color: rgba(0,0,0,0.72);
+      letter-spacing: 0.01em;
     }
 
-    .titlebar {
-      position: relative;
-      z-index: 1;
-      height: 60px;
-      background: var(--chrome-2);
+    .browser{
+      position:absolute;
+      left: 18px;
+      right: 18px;
+      top: 42px;
+      bottom: 14px;
+      background: var(--browser);
+      border: 1px solid rgba(0,0,0,0.18);
+    }
+
+    .titlebar{
+      height: 58px;
+      background: var(--windowtop);
       border-bottom: 1px solid var(--line);
-      display: flex;
-      align-items: center;
-      padding: 0 18px;
+      position:relative;
+      display:flex;
+      align-items:center;
+      padding-left: 14px;
     }
 
-    .traffic {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-right: 12px;
+    .traffic{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      z-index:2;
     }
 
-    .dot {
-      width: 13px;
-      height: 13px;
-      border-radius: 50%;
+    .dot{
+      width: 12px;
+      height: 12px;
+      border-radius:50%;
       background: rgba(255,255,255,0.75);
       border: 1px solid rgba(0,0,0,0.18);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.2);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.18);
     }
 
-    .dot:nth-child(1) { background: #dadada; }
-    .dot:nth-child(2) { background: #d0d0d0; }
-    .dot:nth-child(3) { background: #c4c4c4; }
+    .dot:nth-child(1){ background:#d8d8d8; }
+    .dot:nth-child(2){ background:#d0d0d0; }
+    .dot:nth-child(3){ background:#c6c6c6; }
 
-    .tab-title {
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      color: rgba(255,255,255,0.96);
+    .title{
+      position:absolute;
+      left:50%;
+      transform:translateX(-50%);
+      color: rgba(255,255,255,0.95);
       font-size: 15px;
-      font-weight: 700;
-      letter-spacing: 0.12em;
+      font-weight:700;
+      letter-spacing: 0.10em;
       text-transform: uppercase;
-      user-select: none;
+      user-select:none;
     }
 
-    .toolbar {
-      position: relative;
-      z-index: 1;
-      height: 62px;
-      background: var(--chrome-3);
+    .toolbar{
+      height: 58px;
+      background: var(--toolbar);
       border-bottom: 1px solid var(--line);
-      display: flex;
-      align-items: center;
-      gap: 12px;
+      display:flex;
+      align-items:center;
+      gap:12px;
       padding: 0 16px;
     }
 
-    .nav {
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.08);
+    .nav{
+      width:27px;
+      height:27px;
+      border-radius:50%;
+      background: rgba(255,255,255,0.07);
       border: 1px solid rgba(0,0,0,0.12);
-      position: relative;
+      position:relative;
       box-shadow: inset 0 1px 0 rgba(255,255,255,0.12);
     }
 
-    .nav::before {
-      content: "";
-      position: absolute;
-      width: 8px;
-      height: 8px;
-      border: 2px solid rgba(255,255,255,0.9);
-      border-top: 0;
-      border-right: 0;
+    .nav::before{
+      content:"";
+      position:absolute;
+      width:8px;
+      height:8px;
+      border:2px solid rgba(255,255,255,0.85);
+      border-top:0;
+      border-right:0;
       left: 10px;
       top: 8px;
       transform: rotate(45deg);
     }
 
-    .nav.forward { transform: rotate(180deg); }
+    .nav.back{
+      margin-right: -4px;
+    }
 
-    .address {
-      flex: 1;
-      height: 34px;
-      border-radius: 18px;
-      background: rgba(255,255,255,0.1);
-      border: 1px solid rgba(0,0,0,0.15);
-      display: flex;
-      align-items: center;
+    .nav.forward{
+      transform: rotate(180deg);
+    }
+
+    .address{
+      flex:1;
+      height:34px;
+      background: rgba(255,255,255,0.10);
+      border:1px solid rgba(0,0,0,0.15);
+      border-radius:18px;
+      display:flex;
+      align-items:center;
+      color: rgba(255,255,255,0.88);
       padding: 0 16px;
-      color: var(--text);
-      font-size: 13px;
-      letter-spacing: 0.03em;
-      user-select: none;
+      font-size: 14px;
+      letter-spacing:0.03em;
+      user-select:none;
     }
 
-    .lock {
-      width: 10px;
-      height: 10px;
-      border: 2px solid rgba(255,255,255,0.82);
-      border-radius: 3px;
-      position: relative;
-      margin-right: 10px;
-      flex-shrink: 0;
+    .lock{
+      position:relative;
+      width:10px;
+      height:10px;
+      border:2px solid rgba(255,255,255,0.82);
+      border-radius:3px;
+      margin-right:10px;
+      flex-shrink:0;
     }
 
-    .lock::before {
-      content: "";
-      position: absolute;
-      width: 9px;
-      height: 7px;
-      border: 2px solid rgba(255,255,255,0.82);
-      border-bottom: 0;
-      border-radius: 9px 9px 0 0;
-      left: -2px;
-      top: -9px;
+    .lock::before{
+      content:"";
+      position:absolute;
+      width:9px;
+      height:7px;
+      border:2px solid rgba(255,255,255,0.82);
+      border-bottom:0;
+      border-radius:9px 9px 0 0;
+      left:-2px;
+      top:-9px;
     }
 
-    .page {
-      position: relative;
-      z-index: 1;
-      height: calc(100% - 122px);
-      background: linear-gradient(180deg, #8a8a8a 0%, #7f7f7f 100%);
-      display: flex;
+    .page{
+      position:absolute;
+      left:0;
+      right:0;
+      top:116px;
+      bottom:0;
+      background: var(--page);
+      padding: 18px 14px 0 14px;
     }
 
-    .sidebar {
-      width: 250px;
-      background: rgba(255,255,255,0.05);
-      border-right: 1px solid var(--line);
-      padding: 20px 16px 16px;
+    .page-inner{
+      position:relative;
+      width:100%;
+      height:100%;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(0,0,0,0.06);
     }
 
-    .side-label {
-      width: 72%;
-      height: 16px;
-      border-radius: 8px;
-      background: rgba(255,255,255,0.15);
-      margin-bottom: 18px;
+    .label{
+      position:absolute;
+      left: 18px;
+      top: 16px;
+      color: rgba(255,255,255,0.95);
+      font-size: 15px;
+      font-weight:700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      user-select:none;
     }
 
-    .side-item {
-      height: 12px;
-      border-radius: 6px;
-      background: rgba(255,255,255,0.1);
-      margin-bottom: 12px;
+    .bars{
+      position:absolute;
+      left: 18px;
+      top: 60px;
+      width: 61%;
+      display:flex;
+      flex-direction:column;
+      gap: 16px;
     }
 
-    .side-item:nth-child(2) { width: 83%; }
-    .side-item:nth-child(3) { width: 68%; }
-    .side-item:nth-child(4) { width: 89%; }
-    .side-item:nth-child(5) { width: 72%; }
-    .side-item:nth-child(6) { width: 90%; }
-
-    .content {
-      flex: 1;
-      padding: 22px 26px 18px;
-    }
-
-    .hero {
-      height: 158px;
-      background: linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.04));
-      border: 1px solid rgba(0,0,0,0.14);
-      border-radius: 16px;
-      position: relative;
-      overflow: hidden;
-      margin-bottom: 18px;
-    }
-
-    .hero::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(
-        120deg,
-        rgba(255,255,255,0.06),
-        transparent 42%,
-        rgba(0,0,0,0.06)
-      );
-    }
-
-    .hero-bars {
-      position: absolute;
-      left: 20px;
-      right: 20px;
-      bottom: 18px;
-      display: flex;
-      align-items: end;
-      gap: 18px;
-    }
-
-    .hero-bar {
-      background: rgba(255,255,255,0.12);
-      border-radius: 10px;
+    .bar{
       height: 18px;
-    }
-
-    .hero-bar:nth-child(1) { width: 58%; height: 22px; }
-    .hero-bar:nth-child(2) { width: 22%; height: 18px; }
-    .hero-bar:nth-child(3) { width: 16%; height: 16px; }
-
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 18px;
-      height: calc(100% - 176px);
-    }
-
-    .card {
-      position: relative;
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(0,0,0,0.14);
-      border-radius: 14px;
-      overflow: hidden;
-    }
-
-    .card::before {
-      content: "";
-      position: absolute;
-      left: 16px;
-      right: 18px;
-      top: 18px;
-      height: 16px;
-      background: rgba(255,255,255,0.12);
-      border-radius: 8px;
-    }
-
-    .card::after {
-      content: "";
-      position: absolute;
-      left: 16px;
-      right: 20px;
-      bottom: 18px;
-      height: 92px;
-      background: rgba(255,255,255,0.08);
       border-radius: 10px;
+      background: rgba(255,255,255,0.12);
     }
 
-    .mini {
-      position: absolute;
-      right: 16px;
-      top: 18px;
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.18);
-      border: 1px solid rgba(0,0,0,0.12);
-    }
+    .bar:nth-child(2){ width: 83%; }
+    .bar:nth-child(3){ width: 62%; }
 
-    @media (max-width: 760px) {
-      .sidebar { display: none; }
-      .cards { grid-template-columns: 1fr; }
-      .tab-title { letter-spacing: 0.08em; }
+    .card{
+      position:absolute;
+      left: 18px;
+      bottom: 16px;
+      width: 200px;
+      height: 120px;
+      background: rgba(255,255,255,0.08);
+      border:1px solid rgba(0,0,0,0.09);
     }
   </style>
 </head>
 <body>
-  <div class="window">
-    <div class="titlebar">
-      <div class="traffic">
-        <div class="dot"></div>
-        <div class="dot"></div>
-        <div class="dot"></div>
+  <div class="frame">
+    <div class="doctype">&lt;!DOCTYPE html&gt;</div>
+
+    <div class="browser">
+      <div class="titlebar">
+        <div class="traffic">
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+        </div>
+        <div class="title">ACHROMA</div>
       </div>
 
-      <div class="tab-title">ACHROMA</div>
-    </div>
+      <div class="toolbar">
+        <div class="nav back"></div>
+        <div class="nav forward"></div>
 
-    <div class="toolbar">
-      <div class="nav"></div>
-      <div class="nav forward"></div>
-
-      <div class="address">
-        <span class="lock"></span>
-        achroma.example
+        <div class="address">
+          <span class="lock"></span>
+          achroma.example
+        </div>
       </div>
-    </div>
 
-    <div class="page">
-      <aside class="sidebar">
-        <div class="side-label"></div>
-        <div class="side-item"></div>
-        <div class="side-item"></div>
-        <div class="side-item"></div>
-        <div class="side-item"></div>
-        <div class="side-item"></div>
-      </aside>
+      <div class="page">
+        <div class="page-inner">
+          <div class="label">BROWSER PAGE</div>
 
-      <main class="content">
-        <div class="hero">
-          <div class="hero-bars">
-            <div class="hero-bar"></div>
-            <div class="hero-bar"></div>
-            <div class="hero-bar"></div>
+          <div class="bars">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
           </div>
-        </div>
 
-        <div class="cards">
-          <div class="card"><div class="mini"></div></div>
-          <div class="card"><div class="mini"></div></div>
-          <div class="card"><div class="mini"></div></div>
+          <div class="card"></div>
         </div>
-      </main>
+      </div>
     </div>
   </div>
 </body>
