@@ -3,22 +3,23 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Achroma Browser - Media Hub</title>
+  <title>Achroma Real App Shell</title>
   <style>
     :root {
-      --bg: #000;
-      --browser: #7a7a7a;
-      --browser-2: #828282;
-      --browser-3: #8f8f8f;
-      --browser-4: #a4a4a4;
-      --surface: #8d8d8d;
-      --panel: rgba(255,255,255,0.07);
-      --panel-2: rgba(255,255,255,0.12);
+      --bg: #000000;
+      --shell: #7a7a7a;
+      --shell-2: #808080;
+      --shell-3: #8d8d8d;
+      --shell-4: #9d9d9d;
+      --surface: #8b8b8b;
+      --surface-2: #969696;
+      --surface-3: #a7a7a7;
+      --panel: rgba(255,255,255,0.08);
+      --panel-strong: rgba(255,255,255,0.12);
       --line: rgba(0,0,0,0.18);
-      --text: #f3f3f3;
-      --muted: rgba(255,255,255,0.8);
-      --shadow: rgba(0,0,0,0.28);
-      --accent: rgba(255,255,255,0.14);
+      --text: rgba(255,255,255,0.96);
+      --muted: rgba(255,255,255,0.72);
+      --shadow: rgba(0,0,0,0.26);
     }
 
     * { box-sizing: border-box; }
@@ -39,12 +40,12 @@
     }
 
     .window {
-      width: min(1100px, 92vw);
-      height: min(700px, 84vh);
-      background: var(--browser);
-      border: 1px solid rgba(0,0,0,0.20);
+      width: min(980px, 90vw);
+      height: min(620px, 82vh);
+      background: var(--shell);
+      border: 1px solid rgba(0,0,0,0.24);
       box-shadow:
-        0 28px 60px var(--shadow),
+        0 26px 56px var(--shadow),
         inset 0 1px 0 rgba(255,255,255,0.12);
       position: relative;
       overflow: hidden;
@@ -67,7 +68,7 @@
       position: relative;
       z-index: 1;
       height: 58px;
-      background: var(--browser-2);
+      background: var(--shell-2);
       border-bottom: 1px solid var(--line);
       display: flex;
       align-items: center;
@@ -79,29 +80,28 @@
       gap: 10px;
       align-items: center;
       width: 110px;
-      z-index: 2;
     }
 
     .dot {
       width: 12px;
       height: 12px;
       border-radius: 50%;
-      border: 1px solid rgba(0,0,0,0.14);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.24);
+      border: 1px solid rgba(0,0,0,0.16);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.22);
     }
 
-    .dot:nth-child(1) { background: #dadada; }
-    .dot:nth-child(2) { background: #cfcfcf; }
-    .dot:nth-child(3) { background: #c4c4c4; }
+    .dot:nth-child(1) { background: #d9d9d9; }
+    .dot:nth-child(2) { background: #d0d0d0; }
+    .dot:nth-child(3) { background: #c7c7c7; }
 
     .tab-title {
       position: absolute;
       left: 50%;
       transform: translateX(-50%);
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      font-weight: 700;
       font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
       color: rgba(255,255,255,0.96);
       user-select: none;
     }
@@ -109,8 +109,8 @@
     .toolbar {
       position: relative;
       z-index: 1;
-      height: 58px;
-      background: var(--browser-3);
+      height: 60px;
+      background: var(--shell-3);
       border-bottom: 1px solid var(--line);
       display: flex;
       align-items: center;
@@ -118,9 +118,9 @@
       padding: 0 16px;
     }
 
-    .nav {
-      width: 28px;
-      height: 28px;
+    .nav-btn {
+      width: 26px;
+      height: 26px;
       border-radius: 50%;
       background: rgba(255,255,255,0.08);
       border: 1px solid rgba(0,0,0,0.12);
@@ -128,7 +128,7 @@
       box-shadow: inset 0 1px 0 rgba(255,255,255,0.12);
     }
 
-    .nav::before {
+    .nav-btn::before {
       content: "";
       position: absolute;
       width: 8px;
@@ -141,22 +141,20 @@
       transform: rotate(45deg);
     }
 
-    .nav.forward {
-      transform: rotate(180deg);
-    }
+    .nav-btn.forward { transform: rotate(180deg); }
 
     .address {
       flex: 1;
       height: 34px;
       border-radius: 18px;
       background: rgba(255,255,255,0.10);
-      border: 1px solid rgba(0,0,0,0.15);
+      border: 1px solid rgba(0,0,0,0.16);
       display: flex;
       align-items: center;
       padding: 0 16px;
-      color: rgba(255,255,255,0.92);
+      color: var(--text);
       font-size: 13px;
-      letter-spacing: 0.03em;
+      letter-spacing: 0.04em;
       user-select: none;
     }
 
@@ -165,8 +163,8 @@
       height: 10px;
       border: 2px solid rgba(255,255,255,0.82);
       border-radius: 3px;
-      position: relative;
       margin-right: 10px;
+      position: relative;
       flex-shrink: 0;
     }
 
@@ -175,18 +173,18 @@
       position: absolute;
       width: 9px;
       height: 7px;
-      border: 2px solid rgba(255,255,255,0.82);
+      border: 2px solid rgba(255,255,255,0.8);
       border-bottom: 0;
       border-radius: 9px 9px 0 0;
       left: -2px;
       top: -9px;
     }
 
-    .page {
+    .app {
       position: relative;
       z-index: 1;
-      height: calc(100% - 116px);
-      background: linear-gradient(180deg, #8d8d8d 0%, #7d7d7d 100%);
+      height: calc(100% - 118px);
+      background: linear-gradient(180deg, #8d8d8d 0%, #7f7f7f 100%);
       display: flex;
     }
 
@@ -194,132 +192,23 @@
       width: 220px;
       background: rgba(255,255,255,0.04);
       border-right: 1px solid var(--line);
-      padding: 18px 14px 10px;
+      padding: 16px 12px;
     }
 
     .brand {
-      width: 100%;
-      height: 36px;
+      height: 44px;
       display: flex;
       align-items: center;
       padding: 0 10px;
-      margin-bottom: 18px;
-      letter-spacing: 0.08em;
       text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-size: 12px;
       font-weight: 700;
-      color: rgba(255,255,255,0.9);
-      font-size: 13px;
+      color: rgba(255,255,255,0.92);
     }
 
-    .menu {
+    .side-menu {
       display: grid;
       gap: 8px;
-    }
-
-    .menu-item {
-      height: 34px;
-      border-radius: 10px;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(0,0,0,0.08);
-      display: flex;
-      align-items: center;
-      padding: 0 12px;
-      color: rgba(255,255,255,0.85);
-      font-size: 12px;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-    }
-
-    .menu-item.active {
-      background: rgba(255,255,255,0.12);
-    }
-
-    .main {
-      flex: 1;
-      padding: 18px 20px 14px;
-      overflow: hidden;
-    }
-
-    .hero {
-      height: 180px;
-      background:
-        linear-gradient(135deg, rgba(255,255,255,0.16), rgba(255,255,255,0.04)),
-        linear-gradient(120deg, rgba(255,255,255,0.08), transparent 45%);
-      border: 1px solid rgba(0,0,0,0.14);
-      border-radius: 16px;
-      position: relative;
-      overflow: hidden;
-      margin-bottom: 16px;
-    }
-
-    .hero::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(90deg, rgba(255,255,255,0.08), transparent 40%, rgba(0,0,0,0.08));
-    }
-
-    .hero-content {
-      position: absolute;
-      left: 20px;
-      right: 20px;
-      bottom: 18px;
-      display: flex;
-      align-items: end;
-      justify-content: space-between;
-      gap: 12px;
-    }
-
-    .hero-text {
-      flex: 1;
-      display: grid;
-      gap: 8px;
-    }
-
-    .hero-line {
-      height: 16px;
-      border-radius: 10px;
-      background: rgba(255,255,255,0.15);
-    }
-
-    .hero-line:nth-child(1) { width: 52%; }
-    .hero-line:nth-child(2) { width: 35%; }
-
-    .cta {
-      width: 120px;
-      height: 34px;
-      border-radius: 18px;
-      background: rgba(255,255,255,0.12);
-      border: 1px solid rgba(0,0,0,0.12);
-    }
-
-    .section {
-      margin-top: 18px;
-    }
-
-    .section-head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      font-size: 12px;
-      color: rgba(255,255,255,0.9);
-    }
-
-    .section-head .more {
-      opacity: 0.7;
-    }
-
-    .card-row {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 14px;
-    }
-
-    .card {
-      height: 160px;
-      border-radius: 14px;
-      background: rgba(*
+      margin-top:*
 
