@@ -1,224 +1,270 @@
-const express = require("express");
-const http = require("http");
-const path = require("path");
-const { Server } = require("socket.io");
-
-const app = express();
-const server = http.createServer(app);
-const io = new Server(server);
-
-const movies = [
-  {
-    id: "m1",
-    title: "Dune",
-    year: 2021,
-    genre: "Sci-Fi",
-    runtime: "2h 35m",
-    rating: 8.0,
-    image: "https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?auto=format&fit=crop&w=900&q=80"
-  },
-  {
-    id: "m2",
-    title: "The Batman",
-    year: 2022,
-    genre: "Action",
-    runtime: "2h 56m",
-    rating: 7.8,
-    image: "https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=900&q=80"
-  },
-  {
-    id: "m3",
-    title: "Spider-Man: Across the Spider-Verse",
-    year: 2023,
-    genre: "Animation",
-    runtime: "2h 20m",
-    rating: 8.7,
-    image: "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=900&q=80"
-  },
-  {
-    id: "m4",
-    title: "Oppenheimer",
-    year: 2023,
-    genre: "Drama",
-    runtime: "3h 0m",
-    rating: 8.5,
-    image: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=900&q=80"
-  },
-  {
-    id: "m5",
-    title: "Everything Everywhere All at Once",
-    year: 2022,
-    genre: "Sci-Fi",
-    runtime: "2h 19m",
-    rating: 8.2,
-    image: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80"
-  },
-  {
-    id: "m6",
-    title: "The Dark Knight",
-    year: 2008,
-    genre: "Action",
-    runtime: "2h 32m",
-    rating: 9.0,
-    image: "https://images.unsplash.com/photo-1513106580091-1d82408b8cd6?auto=format&fit=crop&w=900&q=80"
-  }
-];
-
-const games = [
-  {
-    id: "g1",
-    title: "Fortnite",
-    genre: "Battle Royale",
-    players: "Up to 100",
-    rating: 4.8,
-    image: "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=900&q=80"
-  },
-  {
-    id: "g2",
-    title: "Minecraft",
-    genre: "Sandbox",
-    players: "Single or Multiplayer",
-    rating: 4.9,
-    image: "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=900&q=80"
-  },
-  {
-    id: "g3",
-    title: "Valorant",
-    genre: "FPS",
-    players: "5v5",
-    rating: 4.7,
-    image: "https://images.unsplash.com/photo-1542751110-97427bbecf20?auto=format&fit=crop&w=900&q=80"
-  },
-  {
-    id: "g4",
-    title: "Rocket League",
-    genre: "Sports",
-    players: "2v2 / 3v3",
-    rating: 4.6,
-    image: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=900&q=80"
-  },
-  {
-    id: "g5",
-    title: "Apex Legends",
-    genre: "Battle Royale",
-    players: "Squad-based",
-    rating: 4.7,
-    image: "https://images.unsplash.com/photo-1547637203-8965cbfa64d4?auto=format&fit=crop&w=900&q=80"
-  },
-  {
-    id: "g6",
-    title: "League of Legends",
-    genre: "MOBA",
-    players: "5v5",
-    rating: 4.5,
-    image: "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=900&q=80"
-  }
-];
-
-const rooms = new Map();
-
-app.use(express.static(path.join(__dirname, "public")));
-
-app.get("/api/catalog", (req, res) => {
-  res.json({ movies, games });
-});
-
-io.on("connection", (socket) => {
-  console.log("user connected:", socket.id);
-
-  socket.on("join-room", ({ roomName, username }) => {
-    const safeRoom = (roomName || "lounge").trim().replace(/\s+/g, "-").toLowerCase();
-    const safeUsername = (username || "Guest").trim();
-
-    if (!safeUsername) {
-      socket.emit("join-error", { message: "Username is required." });
-      return;
-    }
-
-    if (!rooms.has(safeRoom)) {
-      rooms.set(safeRoom, { users: new Map(), messages: [] });
-    }
-
-    const room = rooms.get(safeRoom);
-
-    // leave previous room if needed
-    if (socket.room && socket.room !== safeRoom && rooms.has(socket.room)) {
-      const previousRoom = rooms.get(socket.room);
-      previousRoom.users.delete(socket.id);
-
-      io.to(socket.room).emit("room-update", {
-        roomName: socket.room,
-        members: [...previousRoom.users.values()]
-      });
-    }
-
-    socket.leave(socket.room || safeRoom);
-    socket.join(safeRoom);
-    socket.room = safeRoom;
-
-    room.users.set(socket.id, safeUsername);
-
-    const payload = {
-      roomName: safeRoom,
-      username: safeUsername,
-      members: [...room.users.values()],
-      history: room.messages.slice(-25)
-    };
-
-    socket.emit("joined-room", payload);
-    io.to(safeRoom).emit("room-update", {
-      roomName: safeRoom,
-      members: [...room.users.values()]
-    });
-  });
-
-  socket.on("send-message", ({ roomName, username, message }) => {
-    const safeRoom = (roomName || "lounge").trim().replace(/\s+/g, "-").toLowerCase();
-    const safeUsername = (username || "Guest").trim();
-    const text = (message || "").trim();
-
-    if (!safeRoom || !safeUsername || !text) return;
-
-    const payload = {
-      username: safeUsername,
-      message: text,
-      time: new Date().toISOString()
-    };
-
-    const room = rooms.get(safeRoom);
-    if (room) {
-      room.messages.push(payload);
-      if (room.messages.length > 100) {
-        room.messages = room.messages.slice(-100);
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Achroma | Design. Build. Elevate.</title>
+    <meta
+      name="description"
+      content="Achroma is a premium creative and digital studio helping brands grow through strategy, design, and digital experiences."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #070b12;
+        --bg-2: #0d1420;
+        --panel: rgba(17, 24, 39, 0.8);
+        --panel-strong: #111827;
+        --card: #0f172a;
+        --muted: #9aa8bd;
+        --text: #edf2ff;
+        --text-soft: #c5d0e6;
+        --primary: #7c3aed;
+        --primary-2: #a855f7;
+        --accent: #22d3ee;
+        --success: #34d399;
+        --border: rgba(148, 163, 184, 0.16);
+        --shadow: 0 20px 50px rgba(17, 24, 39, 0.45);
+        --radius: 22px;
+        --container: 1180px;
       }
-    }
 
-    io.to(safeRoom).emit("new-message", payload);
-  });
+      * {
+        box-sizing: border-box;
+      }
 
-  socket.on("disconnect", () => {
-    if (!socket.room || !rooms.has(socket.room)) return;
+      html {
+        scroll-behavior: smooth;
+      }
 
-    const room = rooms.get(socket.room);
-    room.users.delete(socket.id);
+      body {
+        margin: 0;
+        font-family: "Inter", sans-serif;
+        background:
+          radial-gradient(circle at top left, rgba(124, 58, 237, 0.18), transparent 30%),
+          radial-gradient(circle at top right, rgba(34, 211, 238, 0.10), transparent 25%),
+          var(--bg);
+        color: var(--text);
+        line-height: 1.6;
+      }
 
-    if (room.users.size === 0) {
-      rooms.delete(socket.room);
-      return;
-    }
+      img {
+        max-width: 100%;
+        display: block;
+      }
 
-    io.to(socket.room).emit("room-update", {
-      roomName: socket.room,
-      members: [...room.users.values()]
-    });
-  });
-});
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
 
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "index.html"));
-});
+      .container {
+        width: min(var(--container), calc(100% - 32px));
+        margin: 0 auto;
+      }
 
-const PORT = process.env.PORT || 3000;
-server.listen(PORT, () => {
-  console.log("app running at http://localhost:" + PORT);
-});
+      .section {
+        padding: 100px 0;
+      }
+
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 8px 14px;
+        border-radius: 999px;
+        background: rgba(124, 58, 237, 0.12);
+        border: 1px solid rgba(168, 85, 247, 0.2);
+        color: #d9c4ff;
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      .eyebrow::before {
+        content: "";
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--primary), var(--accent));
+        box-shadow: 0 0 18px rgba(124, 58, 237, 0.8);
+      }
+
+      h1, h2, h3, h4, p {
+        margin-top: 0;
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        padding: 16px 24px;
+        border-radius: 14px;
+        font-weight: 700;
+        transition: 0.25s ease;
+        border: 1px solid transparent;
+        cursor: pointer;
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, var(--primary), var(--primary-2));
+        color: white;
+        box-shadow: 0 20px 35px rgba(124, 58, 237, 0.35);
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 26px 40px rgba(124, 58, 237, 0.45);
+      }
+
+      .btn-secondary {
+        background: rgba(148, 163, 184, 0.06);
+        border-color: var(--border);
+        color: var(--text);
+      }
+
+      .btn-secondary:hover {
+        background: rgba(148, 163, 184, 0.1);
+      }
+
+      .header {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        backdrop-filter: blur(18px);
+        background: rgba(7, 11, 18, 0.55);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+      }
+
+      .nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 18px 0;
+      }
+
+      .brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        font-weight: 800;
+        letter-spacing: -0.04em;
+        font-size: 1.4rem;
+      }
+
+      .brand-mark {
+        width: 30px;
+        height: 30px;
+        border-radius: 10px;
+        background: linear-gradient(135deg, var(--primary), var(--accent));
+        box-shadow: 0 0 24px rgba(124, 58, 237, 0.6);
+        position: relative;
+      }
+
+      .brand-mark::before {
+        content: "";
+        position: absolute;
+        inset: 6px;
+        border-radius: 7px;
+        background: rgba(7, 11, 18, 0.85);
+      }
+
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 28px;
+        color: var(--text-soft);
+        font-size: 0.96rem;
+      }
+
+      .nav-links a:hover {
+        color: var(--text);
+      }
+
+      .nav-actions {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+
+      .ham {
+        display: none;
+        flex-direction: column;
+        gap: 5px;
+        width: 38px;
+        height: 38px;
+        border-radius: 12px;
+        background: rgba(148, 163, 184, 0.06);
+        border: 1px solid var(--border);
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+      }
+
+      .ham span {
+        width: 18px;
+        height: 2px;
+        background: white;
+        border-radius: 2px;
+      }
+
+      .hero {
+        padding-top: 60px;
+        padding-bottom: 30px;
+      }
+
+      .hero-inner {
+        display: grid;
+        grid-template-columns: 1.1fr 0.9fr;
+        align-items: center;
+        gap: 50px;
+      }
+
+      .hero-copy h1 {
+        font-size: clamp(2.8rem, 5vw, 6rem);
+        line-height: 0.96;
+        letter-spacing: -0.06em;
+        margin-bottom: 20px;
+      }
+
+      .hero-copy h1 .gradient {
+        background: linear-gradient(135deg, #d8b4fe, #7dd3fc 60%, #bbf7d0);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+
+      .hero-copy p {
+        font-size: 1.08rem;
+        color: var(--muted);
+        max-width: 620px;
+        margin-bottom: 28px;
+      }
+
+      .hero-actions {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 16px;
+        margin-bottom: 28px;
+      }
+
+      .mini-proof {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        color: var(--muted);
+        font-size: 0.85rem;
+      }
+
+      .avatars {
+        display: flex;
+        align-items: center;*
+
