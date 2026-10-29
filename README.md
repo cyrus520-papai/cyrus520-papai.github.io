@@ -6,23 +6,22 @@
     <title>NovaSphere</title>
     <style>
       :root {
-        --bg: #050b14;
+        --bg: #060c15;
         --bg-2: #0d1726;
-        --panel: #101b2d;
+        --panel: #101b2c;
         --panel-2: #16263d;
-        --panel-3: #1d324c;
-        --panel-4: #0f1726;
-        --soft: #edf3ff;
+        --panel-3: #1c2f46;
+        --panel-4: #0d1523;
+        --soft: #eef5ff;
         --muted: #aabbd7;
-        --text: #f5f9ff;
-        --gold: #f7ca6a;
-        --gold-2: #eb8a3a;
+        --text: #f7fafe;
+        --gold: #f7cb6b;
+        --gold-2: #eb8f3f;
         --blue: #60a5fa;
         --purple: #8b5cf6;
-        --pink: #f472b6;
         --green: #3ad49d;
-        --red: #fb7185;
-        --shadow: rgba(0, 0, 0, 0.45);
+        --red: #f87171;
+        --shadow: rgba(0, 0, 0, 0.48);
       }
 
       * { box-sizing: border-box; }
@@ -32,8 +31,8 @@
         min-height: 100vh;
         font-family: Arial, Helvetica, sans-serif;
         background:
-          radial-gradient(circle at top left, rgba(96,165,250,0.16), transparent 22%),
-          radial-gradient(circle at top right, rgba(139,92,246,0.12), transparent 24%),
+          radial-gradient(circle at top left, rgba(96,165,250,0.14), transparent 22%),
+          radial-gradient(circle at top right, rgba(139,92,246,0.14), transparent 24%),
           linear-gradient(180deg, var(--bg), var(--bg-2));
         color: var(--text);
       }
@@ -43,20 +42,172 @@
         place-items: center;
       }
 
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
       button, input {
         font: inherit;
       }
 
       .app {
-        width: min(1500px, 96vw);
+        width: min(1580px, 97vw);
         min-height: 92vh;
         display: grid;
-        grid-template-rows: auto 1fr;
+        grid-template-columns: 250px minmax(0, 1fr) 340px;
         background: rgba(7, 11, 20, 0.96);
         border: 1px solid rgba(255,255,255,0.08);
-        border-radius: 26px;
+        border-radius: 28px;
         overflow: hidden;
-        box-shadow: 0 32px 90px rgba(0,0,0,0.52);
+        box-shadow: 0 32px 100px rgba(0,0,0,0.56);
+      }
+
+      .sidebar {
+        background: linear-gradient(180deg, rgba(16,27,44,0.96), rgba(10,15,23,0.98));
+        border-right: 1px solid rgba(255,255,255,0.08);
+        padding: 18px 14px;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 8px 22px;
+      }
+
+      .brand-mark {
+        width: 38px;
+        height: 38px;
+        border-radius: 12px;
+        display: grid;
+        place-items: center;
+        font-weight: 900;
+        color: #111827;
+        background: linear-gradient(135deg, var(--gold), var(--gold-2));
+      }
+
+      .brand-name {
+        font-size: 1.12rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .nav-group {
+        margin-top: 20px;
+      }
+
+      .nav-label {
+        font-size: 0.7rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--muted);
+        padding: 0 10px 10px;
+      }
+
+      .nav-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 12px;
+        border-radius: 12px;
+        color: var(--muted);
+        background: transparent;
+        border: 1px solid transparent;
+        transition: all 0.14s ease;
+        cursor: pointer;
+        margin-bottom: 6px;
+      }
+
+      .nav-item:hover {
+        border-color: rgba(255,255,255,0.08);
+        color: var(--text);
+      }
+
+      .nav-item.active {
+        background: linear-gradient(135deg, rgba(96,165,250,0.14), rgba(139,92,246,0.12));
+        border-color: rgba(96,165,250,0.3);
+        color: var(--text);
+      }
+
+      .nav-icon {
+        width: 28px;
+        height: 28px;
+        border-radius: 10px;
+        background: rgba(255,255,255,0.05);
+        border: 1px solid rgba(255,255,255,0.06);
+        display: grid;
+        place-items: center;
+        font-size: 0.9rem;
+      }
+
+      .mini-profile {
+        margin-top: 18px;
+        background: rgba(255,255,255,0.02);
+        border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 18px;
+        padding: 14px 12px;
+      }
+
+      .profile-head {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .avatar {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        font-size: 0.78rem;
+        font-weight: 800;
+        color: #111827;
+      }
+
+      .avatar.g1 { background: linear-gradient(135deg, #60a5fa, #93c5fd); }
+      .avatar.g2 { background: linear-gradient(135deg, #f9a8d4, #fca5a5); }
+      .avatar.g3 { background: linear-gradient(135deg, #fbbf24, #f59e0b); }
+
+      .profile-name {
+        font-weight: 700;
+      }
+
+      .profile-meta {
+        color: var(--muted);
+        font-size: 0.75rem;
+      }
+
+      .profile-stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+        margin-top: 14px;
+      }
+
+      .stat-box {
+        background: rgba(255,255,255,0.02);
+        border: 1px solid rgba(255,255,255,0.06);
+        border-radius: 10px;
+        padding: 10px;
+        text-align: center;
+      }
+
+      .stat-box strong {
+        display: block;
+        font-size: 1rem;
+      }
+
+      .stat-box span {
+        color: var(--muted);
+        font-size: 0.7rem;
+      }
+
+      .main-panel {
+        background: linear-gradient(180deg, rgba(14,20,31,0.95), rgba(7,11,19,0.96));
+        min-width: 0;
       }
 
       .topbar {
@@ -65,92 +216,213 @@
         align-items: center;
         gap: 18px;
         padding: 18px 22px;
-        background: rgba(15, 21, 31, 0.96);
+        background: rgba(15,22,33,0.9);
         border-bottom: 1px solid rgba(255,255,255,0.08);
       }
 
-      .brand-wrap {
+      .search-wrap {
+        flex: 1;
+        position: relative;
+        max-width: 620px;
+      }
+
+      .search {
+        width: 100%;
+        padding: 12px 18px 12px 42px;
+        border-radius: 999px;
+        border: 1px solid rgba(255,255,255,0.08);
+        background: rgba(255,255,255,0.04);
+        color: var(--text);
+        outline: none;
+      }
+
+      .search::placeholder {
+        color: var(--muted);
+      }
+
+      .search-icon {
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--muted);
+      }
+
+      .top-actions {
         display: flex;
         align-items: center;
         gap: 12px;
       }
 
-      .brand-mark {
-        width: 38px;
-        height: 38px;
-        display: grid;
-        place-items: center;
-        border-radius: 12px;
-        background: linear-gradient(135deg, var(--gold), var(--gold-2));
-        color: #101827;
-        font-weight: 900;
-      }
-
-      .brand-name {
-        font-size: 1.18rem;
-        font-weight: 800;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-      }
-
-      .nav {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-      }
-
-      .tab {
-        background: rgba(255,255,255,0.04);
+      .ghost-btn {
         border: 1px solid rgba(255,255,255,0.08);
-        color: var(--muted);
-        padding: 8px 15px;
-        border-radius: 999px;
-        cursor: pointer;
-        transition: all 0.14s ease;
-      }
-
-      .tab:hover {
-        border-color: rgba(255,255,255,0.14);
-      }
-
-      .tab.active {
-        background: linear-gradient(135deg, rgba(96,165,250,0.2), rgba(139,92,246,0.16));
-        border-color: rgba(96,165,250,0.45);
+        background: rgba(255,255,255,0.04);
         color: var(--text);
-      }
-
-      .user-pill {
-        background: rgba(255,255,255,0.04);
-        border: 1px solid rgba(255,255,255,0.08);
         border-radius: 999px;
-        padding: 9px 13px;
-        color: var(--soft);
+        padding: 10px 14px;
+        cursor: pointer;
       }
 
-      .main {
-        display: grid;
-        grid-template-columns: minmax(0, 1.7fr) minmax(320px, 0.88fr);
-        min-height: 0;
+      .primary-btn {
+        background: linear-gradient(135deg, var(--gold), var(--gold-2));
+        border: none;
+        color: #111827;
+        border-radius: 999px;
+        padding: 10px 15px;
+        font-weight: 800;
+        cursor: pointer;
       }
 
-      .content {
+      .content-wrap {
         padding: 22px;
-        background: linear-gradient(180deg, rgba(15,23,36,0.9), rgba(7,11,18,0.96));
       }
 
       .section {
         display: none;
-        min-height: 760px;
+        min-height: 820px;
       }
 
       .section.active {
         display: block;
       }
 
+      .hero {
+        position: relative;
+        height: 420px;
+        border-radius: 26px;
+        overflow: hidden;
+        border: 1px solid rgba(255,255,255,0.08);
+        background:
+          linear-gradient(90deg, rgba(0,0,0,0.72), rgba(0,0,0,0.15)),
+          url("https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=1600&q=80") center/cover no-repeat;
+      }
+
+      .hero-glow {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(180deg, rgba(0,0,0,0.12), rgba(0,0,0,0.55));
+      }
+
+      .hero-content {
+        position: absolute;
+        left: 28px;
+        right: 28px;
+        bottom: 26px;
+        z-index: 1;
+      }
+
+      .eyebrow {
+        display: inline-block;
+        padding: 7px 12px;
+        border-radius: 999px;
+        font-size: 0.72rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        background: rgba(255,255,255,0.08);
+        border: 1px solid rgba(255,255,255,0.12);
+      }
+
+      .hero h1 {
+        margin: 16px 0 10px;
+        font-size: clamp(2.4rem, 4.5vw, 4.8rem);
+        line-height: 0.96;
+        letter-spacing: -0.05em;
+      }
+
+      .hero-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px;
+        color: var(--soft);
+        font-size: 0.9rem;
+      }
+
+      .hero-actions {
+        margin-top: 18px;
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 28px 0 14px;
+      }
+
+      .section-header h2 {
+        margin: 0;
+        font-size: 1.06rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--soft);
+      }
+
+      .more {
+        color: var(--gold);
+        font-weight: 700;
+      }
+
+      .card-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 16px;
+      }
+
+      .media-card {
+        background: linear-gradient(180deg, rgba(22,33,50,0.9), rgba(10,15,25,0.95));
+        border: 1px solid rgba(255,255,255,0.06);
+        border-radius: 20px;
+        overflow: hidden;
+        cursor: pointer;
+        transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+      }
+
+      .media-card:hover {
+        transform: translateY(-2px);
+        border-color: rgba(96,165,250,0.4);
+        box-shadow: 0 14px 30px rgba(0,0,0,0.2);
+      }
+
+      .poster {
+        position: relative;
+        aspect-ratio: 4 / 5.3;
+        background-size: cover;
+        background-position: center;
+      }
+
+      .poster-badge {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        border-radius: 999px;
+        background: rgba(12,18,29,0.8);
+        border: 1px solid rgba(255,255,255,0.12);
+        padding: 6px 8px;
+        font-size: 0.7rem;
+        font-weight: 700;
+      }
+
+      .card-body {
+        padding: 12px 12px 14px;
+      }
+
+      .card-title {
+        margin: 0 0 6px;
+        font-size: 1rem;
+      }
+
+      .card-meta {
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.82rem;
+      }
+
       .browser-panel {
         background: rgba(255,255,255,0.02);
         border: 1px solid rgba(255,255,255,0.08);
-        border-radius: 24px;
+        border-radius: 22px;
         overflow: hidden;
       }
 
@@ -159,8 +431,8 @@
         align-items: center;
         gap: 12px;
         padding: 12px 14px;
+        border-bottom: 1px solid rgba(255,255,255,0.08);
         background: rgba(255,255,255,0.03);
-        border-bottom: 1px solid rgba(255,255,255,0.06);
       }
 
       .traffic {
@@ -178,13 +450,13 @@
       .dot.yellow { background: #fbbf24; }
       .dot.green { background: #34d399; }
 
-      .address-bar {
+      .browser-bar {
         flex: 1;
         border-radius: 999px;
+        background: rgba(0,0,0,0.18);
         border: 1px solid rgba(255,255,255,0.08);
-        background: rgba(0,0,0,0.16);
+        padding: 10px 14px;
         color: var(--muted);
-        padding: 9px 14px;
       }
 
       .browser-body {
@@ -193,13 +465,13 @@
         min-height: 760px;
       }
 
-      .side-nav {
+      .browser-sidebar {
         background: rgba(255,255,255,0.015);
         border-right: 1px solid rgba(255,255,255,0.06);
-        padding: 18px 12px;
+        padding: 16px 12px;
       }
 
-      .side-nav-item {
+      .browser-link {
         display: block;
         text-decoration: none;
         padding: 10px 12px;
@@ -207,244 +479,80 @@
         margin-bottom: 10px;
         color: var(--muted);
         background: rgba(255,255,255,0.02);
-        border: 1px solid rgba(255,255,255,0.04);
+        border: 1px solid rgba(255,255,255,0.05);
       }
 
-      .side-nav-item.active {
+      .browser-link.active {
         background: rgba(96,165,250,0.12);
         border-color: rgba(96,165,250,0.35);
         color: var(--text);
       }
 
       .browser-page {
-        padding: 18px;
+        padding: 20px;
       }
 
-      .page-hero {
+      .browser-hero {
         min-height: 220px;
         border-radius: 18px;
-        padding: 22px;
+        padding: 24px;
         display: flex;
         align-items: flex-end;
         border: 1px solid rgba(255,255,255,0.08);
         background:
-          linear-gradient(135deg, rgba(17,24,39,0.78), rgba(15,23,42,0.72)),
+          linear-gradient(135deg, rgba(17,24,39,0.82), rgba(15,23,42,0.74)),
           url("https://images.unsplash.com/photo-1524985069026-dd778a71c7b4?auto=format&fit=crop&w=1400&q=80") center/cover no-repeat;
       }
 
-      .page-hero h2 {
+      .browser-hero h2 {
         margin: 0;
-        font-size: clamp(2rem, 3vw, 3.5rem);
+        font-size: clamp(2rem, 3vw, 3.4rem);
         letter-spacing: -0.05em;
       }
 
-      .site-grid {
-        margin-top: 18px;
+      .browser-grid {
         display: grid;
         grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 16px;
+        margin-top: 18px;
       }
 
-      .site-card {
+      .browser-card {
         background: rgba(255,255,255,0.02);
         border: 1px solid rgba(255,255,255,0.08);
         border-radius: 16px;
         overflow: hidden;
       }
 
-      .site-card .image {
+      .browser-card .image {
         aspect-ratio: 16 / 9;
         background-size: cover;
         background-position: center;
       }
 
-      .site-card .body {
+      .browser-card .body {
         padding: 12px 12px 14px;
       }
 
-      .site-card h4 {
+      .browser-card h4 {
         margin: 0 0 6px;
         font-size: 1rem;
       }
 
-      .site-card p {
+      .browser-card p {
         margin: 0;
         color: var(--muted);
-        font-size: 0.86rem;
+        font-size: 0.84rem;
       }
 
-      .movie-layout {
-        display: grid;
-        gap: 18px;
-      }
-
-      .featured-banner {
-        position: relative;
-        height: 335px;
-        border-radius: 22px;
-        overflow: hidden;
-        border: 1px solid rgba(255,255,255,0.08);
-        background:
-          linear-gradient(90deg, rgba(0,0,0,0.72), rgba(0,0,0,0.2)),
-          url("https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=1600&q=80") center/cover no-repeat;
-      }
-
-      .featured-content {
-        position: absolute;
-        left: 28px;
-        right: 28px;
-        bottom: 24px;
-      }
-
-      .eyebrow {
-        display: inline-block;
-        padding: 7px 12px;
-        border-radius: 999px;
-        background: rgba(255,255,255,0.08);
-        border: 1px solid rgba(255,255,255,0.12);
-        font-size: 0.72rem;
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
-      }
-
-      .featured-content h2 {
-        margin: 16px 0 10px;
-        font-size: clamp(2.3rem, 4vw, 4.3rem);
-        line-height: 0.96;
-        letter-spacing: -0.04em;
-      }
-
-      .meta-row {
-        display: flex;
-        gap: 14px;
-        flex-wrap: wrap;
-        color: var(--soft);
-        font-size: 0.9rem;
-      }
-
-      .action-row {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 12px;
-        margin-top: 18px;
-      }
-
-      .primary-btn, .secondary-btn, .tiny-btn {
-        border: none;
-        border-radius: 999px;
-        cursor: pointer;
-        font-weight: 800;
-      }
-
-      .primary-btn {
-        padding: 12px 18px;
-        background: linear-gradient(135deg, var(--gold), var(--gold-2));
-        color: #111827;
-      }
-
-      .secondary-btn {
-        padding: 11px 17px;
-        background: rgba(255,255,255,0.08);
-        border: 1px solid rgba(255,255,255,0.12);
-        color: var(--text);
-      }
-
-      .row-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-
-      .row-header h3 {
-        margin: 0;
-        font-size: 0.95rem;
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
-        color: var(--soft);
-      }
-
-      .more {
-        color: var(--gold);
-        font-weight: 700;
-      }
-
-      .movie-cards {
-        display: grid;
-        grid-template-columns: repeat(4, minmax(0, 1fr));
-        gap: 18px;
-      }
-
-      .movie-card {
-        background: linear-gradient(180deg, rgba(22,33,50,0.9), rgba(10,15,25,0.95));
-        border: 1px solid rgba(255,255,255,0.06);
-        border-radius: 18px;
-        overflow: hidden;
-        cursor: pointer;
-        transition: transform 0.15s ease, border-color 0.15s ease;
-      }
-
-      .movie-card:hover {
-        transform: translateY(-2px);
-        border-color: rgba(96,165,250,0.4);
-      }
-
-      .movie-poster {
-        position: relative;
-        aspect-ratio: 4 / 5.2;
-        background-size: cover;
-        background-position: center;
-      }
-
-      .movie-badge {
-        position: absolute;
-        left: 10px;
-        top: 10px;
-        padding: 6px 8px;
-        border-radius: 999px;
-        font-size: 0.7rem;
-        font-weight: 700;
-        border: 1px solid rgba(255,255,255,0.12);
-        background: rgba(12,18,29,0.7);
-      }
-
-      .movie-info {
-        padding: 12px 12px 14px;
-      }
-
-      .movie-info h4 {
-        margin: 0 0 6px;
-        font-size: 1rem;
-      }
-
-      .movie-info p {
-        margin: 0;
-        color: var(--muted);
-        font-size: 0.82rem;
-      }
-
-      .player-card {
-        background: rgba(0,0,0,0.22);
-        border: 1px solid rgba(255,255,255,0.08);
-        border-radius: 20px;
-        overflow: hidden;
-      }
-
-      .player-card video {
-        display: block;
-        width: 100%;
-        height: 260px;
-        object-fit: cover;
-        background: #000;
-      }
-
-      .game-card {
+      .games-card {
         background: rgba(255,255,255,0.02);
         border: 1px solid rgba(255,255,255,0.08);
         border-radius: 20px;
         padding: 16px;
       }
 
-      .game-top {
+      .games-head {
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -452,7 +560,7 @@
         margin-bottom: 12px;
       }
 
-      .game-top h3 {
+      .games-head h3 {
         margin: 0;
         font-size: 0.95rem;
         letter-spacing: 0.08em;
@@ -461,11 +569,11 @@
       }
 
       .score-badge {
-        padding: 6px 10px;
-        border-radius: 999px;
         background: rgba(247, 201, 106, 0.12);
         border: 1px solid rgba(247, 201, 106, 0.35);
         color: var(--gold);
+        border-radius: 999px;
+        padding: 6px 10px;
         font-size: 0.75rem;
         font-weight: 700;
       }
@@ -473,7 +581,7 @@
       .mini-scene {
         position: relative;
         width: 100%;
-        height: 320px;
+        height: 330px;
         background:
           linear-gradient(180deg, rgba(96,165,250,0.12), rgba(0,0,0,0.2)),
           linear-gradient(180deg, #14263f 0%, #0f1725 36%, #111827 100%);
@@ -487,7 +595,7 @@
         position: absolute;
         inset: 0;
         background:
-          linear-gradient(transparent 0 76%, rgba(7,11,20,0.88) 76% 100%),
+          linear-gradient(transparent 0 76%, rgba(7,11,20,0.9) 76% 100%),
           linear-gradient(90deg, rgba(255,255,255,0.02) 0 5%, transparent 5% 100%);
         pointer-events: none;
       }
@@ -532,24 +640,27 @@
         box-shadow: 0 0 18px rgba(58,212,157,0.3);
       }
 
-      .game-footer {
-        margin-top: 12px;
+      .games-footer {
         display: flex;
         justify-content: space-between;
         align-items: center;
         gap: 12px;
+        margin-top: 12px;
       }
 
-      .game-hint {
+      .games-hint {
         color: var(--muted);
         font-size: 0.85rem;
       }
 
       .tiny-btn {
         padding: 9px 12px;
-        background: rgba(255,255,255,0.06);
+        border-radius: 999px;
         border: 1px solid rgba(255,255,255,0.08);
+        background: rgba(255,255,255,0.04);
         color: var(--text);
+        cursor: pointer;
+        font-weight: 700;
       }
 
       .tiny-btn.primary {
@@ -567,8 +678,9 @@
 
       .chat-header {
         display: flex;
-        justify-content: space-between;
         align-items: center;
+        justify-content: space-between;
+        gap: 12px;
         padding: 14px 16px;
         border-bottom: 1px solid rgba(255,255,255,0.08);
       }
@@ -576,8 +688,8 @@
       .chat-header h3 {
         margin: 0;
         font-size: 0.9rem;
-        letter-spacing: 0.08em;
         text-transform: uppercase;
+        letter-spacing: 0.08em;
         color: var(--soft);
       }
 
@@ -587,25 +699,25 @@
         background: rgba(58,212,157,0.12);
         border: 1px solid rgba(58,212,157,0.38);
         color: var(--green);
-        font-size: 0.75rem;
+        font-size: 0.74rem;
         font-weight: 700;
       }
 
       .chat-box {
-        min-height: 360px;
         display: flex;
         flex-direction: column;
         gap: 12px;
+        min-height: 400px;
         padding: 16px;
-        background: rgba(0,0,0,0.06);
+        background: rgba(0,0,0,0.05);
       }
 
       .msg {
         max-width: 85%;
         padding: 10px 12px;
         border-radius: 14px;
-        line-height: 1.35;
         font-size: 0.9rem;
+        line-height: 1.35;
       }
 
       .msg.self {
@@ -633,8 +745,8 @@
         flex: 1;
         background: rgba(255,255,255,0.04);
         border: 1px solid rgba(255,255,255,0.08);
-        color: var(--text);
         border-radius: 999px;
+        color: var(--text);
         padding: 11px 14px;
       }
 
@@ -655,8 +767,8 @@
       .voice-head h3 {
         margin: 0;
         font-size: 0.94rem;
-        text-transform: uppercase;
         letter-spacing: 0.08em;
+        text-transform: uppercase;
         color: var(--soft);
       }
 
@@ -682,21 +794,12 @@
         gap: 10px;
       }
 
-      .avatar {
-        width: 30px;
-        height: 30px;
-        border-radius: 50%;
-        display: grid;
-        place-items: center;
-        font-size: 0.74rem;
-        font-weight: 800;
-        color: #111827;
+      .voice-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 16px;
       }
-
-      .avatar.a1 { background: linear-gradient(135deg, #60a5fa, #93c5fd); }
-      .avatar.a2 { background: linear-gradient(135deg, #f9a8d4, #fca5a5); }
-      .avatar.a3 { background: linear-gradient(135deg, #fbbf24, #f59e0b); }
-      .avatar.a4 { background: linear-gradient(135deg, #4ade80, #34d399); }
 
       .status {
         width: 10px;
@@ -706,51 +809,183 @@
         box-shadow: 0 0 10px rgba(58,212,157,0.8);
       }
 
-      .status.idle {
-        background: #fbbf24;
+      .status.idle { background: #fbbf24; }
+      .status.muted { background: var(--red); }
+
+      .rightbar {
+        background: linear-gradient(180deg, rgba(18,28,41,0.96), rgba(9,14,22,0.96));
+        border-left: 1px solid rgba(255,255,255,0.08);
+        padding: 18px;
       }
 
-      .status.muted {
-        background: var(--red);
-      }
-
-      .voice-actions {
-        display: flex;
-        gap: 8px;
-        flex-wrap: wrap;
-        margin-top: 16px;
-      }
-
-      .sidebar-stack {
+      .right-stack {
         display: grid;
         gap: 18px;
-        padding: 18px;
-        background: linear-gradient(180deg, rgba(23,34,53,0.9), rgba(9,14,22,0.92));
-        border-left: 1px solid rgba(255,255,255,0.08);
       }
 
-      @media (max-width: 1100px) {
-        .main {
+      .room-card {
+        background: rgba(255,255,255,0.02);
+        border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 18px;
+        overflow: hidden;
+      }
+
+      .room-card .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        padding: 14px 16px;
+        border-bottom: 1px solid rgba(255,255,255,0.08);
+      }
+
+      .room-card .header h3 {
+        margin: 0;
+        font-size: 0.9rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--soft);
+      }
+
+      .room-body {
+        padding: 14px 16px 16px;
+        display: grid;
+        gap: 12px;
+      }
+
+      .user-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        background: rgba(255,255,255,0.02);
+        border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 12px;
+        padding: 10px 12px;
+      }
+
+      .friend {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .avatar.small {
+        width: 28px;
+        height: 28px;
+        font-size: 0.72rem;
+      }
+
+      .muted-text {
+        color: var(--muted);
+        font-size: 0.75rem;
+      }
+
+      .modal {
+        position: fixed;
+        inset: 0;
+        display: none;
+        place-items: center;
+        background: rgba(0,0,0,0.6);
+        backdrop-filter: blur(8px);
+        z-index: 50;
+      }
+
+      .modal.active {
+        display: grid;
+      }
+
+      .modal-card {
+        width: min(780px, 90vw);
+        background: linear-gradient(180deg, rgba(16,27,44,0.98), rgba(7,11,18,0.98));
+        border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 22px;
+        overflow: hidden;
+        box-shadow: 0 28px 80px rgba(0,0,0,0.45);
+      }
+
+      .modal-image {
+        height: 260px;
+        background-size: cover;
+        background-position: center;
+      }
+
+      .modal-body {
+        padding: 20px 22px 24px;
+      }
+
+      .modal-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: start;
+        gap: 12px;
+      }
+
+      .modal-body h3 {
+        margin: 0 0 10px;
+        font-size: clamp(1.7rem, 3vw, 2.8rem);
+      }
+
+      .modal-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+
+      .close-btn {
+        background: rgba(255,255,255,0.06);
+        color: var(--text);
+        border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 999px;
+        padding: 8px 12px;
+        cursor: pointer;
+      }
+
+      .modal-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 18px;
+      }
+
+      .modal p {
+        margin: 18px 0 0;
+        color: var(--soft);
+        line-height: 1.6;
+      }
+
+      @media (max-width: 1260px) {
+        .app {
+          grid-template-columns: 220px minmax(0,1fr);
+        }
+
+        .rightbar {
+          display: none;
+        }
+      }
+
+      @media (max-width: 980px) {
+        .app {
           grid-template-columns: 1fr;
         }
 
-        .sidebar-stack {
-          border-left: none;
-          border-top: 1px solid rgba(255,255,255,0.08);
+        .sidebar {
+          border-right: none;
+          border-bottom: 1px solid rgba(255,255,255,0.08);
         }
-      }
 
-      @media (max-width: 900px) {
         .browser-body {
           grid-template-columns: 1fr;
         }
 
-        .side-nav {
+        .browser-sidebar {
           border-right: none;
-          border-bottom: 1px solid rgba(255,255,255,0.06);
+          border-bottom: 1px solid rgba(255,255,255,0.08);
         }
 
-        .movie-cards {
+        .card-grid {
           grid-template-columns: repeat(2, minmax(0, 1fr));
         }
       }
@@ -761,38 +996,86 @@
           align-items: flex-start;
         }
 
-        .nav {
+        .search-wrap {
           width: 100%;
+          max-width: none;
         }
 
-        .site-grid, .movie-cards {
+        .card-grid, .browser-grid {
           grid-template-columns: 1fr;
+        }
+
+        .hero {
+          height: 340px;
         }
       }
     </style>
   </head>
   <body>
     <div class="app">
-      <header class="topbar">
-        <div class="brand-wrap">
+      <aside class="sidebar">
+        <div class="brand">
           <div class="brand-mark">N</div>
           <div class="brand-name">NovaSphere</div>
         </div>
 
-        <nav class="nav" aria-label="Main tabs">
-          <button class="tab active" type="button" data-section="browser">Browser</button>
-          <button class="tab" type="button" data-section="games">Games</button>
-          <button class="tab" type="button" data-section="movies">Movies</button>
-          <button class="tab" type="button" data-section="chat">Chat</button>
-          <button class="tab" type="button" data-section="voice">Voice</button>
-        </nav>
+        <div class="nav-group">
+          <div class="nav-label">Main</div>
+          <div class="nav-item active"><div class="nav-icon">◈</div> Home</div>
+          <div class="nav-item"><div class="nav-icon">◌</div> Discover</div>
+          <div class="nav-item"><div class="nav-icon">▣</div> Community</div>
+          <div class="nav-item"><div class="nav-icon">✦</div> Favorites</div>
+        </div>
 
-        <div class="user-pill">Guest User</div>
-      </header>
+        <div class="nav-group">
+          <div class="nav-label">Categories</div>
+          <div class="nav-item"><div class="nav-icon">▶</div> Movies</div>
+          <div class="nav-item"><div class="nav-icon">▧</div> Shows</div>
+          <div class="nav-item"><div class="nav-icon">◍</div> Games</div>
+          <div class="nav-item"><div class="nav-icon">☎</div> Chat</div>
+        </div>
 
-      <div class="main">
-        <main class="content">
-          <section class="section active" id="browser">
+        <div class="mini-profile">
+          <div class="profile-head">
+            <div class="avatar g1">GM</div>
+            <div>
+              <div class="profile-name">Guest Mode</div>
+              <div class="profile-meta">Level 29</div>
+            </div>
+          </div>
+
+          <div class="profile-stats">
+            <div class="stat-box">
+              <strong>148</strong>
+              <span>Friends</span>
+            </div>
+            <div class="stat-box">
+              <strong>42</strong>
+              <span>Rooms</span>
+            </div>
+            <div class="stat-box">
+              <strong>9.8</strong>
+              <span>Rating</span>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <main class="main-panel">
+        <header class="topbar">
+          <div class="search-wrap">
+            <span class="search-icon">⌕</span>
+            <input class="search" type="text" placeholder="Search movies, games, creators, rooms..." />
+          </div>
+
+          <div class="top-actions">
+            <button class="ghost-btn">Invite</button>
+            <button class="primary-btn">Create Room</button>
+          </div>
+        </header>
+
+        <div class="content-wrap">
+          <section class="section active" id="browserSection">
             <div class="browser-panel">
               <div class="browser-top">
                 <div class="traffic">
@@ -800,34 +1083,34 @@
                   <div class="dot yellow"></div>
                   <div class="dot green"></div>
                 </div>
-                <div class="address-bar">novasphere.app/explore</div>
+                <div class="browser-bar">novasphere.app/explore</div>
               </div>
 
               <div class="browser-body">
-                <aside class="side-nav">
-                  <a href="#" class="side-nav-item active">Explore</a>
-                  <a href="#" class="side-nav-item">Live</a>
-                  <a href="#" class="side-nav-item">Movies</a>
-                  <a href="#" class="side-nav-item">Games</a>
-                  <a href="#" class="side-nav-item">Friends</a>
-                  <a href="#" class="side-nav-item">Saved</a>
+                <aside class="browser-sidebar">
+                  <a href="#" class="browser-link active">Explore</a>
+                  <a href="#" class="browser-link">Live</a>
+                  <a href="#" class="browser-link">Movies</a>
+                  <a href="#" class="browser-link">Games</a>
+                  <a href="#" class="browser-link">Friends</a>
+                  <a href="#" class="browser-link">Saved</a>
                 </aside>
 
                 <div class="browser-page">
-                  <div class="page-hero">
+                  <div class="browser-hero">
                     <h2>Discover the internet together.</h2>
                   </div>
 
-                  <div class="site-grid">
-                    <div class="site-card">
+                  <div class="browser-grid">
+                    <div class="browser-card">
                       <div class="image" style="background-image:url('https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?auto=format&fit=crop&w=1200&q=80')"></div>
                       <div class="body">
                         <h4>Movie Night</h4>
-                        <p>Watch premieres with friends in one room.</p>
+                        <p>Watch premieres with your friends in one room.</p>
                       </div>
                     </div>
 
-                    <div class="site-card">
+                    <div class="browser-card">
                       <div class="image" style="background-image:url('https://images.unsplash.com/photo-1493711662062-fa541adb3fc8?auto=format&fit=crop&w=1200&q=80')"></div>
                       <div class="body">
                         <h4>Arcade Lounge</h4>
@@ -835,7 +1118,7 @@
                       </div>
                     </div>
 
-                    <div class="site-card">
+                    <div class="browser-card">
                       <div class="image" style="background-image:url('https://images.unsplash.com/photo-1524985069026-dd778a71c7b4?auto=format&fit=crop&w=1200&q=80')"></div>
                       <div class="body">
                         <h4>Community Rooms</h4>
@@ -848,61 +1131,56 @@
             </div>
           </section>
 
-          <section class="section" id="games">
-            <div class="game-card">
-              <div class="game-top">
+          <section class="section" id="gamesSection">
+            <div class="games-card">
+              <div class="games-head">
                 <h3>Mini Game</h3>
-                <div class="score-badge" id="gameScore">0 / 6</div>
+                <div class="score-badge" id="scoreDisplay">0 / 6</div>
               </div>
-
-              <div class="mini-scene" id="miniScene"></div>
-
-              <div class="game-footer">
-                <div class="game-hint" id="gameHint">Find the movie clues.</div>
-                <button type="button" class="tiny-btn primary" id="gameRestart">Restart</button>
+              <div class="mini-scene" id="miniScene" aria-label="Mini game"></div>
+              <div class="games-footer">
+                <div class="games-hint" id="gameHint">Find the movie clues.</div>
+                <button class="tiny-btn primary" id="restartGameBtn" type="button">Restart</button>
               </div>
             </div>
           </section>
 
-          <section class="section" id="movies">
+          <section class="section" id="moviesSection">
             <div class="movie-layout">
-              <div class="featured-banner">
-                <div class="featured-content">
+              <div class="hero">
+                <div class="hero-glow"></div>
+                <div class="hero-content">
                   <div class="eyebrow">Featured Premiere</div>
-                  <h2 id="featuredTitle">Night Drift</h2>
-
-                  <div class="meta-row">
+                  <h1 id="heroTitle">Night Drift</h1>
+                  <div class="hero-meta">
                     <span>2026</span>
                     <span>Drama / Sci‑Fi</span>
                     <span>2h 12m</span>
                     <span>4.9/5</span>
                   </div>
-
-                  <div class="action-row">
-                    <button type="button" class="primary-btn" id="watchNowBtn">Watch Now</button>
-                    <button type="button" class="secondary-btn">+ My List</button>
+                  <div class="hero-actions">
+                    <button class="primary-btn" id="watchNowBtn" type="button">Watch Now</button>
+                    <button class="secondary-btn" type="button">+ My List</button>
                   </div>
                 </div>
               </div>
 
-              <div class="rows">
-                <div class="row-header">
-                  <h3>Trending</h3>
-                  <div class="more">View all</div>
-                </div>
-
-                <div class="movie-cards" id="movieCards"></div>
+              <div class="section-header">
+                <h2>Trending Now</h2>
+                <div class="more">View all</div>
               </div>
 
-              <div class="player-card">
+              <div class="card-grid" id="movieGrid"></div>
+
+              <div class="player-card" style="margin-top:18px;">
                 <video id="movieVideo" controls playsinline poster="https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=1200&q=80">
-                  <source src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4" type="video/mp4">
+                  <source src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4" type="video/mp4" />
                 </video>
               </div>
             </div>
           </section>
 
-          <section class="section" id="chat">
+          <section class="section" id="chatSection">
             <div class="chat-panel">
               <div class="chat-header">
                 <h3>Community Chat</h3>
@@ -918,12 +1196,12 @@
 
               <div class="composer">
                 <input id="chatInput" type="text" placeholder="Type a message..." />
-                <button id="sendMessage" type="button" class="primary-btn">Send</button>
+                <button class="primary-btn" id="sendChatBtn" type="button">Send</button>
               </div>
             </div>
           </section>
 
-          <section class="section" id="voice">
+          <section class="section" id="voiceSection">
             <div class="voice-panel">
               <div class="voice-head">
                 <h3>Voice Chat</h3>
@@ -933,10 +1211,10 @@
               <div class="voice-users">
                 <div class="voice-user">
                   <div class="user-name">
-                    <div class="avatar a1">A</div>
+                    <div class="avatar g1" style="width:30px;height:30px;">A</div>
                     <div>
                       <div>Alice</div>
-                      <div style="font-size:0.75rem;color:var(--muted);">Hosting room</div>
+                      <div class="muted-text">Hosting room</div>
                     </div>
                   </div>
                   <div class="status"></div>
@@ -944,10 +1222,10 @@
 
                 <div class="voice-user">
                   <div class="user-name">
-                    <div class="avatar a2">B</div>
+                    <div class="avatar g2" style="width:30px;height:30px;">B</div>
                     <div>
                       <div>Ben</div>
-                      <div style="font-size:0.75rem;color:var(--muted);">Talking</div>
+                      <div class="muted-text">Talking</div>
                     </div>
                   </div>
                   <div class="status"></div>
@@ -955,10 +1233,10 @@
 
                 <div class="voice-user">
                   <div class="user-name">
-                    <div class="avatar a3">C</div>
+                    <div class="avatar g3" style="width:30px;height:30px;">C</div>
                     <div>
                       <div>Chloe</div>
-                      <div style="font-size:0.75rem;color:var(--muted);">Muted</div>
+                      <div class="muted-text">Muted</div>
                     </div>
                   </div>
                   <div class="status muted"></div>
@@ -966,10 +1244,10 @@
 
                 <div class="voice-user">
                   <div class="user-name">
-                    <div class="avatar a4">D</div>
+                    <div class="avatar g1" style="width:30px;height:30px;">D</div>
                     <div>
                       <div>Dan</div>
-                      <div style="font-size:0.75rem;color:var(--muted);">Away</div>
+                      <div class="muted-text">Away</div>
                     </div>
                   </div>
                   <div class="status idle"></div>
@@ -983,183 +1261,273 @@
               </div>
             </div>
           </section>
-        </main>
+        </div>
+      </main>
 
-        <aside class="sidebar-stack">
-          <div class="chat-panel">
-            <div class="chat-header">
+      <aside class="rightbar">
+        <div class="right-stack">
+          <div class="room-card">
+            <div class="header">
               <h3>Room Feed</h3>
               <div class="online-pill">Live</div>
             </div>
 
-            <div class="chat-box" style="min-height:220px;">
-              <div class="msg other">The new trailer dropped. Check it out.</div>
-              <div class="msg self">I saw it. The visuals are amazing.</div>
-              <div class="msg other">Anyone want to play a quick game after?</div>
-              <div class="msg self">Absolutely.</div>
-            </div>
-          </div>
-
-          <div class="voice-panel">
-            <div class="voice-head">
-              <h3>Voice Room</h3>
-              <div class="online-pill">4 in call</div>
-            </div>
-
-            <div class="voice-users">
-              <div class="voice-user">
-                <div class="user-name">
-                  <div class="avatar a1">A</div>
-                  <div>Alice</div>
+            <div class="room-body">
+              <div class="user-row">
+                <div class="friend">
+                  <div class="avatar g1 small">A</div>
+                  <div>
+                    <div>Alice</div>
+                    <div class="muted-text">Hosting</div>
+                  </div>
                 </div>
                 <div class="status"></div>
               </div>
 
-              <div class="voice-user">
-                <div class="user-name">
-                  <div class="avatar a2">B</div>
-                  <div>Ben</div>
+              <div class="user-row">
+                <div class="friend">
+                  <div class="avatar g2 small">B</div>
+                  <div>
+                    <div>Ben</div>
+                    <div class="muted-text">Playing</div>
+                  </div>
                 </div>
                 <div class="status"></div>
               </div>
 
-              <div class="voice-user">
-                <div class="user-name">
-                  <div class="avatar a3">C</div>
-                  <div>Chloe</div>
+              <div class="user-row">
+                <div class="friend">
+                  <div class="avatar g3 small">C</div>
+                  <div>
+                    <div>Chloe</div>
+                    <div class="muted-text">Watching</div>
+                  </div>
                 </div>
-                <div class="status muted"></div>
+                <div class="status"></div>
               </div>
             </div>
+          </div>
 
-            <div class="voice-actions">
-              <button class="tiny-btn primary" type="button">Join</button>
-              <button class="tiny-btn" type="button">Mute</button>
+          <div class="room-card">
+            <div class="header">
+              <h3>Friends</h3>
+              <div class="online-pill">42 online</div>
+            </div>
+
+            <div class="room-body">
+              <div class="user-row">
+                <div class="friend">
+                  <div class="avatar g1 small">L</div>
+                  <div>
+                    <div>Lana</div>
+                    <div class="muted-text">Available</div>
+                  </div>
+                </div>
+                <div class="status"></div>
+              </div>
+
+              <div class="user-row">
+                <div class="friend">
+                  <div class="avatar g2 small">K</div>
+                  <div>
+                    <div>Kai</div>
+                    <div class="muted-text">In chat</div>
+                  </div>
+                </div>
+                <div class="status"></div>
+              </div>
+
+              <div class="user-row">
+                <div class="friend">
+                  <div class="avatar g3 small">R</div>
+                  <div>
+                    <div>Rin</div>
+                    <div class="muted-text">Away</div>
+                  </div>
+                </div>
+                <div class="status idle"></div>
+              </div>
             </div>
           </div>
-        </aside>
+        </div>
+      </aside>
+    </div>
+
+    <div class="modal" id="movieModal" aria-hidden="true">
+      <div class="modal-card">
+        <div class="modal-image" id="modalImage"></div>
+        <div class="modal-body">
+          <div class="modal-top">
+            <div>
+              <h3 id="modalTitle">Night Drift</h3>
+              <div class="modal-meta">
+                <span>2026</span>
+                <span>Drama / Sci‑Fi</span>
+                <span>2h 12m</span>
+                <span>4.9/5</span>
+              </div>
+            </div>
+            <button class="close-btn" id="closeModalBtn" type="button">Close</button>
+          </div>
+
+          <div class="modal-actions">
+            <button class="primary-btn" type="button">Watch Now</button>
+            <button class="secondary-btn" type="button">+ My List</button>
+          </div>
+
+          <p id="modalDescription">
+            A rogue group of pilots searches for a lost signal buried beneath the final frontier. As reality folds and trust breaks apart, one impossible mission becomes a fight for the future.
+          </p>
+        </div>
       </div>
     </div>
 
     <script>
-      const tabs = document.querySelectorAll(".tab");
+      const tabs = document.querySelectorAll(".nav-item");
       const sections = document.querySelectorAll(".section");
+
+      const tabMap = {
+        "Home": "browserSection",
+        "Discover": "browserSection",
+        "Community": "chatSection",
+        "Favorites": "moviesSection"
+      };
 
       tabs.forEach((tab) => {
         tab.addEventListener("click", () => {
-          tabs.forEach((btn) => btn.classList.remove("active"));
-          sections.forEach((section) => section.classList.remove("active"));
-
+          tabs.forEach((el) => el.classList.remove("active"));
           tab.classList.add("active");
-          document.getElementById(tab.dataset.section).classList.add("active");
+
+          const target = tabMap[tab.textContent.trim()] || "browserSection";
+          sections.forEach((section) => section.classList.remove("active"));
+          document.getElementById(target).classList.add("active");
         });
       });
 
-      const movies = [
+      const movieData = [
         {
           title: "Night Drift",
           tag: "Movie",
           year: "2026",
           rating: "4.9",
-          poster: "https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?auto=format&fit=crop&w=1000&q=80"
+          description: "A rogue group of pilots searches for a lost signal buried beneath the final frontier. As reality folds and trust breaks apart, one impossible mission becomes a fight for the future.",
+          image: "https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?auto=format&fit=crop&w=1000&q=80"
         },
         {
           title: "Skyline Echo",
           tag: "Series",
           year: "2025",
           rating: "4.8",
-          poster: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1000&q=80"
+          description: "A long-buried radio signal awakens a forgotten city and draws strangers together in the middle of a collapsing sky.",
+          image: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1000&q=80"
         },
         {
           title: "Pixel Harbor",
           tag: "Movie",
           year: "2024",
           rating: "4.7",
-          poster: "https://images.unsplash.com/photo-1513106580091-1d82408b8cd6?auto=format&fit=crop&w=1000&q=80"
+          description: "A future city of glass and light hides a secret beneath its waters, and a young hacker may be the only one who can save it.",
+          image: "https://images.unsplash.com/photo-1513106580091-1d82408b8cd6?auto=format&fit=crop&w=1000&q=80"
         },
         {
           title: "Signal Zero",
           tag: "Series",
           year: "2026",
           rating: "4.9",
-          poster: "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=1000&q=80"
+          description: "When a dead transmission comes back online, an elite team must follow it across a fractured world before it reaches the wrong hands.",
+          image: "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=1000&q=80"
         }
       ];
 
-      const movieCards = document.getElementById("movieCards");
-      const featuredTitle = document.getElementById("featuredTitle");
+      const movieGrid = document.getElementById("movieGrid");
+      const heroTitle = document.getElementById("heroTitle");
+      const modal = document.getElementById("movieModal");
+      const modalTitle = document.getElementById("modalTitle");
+      const modalImage = document.getElementById("modalImage");
+      const modalDescription = document.getElementById("modalDescription");
+      const closeModalBtn = document.getElementById("closeModalBtn");
       const movieVideo = document.getElementById("movieVideo");
-      const watchNowBtn = document.getElementById("watchNowBtn");
 
       function renderMovies() {
-        movieCards.innerHTML = "";
+        movieGrid.innerHTML = "";
 
-        movies.forEach((movie) => {
+        movieData.forEach((movie) => {
           const card = document.createElement("div");
-          card.className = "movie-card";
+          card.className = "media-card";
 
           card.innerHTML = `
-            <div class="movie-poster" style="background-image:url('${movie.poster}')">
-              <div class="movie-badge">${movie.tag}</div>
+            <div class="poster" style="background-image: url('${movie.image}')">
+              <div class="poster-badge">${movie.tag}</div>
             </div>
-            <div class="movie-info">
-              <h4>${movie.title}</h4>
-              <p>${movie.year} • ${movie.rating}/5</p>
+            <div class="card-body">
+              <h3 class="card-title">${movie.title}</h3>
+              <p class="card-meta">${movie.year} • ${movie.rating}/5</p>
             </div>
           `;
 
           card.addEventListener("click", () => {
-            featuredTitle.textContent = movie.title;
-            movieVideo.play();
+            heroTitle.textContent = movie.title;
+            modalTitle.textContent = movie.title;
+            modalImage.style.backgroundImage = `url('${movie.image}')`;
+            modalDescription.textContent = movie.description;
+            modal.classList.add("active");
           });
 
-          movieCards.appendChild(card);
+          movieGrid.appendChild(card);
         });
       }
 
       renderMovies();
 
-      watchNowBtn.addEventListener("click", () => {
+      closeModalBtn.addEventListener("click", () => {
+        modal.classList.remove("active");
+      });
+
+      modal.addEventListener("click", (event) => {
+        if (event.target === modal) {
+          modal.classList.remove("active");
+        }
+      });
+
+      document.getElementById("watchNowBtn").addEventListener("click", () => {
         movieVideo.play();
       });
 
-      // Chat interaction
-      const chatInput = document.getElementById("chatInput");
       const chatBox = document.getElementById("chatBox");
-      const sendMessage = document.getElementById("sendMessage");
+      const chatInput = document.getElementById("chatInput");
+      const sendChatBtn = document.getElementById("sendChatBtn");
 
-      sendMessage.addEventListener("click", () => {
+      sendChatBtn.addEventListener("click", () => {
         const value = chatInput.value.trim();
         if (!value) return;
 
-        const msg = document.createElement("div");
-        msg.className = "msg self";
-        msg.textContent = value;
-        chatBox.appendChild(msg);
+        const self = document.createElement("div");
+        self.className = "msg self";
+        self.textContent = value;
+        chatBox.appendChild(self);
 
         chatInput.value = "";
 
-        const response = document.createElement("div");
-        response.className = "msg other";
-        response.textContent = "Sounds good! I’ll join the room.";
-        chatBox.appendChild(response);
+        const reply = document.createElement("div");
+        reply.className = "msg other";
+        reply.textContent = "Sounds good! I’ll join the room.";
+        chatBox.appendChild(reply);
 
         chatBox.scrollTop = chatBox.scrollHeight;
       });
 
       chatInput.addEventListener("keydown", (event) => {
         if (event.key === "Enter") {
-          sendMessage.click();
+          sendChatBtn.click();
         }
       });
 
-      // Mini game
       class MiniGame {
         constructor() {
           this.scene = document.getElementById("miniScene");
-          this.scoreEl = document.getElementById("gameScore");
-          this.hintEl = document.getElementById("gameHint");
-          this.restartBtn = document.getElementById("gameRestart");
+          this.scoreEl = document.getElementById("scoreDisplay");
+          this.gameHint = document.getElementById("gameHint");
+          this.restartBtn = document.getElementById("restartGameBtn");
           this.items = [];
           this.found = 0;
           this.sceneSize = { width: 0, height: 0 };
@@ -1187,10 +1555,10 @@
           this.scene.innerHTML = "";
           this.items = [];
           this.found = 0;
-          this.hintEl.textContent = "Find the movie clues.";
+          this.gameHint.textContent = "Find the movie clues.";
           this.renderScore();
 
-          const list = [
+          const clues = [
             { name: "Ticket", emoji: "🎟️" },
             { name: "Popcorn", emoji: "🍿" },
             { name: "Play", emoji: "▶️" },
@@ -1199,8 +1567,8 @@
             { name: "Clapperboard", emoji: "🎬" }
           ];
 
-          for (let i = 0; i < list.length; i++) {
-            const item = list[i];
+          for (let i = 0; i < clues.length; i++) {
+            const item = clues[i];
             let x = 0;
             let y = 0;
             let tries = 0;
@@ -1218,9 +1586,9 @@
               })
             );
 
-            const data = { ...item, x, y, found: false };
-            this.items.push(data);
-            this.createItem(data);
+            const entry = { ...item, x, y, found: false };
+            this.items.push(entry);
+            this.createItem(entry);
           }
         }
 
@@ -1241,21 +1609,21 @@
           this.scene.appendChild(btn);
         }
 
-        onFound(item, element) {
+        onFound(item, button) {
           if (item.found) return;
 
           item.found = true;
-          element.classList.add("found");
-          element.classList.add("hidden");
+          button.classList.add("found");
+          button.classList.add("hidden");
 
           this.found += 1;
           this.renderScore();
 
           if (this.found === this.items.length) {
-            this.hintEl.textContent = "You found them all!";
-            this.showOverlay();
+            this.gameHint.textContent = "You found them all!";
+            this.showWinOverlay();
           } else {
-            this.hintEl.textContent = `Nice! ${this.found} found so far.`;
+            this.gameHint.textContent = `Nice! ${this.found} found so far.`;
           }
         }
 
@@ -1263,7 +1631,7 @@
           this.scoreEl.textContent = `${this.found} / ${this.items.length}`;
         }
 
-        showOverlay() {
+        showWinOverlay() {
           const overlay = document.createElement("div");
           overlay.style.position = "absolute";
           overlay.style.inset = "0";
@@ -1271,7 +1639,7 @@
           overlay.style.placeItems = "center";
           overlay.style.background = "rgba(0,0,0,0.42)";
           overlay.style.backdropFilter = "blur(2px)";
-          overlay.style.fontSize = "clamp(1.4rem, 2vw, 2.2rem)";
+          overlay.style.fontSize = "clamp(1.3rem, 2vw, 2.1rem)";
           overlay.style.fontWeight = "800";
           overlay.style.color = "#d1fae5";
           overlay.textContent = "You found all clues!";
