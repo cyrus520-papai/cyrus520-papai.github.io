@@ -3,16 +3,16 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SocialStream Hub</title>
+    <title>SocialStream</title>
     <style>
       :root {
-        --bg: #070b13;
-        --bg-2: #111827;
-        --panel: #111827;
-        --panel-2: #172235;
-        --panel-3: #1d2b3d;
+        --bg: #070d18;
+        --bg-2: #101a2b;
+        --panel: #111b2b;
+        --panel-2: #17263d;
+        --panel-3: #1f2f46;
         --soft: #edf3ff;
-        --muted: #a8b7d3;
+        --muted: #aab8d1;
         --text: #f7f9ff;
         --gold: #f7c96a;
         --gold-2: #ef8d3d;
@@ -30,11 +30,11 @@
       html, body {
         margin: 0;
         min-height: 100vh;
+        font-family: Arial, Helvetica, sans-serif;
         background:
-          radial-gradient(circle at top, rgba(96,165,250,0.15), transparent 25%),
+          radial-gradient(circle at top, rgba(96,165,250,0.12), transparent 26%),
           linear-gradient(180deg, var(--bg), var(--bg-2));
         color: var(--text);
-        font-family: Arial, Helvetica, sans-serif;
       }
 
       body {
@@ -47,24 +47,24 @@
       }
 
       .app {
-        width: min(1460px, 96vw);
+        width: min(1500px, 96vw);
         min-height: 92vh;
         display: grid;
         grid-template-rows: auto 1fr;
-        background: rgba(8, 12, 20, 0.9);
+        background: rgba(8, 12, 20, 0.92);
         border: 1px solid rgba(255,255,255,0.08);
-        border-radius: 26px;
-        box-shadow: 0 30px 70px var(--shadow);
+        border-radius: 24px;
         overflow: hidden;
+        box-shadow: 0 32px 70px var(--shadow);
       }
 
       .topbar {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        gap: 16px;
-        padding: 18px 24px;
-        background: rgba(18, 24, 35, 0.9);
+        gap: 18px;
+        padding: 18px 22px;
+        background: rgba(15, 21, 31, 0.92);
         border-bottom: 1px solid rgba(255,255,255,0.08);
       }
 
@@ -86,7 +86,7 @@
       }
 
       .brand-name {
-        font-size: 1.18rem;
+        font-size: 1.15rem;
         font-weight: 800;
         letter-spacing: 0.08em;
         text-transform: uppercase;
@@ -94,50 +94,52 @@
 
       .nav {
         display: flex;
-        align-items: center;
         gap: 10px;
         flex-wrap: wrap;
       }
 
       .tab {
         border: 1px solid rgba(255,255,255,0.08);
-        background: rgba(255,255,255,0.04);
+        background: rgba(255,255,255,0.03);
         color: var(--muted);
-        padding: 8px 14px;
         border-radius: 999px;
+        padding: 8px 14px;
         cursor: pointer;
         transition: all 0.12s ease;
       }
 
+      .tab:hover {
+        border-color: rgba(255,255,255,0.16);
+      }
+
       .tab.active {
+        background: linear-gradient(135deg, rgba(96,165,250,0.2), rgba(139,92,246,0.15));
+        border-color: rgba(96,165,250,0.42);
         color: var(--text);
-        background: linear-gradient(135deg, rgba(96,165,250,0.25), rgba(139,92,246,0.18));
-        border-color: rgba(96,165,250,0.45);
       }
 
       .user-pill {
-        background: rgba(255,255,255,0.03);
+        background: rgba(255,255,255,0.04);
         border: 1px solid rgba(255,255,255,0.08);
+        padding: 9px 12px;
         border-radius: 999px;
-        padding: 9px 14px;
         color: var(--soft);
       }
 
       .main {
         display: grid;
-        grid-template-columns: minmax(0, 1.8fr) minmax(300px, 0.9fr);
+        grid-template-columns: minmax(0, 1.75fr) minmax(300px, 0.94fr);
         min-height: 0;
       }
 
       .content {
-        padding: 20px;
-        background: linear-gradient(180deg, rgba(17,24,39,0.9), rgba(8,12,17,0.95));
-        min-height: 0;
+        padding: 22px;
+        background: linear-gradient(180deg, rgba(17,24,39,0.9), rgba(8,12,17,0.96));
       }
 
       .section {
         display: none;
-        min-height: 700px;
+        min-height: 760px;
       }
 
       .section.active {
@@ -154,10 +156,10 @@
       .browser-top {
         display: flex;
         align-items: center;
-        gap: 10px;
+        gap: 12px;
         padding: 12px 14px;
-        background: rgba(255,255,255,0.04);
-        border-bottom: 1px solid rgba(255,255,255,0.06);
+        background: rgba(255,255,255,0.03);
+        border-bottom: 1px solid rgba(255,255,255,0.07);
       }
 
       .traffic {
@@ -177,41 +179,40 @@
 
       .address-bar {
         flex: 1;
-        background: rgba(0,0,0,0.16);
-        border: 1px solid rgba(255,255,255,0.08);
         border-radius: 999px;
         padding: 9px 14px;
+        border: 1px solid rgba(255,255,255,0.08);
+        background: rgba(0,0,0,0.18);
         color: var(--muted);
-        overflow: auto;
       }
 
       .browser-body {
         display: grid;
         grid-template-columns: 180px 1fr;
-        min-height: 740px;
+        min-height: 760px;
       }
 
-      .sidebar-links {
-        background: rgba(255,255,255,0.02);
+      .side-nav {
+        background: rgba(255,255,255,0.015);
         border-right: 1px solid rgba(255,255,255,0.06);
         padding: 16px 12px;
       }
 
-      .sidebar-links .link {
+      .side-nav-item {
         display: block;
         text-decoration: none;
-        color: var(--muted);
+        border: 1px solid rgba(255,255,255,0.05);
         background: rgba(255,255,255,0.02);
-        border: 1px solid rgba(255,255,255,0.04);
+        color: var(--muted);
         border-radius: 12px;
         padding: 10px 12px;
         margin-bottom: 10px;
       }
 
-      .sidebar-links .link.active {
-        color: var(--text);
+      .side-nav-item.active {
         background: rgba(96,165,250,0.12);
-        border-color: rgba(96,165,250,0.3);
+        border-color: rgba(96,165,250,0.35);
+        color: var(--text);
       }
 
       .browser-page {
@@ -219,27 +220,28 @@
       }
 
       .page-hero {
-        background:
-          linear-gradient(135deg, rgba(31,41,55,0.8), rgba(15,23,42,0.72)),
-          url("https://images.unsplash.com/photo-1524985069026-dd778a71c7b4?auto=format&fit=crop&w=1200&q=80") center/cover no-repeat;
+        min-height: 220px;
         border-radius: 18px;
         padding: 24px;
-        min-height: 220px;
         display: flex;
-        align-items: end;
+        align-items: flex-end;
+        background:
+          linear-gradient(135deg, rgba(17,24,39,0.8), rgba(15,23,42,0.74)),
+          url("https://images.unsplash.com/photo-1524985069026-dd778a71c7b4?auto=format&fit=crop&w=1400&q=80") center/cover no-repeat;
+        border: 1px solid rgba(255,255,255,0.08);
       }
 
       .page-hero h2 {
         margin: 0;
-        font-size: clamp(2rem, 3vw, 3.2rem);
-        letter-spacing: -0.04em;
+        font-size: clamp(2rem, 3vw, 3.4rem);
+        letter-spacing: -0.05em;
       }
 
       .site-grid {
+        margin-top: 18px;
         display: grid;
         grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 16px;
-        margin-top: 18px;
       }
 
       .site-card {
@@ -260,7 +262,7 @@
       }
 
       .site-card h4 {
-        margin: 0 0 6px;
+        margin: 0 0 7px;
         font-size: 1rem;
       }
 
@@ -272,18 +274,18 @@
 
       .movie-layout {
         display: grid;
-        gap: 20px;
+        gap: 18px;
       }
 
       .featured-banner {
-        height: 300px;
-        border-radius: 22px;
-        background:
-          linear-gradient(90deg, rgba(0,0,0,0.68), rgba(0,0,0,0.22)),
-          url("https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=1400&q=80") center/cover no-repeat;
-        border: 1px solid rgba(255,255,255,0.08);
         position: relative;
+        height: 320px;
+        border-radius: 22px;
         overflow: hidden;
+        background:
+          linear-gradient(90deg, rgba(0,0,0,0.72), rgba(0,0,0,0.18)),
+          url("https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=1600&q=80") center/cover no-repeat;
+        border: 1px solid rgba(255,255,255,0.08);
       }
 
       .featured-content {
@@ -295,19 +297,18 @@
 
       .eyebrow {
         display: inline-block;
-        padding: 7px 11px;
-        border-radius: 999px;
-        border: 1px solid rgba(255,255,255,0.12);
         background: rgba(255,255,255,0.08);
-        font-size: 0.72rem;
-        letter-spacing: 0.08em;
+        border: 1px solid rgba(255,255,255,0.12);
+        border-radius: 999px;
+        padding: 7px 12px;
+        font-size: 0.7rem;
         text-transform: uppercase;
-        color: var(--soft);
+        letter-spacing: 0.08em;
       }
 
       .featured-content h2 {
         margin: 14px 0 10px;
-        font-size: clamp(2rem, 4vw, 4rem);
+        font-size: clamp(2rem, 4vw, 4.2rem);
         line-height: 0.96;
         letter-spacing: -0.04em;
       }
@@ -316,21 +317,21 @@
         display: flex;
         gap: 14px;
         flex-wrap: wrap;
-        color: var(--muted);
-        font-size: 0.88rem;
+        color: var(--soft);
+        font-size: 0.9rem;
       }
 
       .action-row {
         margin-top: 18px;
         display: flex;
-        gap: 12px;
         flex-wrap: wrap;
+        gap: 12px;
       }
 
       .primary-btn, .secondary-btn, .tiny-btn {
         border: none;
         border-radius: 999px;
-        padding: 11px 17px;
+        padding: 11px 16px;
         font-weight: 800;
         cursor: pointer;
       }
@@ -391,27 +392,26 @@
       }
 
       .movie-poster {
+        position: relative;
         aspect-ratio: 4 / 5.2;
         background-size: cover;
         background-position: center;
-        position: relative;
       }
 
       .movie-badge {
         position: absolute;
-        left: 10px;
         top: 10px;
-        padding: 6px 9px;
-        border-radius: 999px;
-        font-size: 0.7rem;
+        left: 10px;
         background: rgba(12,18,29,0.78);
-        color: var(--soft);
         border: 1px solid rgba(255,255,255,0.12);
+        border-radius: 999px;
+        padding: 6px 8px;
+        font-size: 0.7rem;
         font-weight: 700;
       }
 
       .movie-info {
-        padding: 12px 12px 14px;
+        padding: 12px;
       }
 
       .movie-info h4 {
@@ -426,18 +426,18 @@
       }
 
       .player-card {
-        background: rgba(0,0,0,0.24);
+        background: rgba(0,0,0,0.22);
         border: 1px solid rgba(255,255,255,0.08);
         border-radius: 20px;
         overflow: hidden;
       }
 
-      video {
+      .player-card video {
+        display: block;
         width: 100%;
         height: 260px;
-        display: block;
-        background: #000;
         object-fit: cover;
+        background: #000;
       }
 
       .game-card {
@@ -447,18 +447,39 @@
         padding: 16px;
       }
 
-      .mini-wrapper {
-        display: grid;
+      .game-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
         gap: 12px;
+        margin-bottom: 12px;
+      }
+
+      .game-top h3 {
+        margin: 0;
+        font-size: 0.95rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--soft);
+      }
+
+      .score-badge {
+        padding: 6px 10px;
+        border-radius: 999px;
+        background: rgba(247, 201, 106, 0.12);
+        border: 1px solid rgba(247, 201, 106, 0.35);
+        color: var(--gold);
+        font-size: 0.75rem;
+        font-weight: 700;
       }
 
       .mini-scene {
         position: relative;
         width: 100%;
-        height: 290px;
+        height: 320px;
         background:
-          linear-gradient(180deg, rgba(96,165,250,0.12), rgba(0,0,0,0.22)),
-          linear-gradient(180deg, #11213d, #0d1523 35%, #0e1626 100%);
+          linear-gradient(180deg, rgba(96,165,250,0.12), rgba(0,0,0,0.2)),
+          linear-gradient(180deg, #14263f 0%, #0f1725 36%, #111827 100%);
         border: 1px solid rgba(255,255,255,0.08);
         border-radius: 18px;
         overflow: hidden;
@@ -469,8 +490,8 @@
         position: absolute;
         inset: 0;
         background:
-          linear-gradient(transparent 0 76%, rgba(7,11,20,0.9) 76% 100%),
-          linear-gradient(90deg, rgba(255,255,255,0.02) 0 4%, transparent 4% 100%);
+          linear-gradient(transparent 0 76%, rgba(7,11,20,0.88) 76% 100%),
+          linear-gradient(90deg, rgba(255,255,255,0.02) 0 5%, transparent 5% 100%);
         pointer-events: none;
       }
 
@@ -504,36 +525,42 @@
         border-radius: 12px;
         background: rgba(255,255,255,0.08);
         border: 2px solid rgba(255,255,255,0.18);
-        box-shadow: 0 8px 18px rgba(0,0,0,0.25);
+        box-shadow: 0 8px 16px rgba(0,0,0,0.25);
         font-size: 1.6rem;
       }
 
       .findable.found .sprite {
         background: rgba(58,212,157,0.18);
         border-color: rgba(58,212,157,0.9);
-        box-shadow: 0 0 18px rgba(58,212,157,0.33);
+        box-shadow: 0 0 18px rgba(58,212,157,0.3);
       }
 
-      .game-row {
+      .game-footer {
+        margin-top: 12px;
         display: flex;
         justify-content: space-between;
         align-items: center;
         gap: 12px;
       }
 
-      .score-badge {
-        padding: 6px 10px;
-        border-radius: 999px;
-        background: rgba(247, 201, 106, 0.12);
-        border: 1px solid rgba(247, 201, 106, 0.35);
-        color: var(--gold);
-        font-size: 0.75rem;
-        font-weight: 700;
+      .game-hint {
+        color: var(--muted);
+        font-size: 0.85rem;
+      }
+
+      .tiny-btn {
+        background: rgba(255,255,255,0.06);
+        border: 1px solid rgba(255,255,255,0.08);
+        color: var(--text);
+      }
+
+      .tiny-btn.primary {
+        background: linear-gradient(135deg, var(--gold), var(--gold-2));
+        color: #111827;
+        border: none;
       }
 
       .chat-panel {
-        display: grid;
-        grid-template-rows: auto 1fr auto;
         background: rgba(255,255,255,0.02);
         border: 1px solid rgba(255,255,255,0.08);
         border-radius: 20px;
@@ -544,16 +571,15 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        gap: 10px;
-        padding: 15px 16px;
+        padding: 14px 16px;
         border-bottom: 1px solid rgba(255,255,255,0.08);
       }
 
       .chat-header h3 {
         margin: 0;
-        font-size: 0.95rem;
-        text-transform: uppercase;
+        font-size: 0.9rem;
         letter-spacing: 0.08em;
+        text-transform: uppercase;
         color: var(--soft);
       }
 
@@ -571,13 +597,13 @@
         display: flex;
         flex-direction: column;
         gap: 12px;
-        padding: 16px 16px 10px;
-        min-height: 350px;
+        min-height: 360px;
+        padding: 16px;
         background: rgba(0,0,0,0.06);
       }
 
       .msg {
-        max-width: 80%;
+        max-width: 85%;
         padding: 10px 12px;
         border-radius: 14px;
         line-height: 1.35;
@@ -586,7 +612,7 @@
 
       .msg.self {
         align-self: flex-end;
-        background: linear-gradient(135deg, rgba(96,165,250,0.34), rgba(139,92,246,0.26));
+        background: linear-gradient(135deg, rgba(96,165,250,0.34), rgba(139,92,246,0.25));
         border: 1px solid rgba(96,165,250,0.35);
       }
 
@@ -609,8 +635,8 @@
         flex: 1;
         background: rgba(255,255,255,0.04);
         border: 1px solid rgba(255,255,255,0.08);
-        color: var(--text);
         border-radius: 999px;
+        color: var(--text);
         padding: 11px 14px;
       }
 
@@ -630,32 +656,13 @@
 
       .voice-head h3 {
         margin: 0;
-        font-size: 0.95rem;
-        letter-spacing: 0.08em;
+        font-size: 0.94rem;
         text-transform: uppercase;
+        letter-spacing: 0.08em;
         color: var(--soft);
       }
 
-      .voice-actions {
-        display: flex;
-        gap: 8px;
-        flex-wrap: wrap;
-        margin-top: 16px;
-      }
-
-      .tiny-btn {
-        background: rgba(255,255,255,0.04);
-        border: 1px solid rgba(255,255,255,0.08);
-        color: var(--text);
-      }
-
-      .tiny-btn.primary {
-        background: linear-gradient(135deg, var(--gold), var(--gold-2));
-        color: #111827;
-        border: none;
-      }
-
-      .voice-user-list {
+      .voice-users {
         display: grid;
         gap: 10px;
       }
@@ -665,10 +672,10 @@
         justify-content: space-between;
         align-items: center;
         gap: 12px;
+        padding: 10px 12px;
+        border-radius: 14px;
         background: rgba(255,255,255,0.02);
         border: 1px solid rgba(255,255,255,0.08);
-        border-radius: 14px;
-        padding: 10px 12px;
       }
 
       .user-name {
@@ -683,41 +690,55 @@
         border-radius: 50%;
         display: grid;
         place-items: center;
+        font-size: 0.74rem;
         font-weight: 800;
         color: #111827;
-        font-size: 0.75rem;
-      }
-
-      .muted {
-        font-size: 0.78rem;
-        color: var(--muted);
       }
 
       .avatar.a1 { background: linear-gradient(135deg, #60a5fa, #93c5fd); }
       .avatar.a2 { background: linear-gradient(135deg, #f9a8d4, #fca5a5); }
       .avatar.a3 { background: linear-gradient(135deg, #fbbf24, #f59e0b); }
-      .avatar.a4 { background: linear-gradient(135deg, #4ade80, #22c55e); }
+      .avatar.a4 { background: linear-gradient(135deg, #4ade80, #34d399); }
 
       .status {
         width: 10px;
         height: 10px;
         border-radius: 50%;
         background: var(--green);
-        box-shadow: 0 0 12px rgba(58,212,157,0.8);
-      }
-
-      .status.muted {
-        background: var(--red);
-        box-shadow: none;
+        box-shadow: 0 0 10px rgba(58,212,157,0.8);
       }
 
       .status.idle {
         background: #fbbf24;
       }
 
+      .status.muted {
+        background: var(--red);
+      }
+
+      .voice-actions {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-top: 16px;
+      }
+
+      .sidebar-stack {
+        display: grid;
+        gap: 18px;
+        padding: 18px;
+        background: linear-gradient(180deg, rgba(23,34,53,0.9), rgba(9,14,22,0.92));
+        border-left: 1px solid rgba(255,255,255,0.08);
+      }
+
       @media (max-width: 1100px) {
         .main {
           grid-template-columns: 1fr;
+        }
+
+        .sidebar-stack {
+          border-left: none;
+          border-top: 1px solid rgba(255,255,255,0.08);
         }
       }
 
@@ -726,7 +747,7 @@
           grid-template-columns: 1fr;
         }
 
-        .sidebar-links {
+        .side-nav {
           border-right: none;
           border-bottom: 1px solid rgba(255,255,255,0.06);
         }
@@ -746,8 +767,7 @@
           width: 100%;
         }
 
-        .movie-cards,
-        .site-grid {
+        .movie-cards, .site-grid {
           grid-template-columns: 1fr;
         }
       }
@@ -761,12 +781,12 @@
           <div class="brand-name">SocialStream</div>
         </div>
 
-        <nav class="nav" aria-label="Main tabs">
-          <button class="tab active" type="button" data-tab="browser">Browser</button>
-          <button class="tab" type="button" data-tab="games">Games</button>
-          <button class="tab" type="button" data-tab="movies">Movies</button>
-          <button class="tab" type="button" data-tab="chat">Chat</button>
-          <button class="tab" type="button" data-tab="voice">Voice</button>
+        <nav class="nav" aria-label="main tabs">
+          <button class="tab active" type="button" data-section="browser">Browser</button>
+          <button class="tab" type="button" data-section="games">Games</button>
+          <button class="tab" type="button" data-section="movies">Movies</button>
+          <button class="tab" type="button" data-section="chat">Chat</button>
+          <button class="tab" type="button" data-section="voice">Voice</button>
         </nav>
 
         <div class="user-pill">Guest User</div>
@@ -786,13 +806,13 @@
               </div>
 
               <div class="browser-body">
-                <aside class="sidebar-links">
-                  <a href="#" class="link active">Explore</a>
-                  <a href="#" class="link">Live</a>
-                  <a href="#" class="link">Movies</a>
-                  <a href="#" class="link">Games</a>
-                  <a href="#" class="link">Friends</a>
-                  <a href="#" class="link">Saved</a>
+                <aside class="side-nav">
+                  <a href="#" class="side-nav-item active">Explore</a>
+                  <a href="#" class="side-nav-item">Live</a>
+                  <a href="#" class="side-nav-item">Movies</a>
+                  <a href="#" class="side-nav-item">Games</a>
+                  <a href="#" class="side-nav-item">Friends</a>
+                  <a href="#" class="side-nav-item">Saved</a>
                 </aside>
 
                 <div class="browser-page">
@@ -805,7 +825,7 @@
                       <div class="image" style="background-image:url('https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?auto=format&fit=crop&w=1200&q=80')"></div>
                       <div class="body">
                         <h4>Movie Night</h4>
-                        <p>Watch trending premieres with friends.</p>
+                        <p>Watch premieres with your friends.</p>
                       </div>
                     </div>
 
@@ -813,7 +833,7 @@
                       <div class="image" style="background-image:url('https://images.unsplash.com/photo-1493711662062-fa541adb3fc8?auto=format&fit=crop&w=1200&q=80')"></div>
                       <div class="body">
                         <h4>Arcade Lounge</h4>
-                        <p>Play quick competitive games in real time.</p>
+                        <p>Play and compete in quick games.</p>
                       </div>
                     </div>
 
@@ -821,7 +841,7 @@
                       <div class="image" style="background-image:url('https://images.unsplash.com/photo-1524985069026-dd778a71c7b4?auto=format&fit=crop&w=1200&q=80')"></div>
                       <div class="body">
                         <h4>Community Rooms</h4>
-                        <p>Join public or private rooms for hangout sessions.</p>
+                        <p>Join public or private social spaces.</p>
                       </div>
                     </div>
                   </div>
@@ -832,18 +852,16 @@
 
           <section class="section" id="games">
             <div class="game-card">
-              <div class="mini-wrapper">
-                <div class="game-row">
-                  <h3 style="margin:0;font-size:1.08rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--soft)">Mini Game</h3>
-                  <div class="score-badge" id="gameScore">0 / 6</div>
-                </div>
+              <div class="game-top">
+                <h3>Mini Game</h3>
+                <div class="score-badge" id="gameScore">0 / 6</div>
+              </div>
 
-                <div class="mini-scene" id="miniScene" aria-label="Game scene"></div>
+              <div class="mini-scene" id="miniScene"></div>
 
-                <div class="game-row">
-                  <div id="gameHint" style="color:var(--muted);font-size:0.85rem;">Find the movie clues.</div>
-                  <button type="button" class="tiny-btn primary" id="gameRestart">Restart</button>
-                </div>
+              <div class="game-footer">
+                <div class="game-hint" id="gameHint">Find the movie clues.</div>
+                <button type="button" class="tiny-btn primary" id="gameRestart">Restart</button>
               </div>
             </div>
           </section>
@@ -874,7 +892,7 @@
                   <div class="more">View all</div>
                 </div>
 
-                <div id="movieCards" class="movie-cards"></div>
+                <div class="movie-cards" id="movieCards"></div>
               </div>
 
               <div class="player-card">
@@ -913,13 +931,13 @@
                 <div class="online-pill">Live</div>
               </div>
 
-              <div class="voice-user-list">
+              <div class="voice-users">
                 <div class="voice-user">
                   <div class="user-name">
                     <div class="avatar a1">A</div>
                     <div>
                       <div>Alice</div>
-                      <div class="muted">Hosting room</div>
+                      <div style="font-size:0.75rem;color:var(--muted);">Hosting room</div>
                     </div>
                   </div>
                   <div class="status"></div>
@@ -930,7 +948,7 @@
                     <div class="avatar a2">B</div>
                     <div>
                       <div>Ben</div>
-                      <div class="muted">Talking</div>
+                      <div style="font-size:0.75rem;color:var(--muted);">Talking</div>
                     </div>
                   </div>
                   <div class="status"></div>
@@ -941,7 +959,7 @@
                     <div class="avatar a3">C</div>
                     <div>
                       <div>Chloe</div>
-                      <div class="muted">Muted</div>
+                      <div style="font-size:0.75rem;color:var(--muted);">Muted</div>
                     </div>
                   </div>
                   <div class="status muted"></div>
@@ -952,7 +970,7 @@
                     <div class="avatar a4">D</div>
                     <div>
                       <div>Dan</div>
-                      <div class="muted">Away</div>
+                      <div style="font-size:0.75rem;color:var(--muted);">Away</div>
                     </div>
                   </div>
                   <div class="status idle"></div>
@@ -968,57 +986,56 @@
           </section>
         </main>
 
-        <aside style="padding:18px;background:linear-gradient(180deg, rgba(23,34,53,0.9), rgba(9,14,22,0.9)); border-left:1px solid rgba(255,255,255,0.08);">
-          <div style="display:grid;gap:18px;">
-            <div class="chat-panel" style="min-height:0;">
-              <div class="chat-header">
-                <h3>Room Feed</h3>
-                <div class="online-pill">Live</div>
+        <aside class="sidebar-stack">
+          <div class="chat-panel">
+            <div class="chat-header">
+              <h3>Room Feed</h3>
+              <div class="online-pill">Live</div>
+            </div>
+
+            <div class="chat-box" style="min-height:220px;">
+              <div class="msg other">The new trailer dropped. Check it out.</div>
+              <div class="msg self">I saw it. The visuals are amazing.</div>
+              <div class="msg other">Anyone want to play a quick game after?</div>
+              <div class="msg self">Absolutely.</div>
+            </div>
+          </div>
+
+          <div class="voice-panel">
+            <div class="voice-head">
+              <h3>Voice Room</h3>
+              <div class="online-pill">4 in call</div>
+            </div>
+
+            <div class="voice-users">
+              <div class="voice-user">
+                <div class="user-name">
+                  <div class="avatar a1">A</div>
+                  <div>Alice</div>
+                </div>
+                <div class="status"></div>
               </div>
-              <div class="chat-box" style="min-height:220px;">
-                <div class="msg other">The new trailer dropped. Check it out.</div>
-                <div class="msg self">I saw it. The visuals are amazing.</div>
-                <div class="msg other">Anyone want to play a quick game after?</div>
-                <div class="msg self">Absolutely.</div>
+
+              <div class="voice-user">
+                <div class="user-name">
+                  <div class="avatar a2">B</div>
+                  <div>Ben</div>
+                </div>
+                <div class="status"></div>
+              </div>
+
+              <div class="voice-user">
+                <div class="user-name">
+                  <div class="avatar a3">C</div>
+                  <div>Chloe</div>
+                </div>
+                <div class="status muted"></div>
               </div>
             </div>
 
-            <div class="voice-panel">
-              <div class="voice-head">
-                <h3>Voice Room</h3>
-                <div class="online-pill">4 in call</div>
-              </div>
-
-              <div class="voice-user-list">
-                <div class="voice-user">
-                  <div class="user-name">
-                    <div class="avatar a1">A</div>
-                    <div>Alice</div>
-                  </div>
-                  <div class="status"></div>
-                </div>
-
-                <div class="voice-user">
-                  <div class="user-name">
-                    <div class="avatar a2">B</div>
-                    <div>Ben</div>
-                  </div>
-                  <div class="status"></div>
-                </div>
-
-                <div class="voice-user">
-                  <div class="user-name">
-                    <div class="avatar a3">C</div>
-                    <div>Chloe</div>
-                  </div>
-                  <div class="status muted"></div>
-                </div>
-              </div>
-
-              <div class="voice-actions">
-                <button class="tiny-btn primary" type="button">Join</button>
-                <button class="tiny-btn" type="button">Mute</button>
-              </div>
+            <div class="voice-actions">
+              <button class="tiny-btn primary" type="button">Join</button>
+              <button class="tiny-btn" type="button">Mute</button>
             </div>
           </div>
         </aside>
@@ -1026,24 +1043,49 @@
     </div>
 
     <script>
-      const movieCatalog = [
-        { title: "Night Drift", tag: "Movie", year: "2026", rating: "4.9", poster: "https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?auto=format&fit=crop&w=1000&q=80" },
-        { title: "Skyline Echo", tag: "Series", year: "2025", rating: "4.8", poster: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1000&q=80" },
-        { title: "Pixel Harbor", tag: "Movie", year: "2024", rating: "4.7", poster: "https://images.unsplash.com/photo-1513106580091-1d82408b8cd6?auto=format&fit=crop&w=1000&q=80" },
-        { title: "Signal Zero", tag: "Series", year: "2026", rating: "4.9", poster: "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=1000&q=80" }
-      ];
-
       const tabs = document.querySelectorAll(".tab");
       const sections = document.querySelectorAll(".section");
 
       tabs.forEach((tab) => {
         tab.addEventListener("click", () => {
-          tabs.forEach((button) => button.classList.remove("active"));
-          sections.forEach((section) => section.classList.remove("active"));
+          tabs.forEach(btn => btn.classList.remove("active"));
+          sections.forEach(sec => sec.classList.remove("active"));
+
           tab.classList.add("active");
-          document.getElementById(tab.dataset.tab).classList.add("active");
+          document.getElementById(tab.dataset.section).classList.add("active");
         });
       });
+
+      const movies = [
+        {
+          title: "Night Drift",
+          tag: "Movie",
+          year: "2026",
+          rating: "4.9",
+          poster: "https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?auto=format&fit=crop&w=1000&q=80"
+        },
+        {
+          title: "Skyline Echo",
+          tag: "Series",
+          year: "2025",
+          rating: "4.8",
+          poster: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1000&q=80"
+        },
+        {
+          title: "Pixel Harbor",
+          tag: "Movie",
+          year: "2024",
+          rating: "4.7",
+          poster: "https://images.unsplash.com/photo-1513106580091-1d82408b8cd6?auto=format&fit=crop&w=1000&q=80"
+        },
+        {
+          title: "Signal Zero",
+          tag: "Series",
+          year: "2026",
+          rating: "4.9",
+          poster: "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=1000&q=80"
+        }
+      ];
 
       const movieCards = document.getElementById("movieCards");
       const featuredTitle = document.getElementById("featuredTitle");
@@ -1053,9 +1095,10 @@
       function renderMovies() {
         movieCards.innerHTML = "";
 
-        movieCatalog.forEach((movie) => {
+        movies.forEach((movie) => {
           const card = document.createElement("div");
           card.className = "movie-card";
+
           card.innerHTML = `
             <div class="movie-poster" style="background-image:url('${movie.poster}')">
               <div class="movie-badge">${movie.tag}</div>
@@ -1086,20 +1129,20 @@
       const sendMessage = document.getElementById("sendMessage");
 
       sendMessage.addEventListener("click", () => {
-        const text = chatInput.value.trim();
-        if (!text) return;
+        const value = chatInput.value.trim();
+        if (!value) return;
 
         const msg = document.createElement("div");
         msg.className = "msg self";
-        msg.textContent = text;
+        msg.textContent = value;
         chatBox.appendChild(msg);
 
         chatInput.value = "";
 
-        const reply = document.createElement("div");
-        reply.className = "msg other";
-        reply.textContent = "Sounds good! Let’s do it.";
-        chatBox.appendChild(reply);
+        const response = document.createElement("div");
+        response.className = "msg other";
+        response.textContent = "Sounds good! I’ll join the room.";
+        chatBox.appendChild(response);
 
         chatBox.scrollTop = chatBox.scrollHeight;
       });
@@ -1146,7 +1189,7 @@
           this.hintEl.textContent = "Find the movie clues.";
           this.renderScore();
 
-          const list = [
+          const items = [
             { name: "Ticket", emoji: "🎟️" },
             { name: "Popcorn", emoji: "🍿" },
             { name: "Play", emoji: "▶️" },
@@ -1155,8 +1198,8 @@
             { name: "Clapperboard", emoji: "🎬" }
           ];
 
-          for (let i = 0; i < list.length; i++) {
-            const item = list[i];
+          for (let i = 0; i < items.length; i++) {
+            const item = items[i];
             let x = 0;
             let y = 0;
             let tries = 0;
@@ -1174,13 +1217,13 @@
               })
             );
 
-            const entry = { ...item, x, y, found: false };
-            this.items.push(entry);
-            this.createObject(entry);
+            const data = { ...item, x, y, found: false };
+            this.items.push(data);
+            this.createItem(data);
           }
         }
 
-        createObject(item) {
+        createItem(item) {
           const btn = document.createElement("button");
           btn.type = "button";
           btn.className = "findable";
@@ -1227,7 +1270,7 @@
           overlay.style.placeItems = "center";
           overlay.style.background = "rgba(0,0,0,0.42)";
           overlay.style.backdropFilter = "blur(2px)";
-          overlay.style.fontSize = "clamp(1.4rem, 2vw, 2.2rem)";
+          overlay.style.fontSize = "clamp(1.3rem, 2vw, 2rem)";
           overlay.style.fontWeight = "800";
           overlay.style.color = "#d1fae5";
           overlay.textContent = "You found all clues!";
