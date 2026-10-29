@@ -1,15 +1,4 @@
-{
-  "name": "achroma-perfect",
-  "version": "1.0.0",
-  "private": true,
-  "scripts": {
-    "start": "node server.js"
-  },
-  "dependencies": {
-    "express": "^4.19.2",
-    "socket.io": "^4.7.5"
-  }
-}const express = require("express");
+const express = require("express");
 const http = require("http");
 const path = require("path");
 const { Server } = require("socket.io");
@@ -135,7 +124,7 @@ app.get("/api/catalog", (req, res) => {
 });
 
 io.on("connection", (socket) => {
-  console.log("User connected:", socket.id);
+  console.log("user connected:", socket.id);
 
   socket.on("join-room", ({ roomName, username }) => {
     const safeRoom = (roomName || "lounge").trim().replace(/\s+/g, "-").toLowerCase();
@@ -147,23 +136,20 @@ io.on("connection", (socket) => {
     }
 
     if (!rooms.has(safeRoom)) {
-      rooms.set(safeRoom, {
-        users: new Map(),
-        messages: []
-      });
+      rooms.set(safeRoom, { users: new Map(), messages: [] });
     }
 
     const room = rooms.get(safeRoom);
 
+    // leave previous room if needed
     if (socket.room && socket.room !== safeRoom && rooms.has(socket.room)) {
       const previousRoom = rooms.get(socket.room);
-      if (previousRoom) {
-        previousRoom.users.delete(socket.id);
-        io.to(socket.room).emit("room-update", {
-          roomName: socket.room,
-          members: [...previousRoom.users.values()]
-        });
-      }
+      previousRoom.users.delete(socket.id);
+
+      io.to(socket.room).emit("room-update", {
+        roomName: socket.room,
+        members: [...previousRoom.users.values()]
+      });
     }
 
     socket.leave(socket.room || safeRoom);
@@ -172,13 +158,14 @@ io.on("connection", (socket) => {
 
     room.users.set(socket.id, safeUsername);
 
-    socket.emit("joined-room", {
+    const payload = {
       roomName: safeRoom,
       username: safeUsername,
       members: [...room.users.values()],
       history: room.messages.slice(-25)
-    });
+    };
 
+    socket.emit("joined-room", payload);
     io.to(safeRoom).emit("room-update", {
       roomName: safeRoom,
       members: [...room.users.values()]
@@ -233,5 +220,5 @@ app.get("*", (req, res) => {
 
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
-  console.log("App running on http://localhost:" + PORT);
+  console.log("app running at http://localhost:" + PORT);
 });
