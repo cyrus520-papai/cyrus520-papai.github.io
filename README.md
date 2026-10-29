@@ -1,4 +1,15 @@
-const express = require("express");
+{
+  "name": "achroma-perfect",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "socket.io": "^4.7.5"
+  }
+}const express = require("express");
 const http = require("http");
 const path = require("path");
 const { Server } = require("socket.io");
