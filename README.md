@@ -146,12 +146,13 @@ io.on("connection", (socket) => {
 
     if (socket.room && socket.room !== safeRoom && rooms.has(socket.room)) {
       const previousRoom = rooms.get(socket.room);
-      previousRoom.users.delete(socket.id);
-
-      io.to(socket.room).emit("room-update", {
-        roomName: socket.room,
-        members: [...previousRoom.users.values()]
-      });
+      if (previousRoom) {
+        previousRoom.users.delete(socket.id);
+        io.to(socket.room).emit("room-update", {
+          roomName: socket.room,
+          members: [...previousRoom.users.values()]
+        });
+      }
     }
 
     socket.leave(socket.room || safeRoom);
@@ -221,5 +222,5 @@ app.get("*", (req, res) => {
 
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+  console.log("App running on http://localhost:" + PORT);
 });
