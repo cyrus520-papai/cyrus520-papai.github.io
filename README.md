@@ -1,233 +1,388 @@
-// ==========================================
-// 1. DATA LAYER: data/cards.json
-// ==========================================
-/*
-[
-  {
-    "id": "1",
-    "name": "Achromax, The Unraveler",
-    "faction": "Chroma",
-    "type": "Character",
-    "cost": 5,
-    "rarity": "Legendary",
-    "rules": "When Achromax enters the battlefield, drain 2 Shards from your opponent.",
-    "imageUrl": "https://unsplash.com"
-  },
-  {
-    "id": "2",
-    "name": "Shard Burst",
-    "faction": "Achros",
-    "type": "Action",
-    "cost": 2,
-    "rarity": "Rare",
-    "rules": "Gain 3 temporary Shards this turn.",
-    "imageUrl": "https://unsplash.com"
-  },
-  {
-    "id": "3",
-    "name": "Crystalline Golem",
-    "faction": "Chroma",
-    "type": "Character",
-    "cost": 3,
-    "rarity": "Common",
-    "rules": "Prevent the first 1 damage dealt to this character each turn.",
-    "imageUrl": "https://unsplash.com"
-  }
-]
-*/
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hidden Movie & Show Hunt</title>
+    <style>
+      :root {
+        --bg-1: #0b1020;
+        --bg-2: #171f36;
+        --panel: #1d2438;
+        --panel-2: #2b3550;
+        --primary: #fbbf24;
+        --primary-2: #f97316;
+        --text: #f5f7ff;
+        --muted: #c9d1ea;
+        --accent: #7dd3fc;
+        --success: #4ade80;
+        --danger: #f87171;
+      }
 
-// ==========================================
-// 2. MAIN LAYOUT: app/layout.tsx
-// ==========================================
-import React from 'react';
-import './globals.css'; // Contains standard Tailwind directives
+      * {
+        box-sizing: border-box;
+      }
 
-export const metadata = {
-  title: 'Chroma Nexus | Card Database',
-  description: 'Explore the cards, lore, and strategies of the realm.',
-};
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        font-family: Arial, sans-serif;
+        background:
+          radial-gradient(circle at top, rgba(125, 211, 252, 0.18), transparent 30%),
+          linear-gradient(160deg, var(--bg-1), var(--bg-2));
+        color: var(--text);
+      }
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  return (
-    <html lang="en" className="dark">
-      <body className="bg-slate-950 text-slate-100 min-h-screen font-sans selection:bg-purple-600 selection:text-white">
-        {/* Global Navigation Header */}
-        <header className="sticky top-0 z-50 bg-slate-900/80 backdrop-blur-md border-b border-slate-800 px-6 py-4 flex justify-between items-center">
-          <div className="flex items-center space-x-3">
-            <div className="w-8 h-8 rounded-md bg-gradient-to-tr from-purple-600 to-indigo-500 animate-pulse" />
-            <span className="text-xl font-bold tracking-wider uppercase bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">
-              CHROMA NEXUS
-            </span>
-          </div>
-          <nav className="hidden md:flex space-x-8 text-sm font-medium tracking-wide">
-            <a href="/" className="hover:text-purple-400 transition-colors">Home</a>
-            <a href="/cards" className="text-purple-400 border-b-2 border-purple-500 pb-1">Card Database</a>
-            <a href="#" className="hover:text-purple-400 transition-colors">Lore Chronicles</a>
-            <a href="#" className="hover:text-purple-400 transition-colors">Decks</a>
-          </nav>
-          <button className="bg-purple-600 hover:bg-purple-700 text-white font-semibold text-xs uppercase px-5 py-2.5 rounded shadow-lg shadow-purple-900/30 transition-all active:scale-95">
-            Launch App
-          </button>
-        </header>
+      .game-shell {
+        width: min(92vw, 980px);
+        background: rgba(11, 16, 32, 0.9);
+        border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 30px 60px rgba(0,0,0,0.38);
+      }
 
-        {/* Dynamic View Wrapper */}
-        <main>{children}</main>
+      .hud {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px;
+        padding: 18px 22px;
+        background: var(--panel);
+        border-bottom: 1px solid rgba(255,255,255,0.08);
+      }
 
-        {/* Global Footer */}
-        <footer className="border-t border-slate-900 bg-slate-950 text-center py-8 text-sm text-slate-500">
-          <p>© {new Date().getFullYear()} Chroma Nexus. Inspired by tactical TCG universes.</p>
-        </footer>
-      </body>
-    </html>
-  );
-}
+      .brand {
+        font-size: 1.25rem;
+        font-weight: 800;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
 
-// ==========================================
-// 3. INTERACTIVE CARD PORTAL: app/cards/page.tsx
-// ==========================================
-'use client';
+      .stats {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
 
-import { useState, useMemo } from 'react';
+      .stat {
+        background: var(--panel-2);
+        border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 999px;
+        padding: 8px 14px;
+        font-size: 0.96rem;
+      }
 
-// local placeholder matching data/cards.json structural parameters
-const sampleCards = [
-  {
-    id: "1",
-    name: "Achromax, The Unraveler",
-    faction: "Chroma",
-    type: "Character",
-    cost: 5,
-    rarity: "Legendary",
-    rules: "When Achromax enters the battlefield, drain 2 Shards from your opponent.",
-    imageUrl: "https://unsplash.com"
-  },
-  {
-    id: "2",
-    name: "Shard Burst",
-    faction: "Achros",
-    type: "Action",
-    cost: 2,
-    rarity: "Rare",
-    rules: "Gain 3 temporary Shards this turn.",
-    imageUrl: "https://unsplash.com"
-  },
-  {
-    id: "3",
-    name: "Crystalline Golem",
-    faction: "Chroma",
-    type: "Character",
-    cost: 3,
-    rarity: "Common",
-    rules: "Prevent the first 1 damage dealt to this character each turn.",
-    imageUrl: "https://unsplash.com"
-  }
-];
+      .scene-wrap {
+        padding: 18px;
+        background:
+          linear-gradient(180deg, rgba(25,33,52,0.85), rgba(11,16,32,0.85));
+      }
 
-export default function CardDatabase() {
-  const [search, setSearch] = useState('');
-  const [selectedFaction, setSelectedFaction] = useState('All');
+      .scene {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 16 / 9;
+        background:
+          linear-gradient(180deg, rgba(59,130,246,0.15), rgba(0,0,0,0.15)),
+          linear-gradient(180deg, #1b2a4f 0%, #0f172a 28%, #121b2b 29%, #2f3b1d 100%);
+        border-radius: 16px;
+        overflow: hidden;
+        border: 1px solid rgba(255,255,255,0.08);
+        box-shadow: inset 0 0 36px rgba(0,0,0,0.35);
+      }
 
-  // Client-side execution filtering matrix
-  const filteredCards = useMemo(() => {
-    return sampleCards.filter((card) => {
-      const matchesSearch = card.name.toLowerCase().includes(search.toLowerCase()) ||
-                            card.rules.toLowerCase().includes(search.toLowerCase());
-      const matchesFaction = selectedFaction === 'All' || card.faction === selectedFaction;
-      return matchesSearch && matchesFaction;
-    });
-  }, [search, selectedFaction]);
+      .scene::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+          linear-gradient(transparent 0 75%, rgba(13,19,29,0.82) 75% 100%),
+          linear-gradient(90deg, rgba(255,255,255,0.02) 0 4%, transparent 4% 100%);
+        pointer-events: none;
+      }
 
-  return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-      {/* Dynamic Header Node */}
-      <div className="mb-10 text-center md:text-left">
-        <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl bg-gradient-to-r from-purple-400 to-indigo-300 bg-clip-text text-transparent">
-          Card Codex
-        </h1>
-        <p className="mt-2 text-slate-400 max-w-xl">
-          Query values, inspect gameplay rules, and filter down specific mechanics across entire regional card expansions instantly.
-        </p>
+      .movie-object {
+        position: absolute;
+        width: 42px;
+        height: 42px;
+        transform: translate(-50%, -50%);
+        border: none;
+        background: transparent;
+        cursor: pointer;
+        user-select: none;
+        padding: 0;
+        transition: transform 0.12s ease, filter 0.12s ease;
+      }
+
+      .movie-object:hover {
+        transform: translate(-50%, -50%) scale(1.08);
+      }
+
+      .movie-object:focus-visible {
+        outline: 3px solid rgba(255,255,255,0.8);
+        outline-offset: 5px;
+        border-radius: 10px;
+      }
+
+      .movie-object.hidden {
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .movie-object .sprite {
+        width: 100%;
+        height: 100%;
+        display: grid;
+        place-items: center;
+        border-radius: 14px;
+        font-size: 1.7rem;
+        background: rgba(255,255,255,0.08);
+        border: 2px solid rgba(255,255,255,0.18);
+        box-shadow: 0 8px 16px rgba(0,0,0,0.24);
+      }
+
+      .movie-object.found .sprite {
+        background: rgba(74,222,128,0.18);
+        border-color: rgba(74,222,128,0.9);
+        box-shadow: 0 0 20px rgba(74,222,128,0.5);
+      }
+
+      .message {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        min-height: 70px;
+        padding: 16px 22px 20px;
+        color: var(--muted);
+        background: rgba(17, 24, 39, 0.75);
+      }
+
+      .message strong {
+        color: var(--text);
+      }
+
+      .btn {
+        border: none;
+        background: linear-gradient(135deg, var(--primary), var(--primary-2));
+        color: #111827;
+        font-weight: 800;
+        border-radius: 999px;
+        padding: 10px 18px;
+        cursor: pointer;
+      }
+
+      .btn:hover {
+        filter: brightness(1.05);
+      }
+
+      .btn.secondary {
+        background: #374151;
+        color: var(--text);
+      }
+
+      @media (max-width: 700px) {
+        .hud {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .message {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="game-shell">
+      <div class="hud">
+        <div class="brand">Movie Hideout</div>
+        <div class="stats">
+          <div class="stat" id="timer">Time: 60s</div>
+          <div class="stat" id="score">Found: 0 / 8</div>
+        </div>
       </div>
 
-      {/* Control Filtering Layer */}
-      <div className="bg-slate-900 border border-slate-800 p-6 rounded-xl mb-8 flex flex-col md:flex-row gap-4 items-center justify-between">
-        <div className="w-full md:w-1/2">
-          <label htmlFor="search" className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Search Cards</label>
-          <input
-            id="search"
-            type="text"
-            placeholder="Search by card name, keyword or rules text..."
-            className="w-full bg-slate-950 border border-slate-700 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-        </div>
-
-        <div className="w-full md:w-auto flex flex-col sm:flex-row gap-2 self-end md:self-auto">
-          <div className="w-full">
-            <span className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Faction Alliance</span>
-            <div className="inline-flex rounded-lg p-1 bg-slate-950 border border-slate-800">
-              {['All', 'Chroma', 'Achros'].map((faction) => (
-                <button
-                  key={faction}
-                  onClick={() => setSelectedFaction(faction)}
-                  className={`px-4 py-1.5 rounded-md text-xs font-medium uppercase tracking-wider transition ${
-                    selectedFaction === faction
-                      ? 'bg-purple-600 text-white shadow'
-                      : 'text-slate-400 hover:text-white'
-                  }`}
-                >
-                  {faction}
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
+      <div class="scene-wrap">
+        <div id="scene" class="scene" aria-label="Hidden movie and show objects scene"></div>
       </div>
 
-      {/* UI Result Matrix */}
-      {filteredCards.length === 0 ? (
-        <div className="text-center py-20 border border-dashed border-slate-800 rounded-xl bg-slate-900/30">
-          <p className="text-slate-400">No archival instances match your active layout filtering metrics.</p>
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {filteredCards.map((card) => (
-            <div
-              key={card.id}
-              className="group bg-slate-900 border border-slate-800/80 rounded-xl overflow-hidden hover:border-purple-500/50 shadow-xl transition-all hover:-translate-y-1 duration-300"
-            >
-              {/* Graphic Render Wrapper */}
-              <div className="relative aspect-[3/4] bg-slate-950 w-full overflow-hidden border-b border-slate-800">
-                <img
-                  src={card.imageUrl}
-                  alt={card.name}
-                  loading="lazy"
-                  className="object-cover w-full h-full transition duration-500 group-hover:scale-105 opacity-80 group-hover:opacity-100"
-                />
-                {/* Cost Badge Node */}
-                <div className="absolute top-3 right-3 w-8 h-8 rounded-full bg-slate-950/90 border border-purple-500 flex items-center justify-center font-bold text-sm text-purple-400 backdrop-blur-sm">
-                  {card.cost}
-                </div>
-                {/* Faction Subtag Overlay */}
-                <div className="absolute bottom-2 left-2 px-2 py-0.5 rounded bg-slate-900/90 text-[10px] font-bold tracking-widest uppercase border border-slate-700 backdrop-blur-sm">
-                  {card.faction}
-                </div>
-              </div>
+      <div class="message">
+        <div><strong>Find all movie-night clues</strong> before the timer runs out.</div>
+        <button id="restartBtn" class="btn secondary" type="button">Restart</button>
+      </div>
+    </div>
 
-              {/* Text Meta Descriptions Container */}
-              <div className="p-4">
-                <div className="flex justify-between items-start gap-2 mb-1">
-                  <h3 className="font-bold text-base tracking-wide text-white group-hover:text-purple-300 transition-colors line-clamp-1">
-                    {card.name}
-                  </h3>
-                </div>
-                <div className="flex gap-2 mb-3 text-[11px] font-medium tracking-wide">
-                  <span className="text-slate-400">{card.type}</span>
-                  <span className="text-slate-600">•</span>
-                  <span className={`
-                    ${card.rarity === 'Legendary' ? 'text-amber-400' : ''}
+    <script>
+      const ITEMS = [
+        { name: "Ticket", emoji: "🎟️" },
+        { name: "Popcorn", emoji: "🍿" },
+        { name: "Camera", emoji: "🎥" },
+        { name: "TV", emoji: "📺" },
+        { name: "Play Button", emoji: "▶️" },
+        { name: "Movie Reel", emoji: "🎞️" },
+        { name: "Remote", emoji: "📺" }, // intentionally duplicates to show variety
+        { name: "Clapperboard", emoji: "🎬" }
+      ];
+
+      class HiddenMovieGame {
+        constructor() {
+          this.items = [];
+          this.foundCount = 0;
+          this.secondsLeft = 60;
+          this.gameOver = false;
+          this.timerId = null;
+          this.sceneBounds = { width: 0, height: 0 };
+          this.scene = document.getElementById("scene");
+          this.timerEl = document.getElementById("timer");
+          this.scoreEl = document.getElementById("score");
+          this.restartBtn = document.getElementById("restartBtn");
+          this.setup();
+        }
+
+        setup() {
+          this.bindEvents();
+          this.resetSceneSize();
+          this.start();
+        }
+
+        bindEvents() {
+          this.restartBtn.addEventListener("click", () => this.start());
+          window.addEventListener("resize", () => this.resetSceneSize());
+        }
+
+        resetSceneSize() {
+          const rect = this.scene.getBoundingClientRect();
+          this.sceneBounds.width = rect.width;
+          this.sceneBounds.height = rect.height;
+        }
+
+        start() {
+          clearInterval(this.timerId);
+
+          this.scene.innerHTML = "";
+          this.items = [];
+          this.foundCount = 0;
+          this.secondsLeft = 60;
+          this.gameOver = false;
+
+          this.generateItems(ITEMS);
+          this.renderScore();
+          this.renderTimer();
+          this.timerId = setInterval(() => {
+            if (this.gameOver) return;
+
+            this.secondsLeft -= 1;
+            this.renderTimer();
+
+            if (this.secondsLeft <= 0) {
+              this.endGame(false);
+            }
+          }, 1000);
+        }
+
+        generateItems(list) {
+          const placedItems = [];
+
+          for (let i = 0; i < list.length; i++) {
+            const itemData = list[i];
+            let x = 0;
+            let y = 0;
+            let tries = 0;
+
+            do {
+              x = Math.random() * (this.sceneBounds.width - 80) + 40;
+              y = Math.random() * (this.sceneBounds.height - 80) + 40;
+              tries++;
+            } while (
+              tries < 250 &&
+              placedItems.some((existing) => {
+                const dx = x - existing.x;
+                const dy = y - existing.y;
+                return Math.hypot(dx, dy) < 80;
+              })
+            );
+
+            const item = {
+              ...itemData,
+              x,
+              y,
+              found: false
+            };
+
+            placedItems.push(item);
+            this.createObject(item);
+          }
+
+          this.items = placedItems;
+        }
+
+        createObject(item) {
+          const button = document.createElement("button");
+          button.type = "button";
+          button.className = "movie-object";
+          button.setAttribute("aria-label", `Find ${item.name}`);
+          button.style.left = `${item.x}px`;
+          button.style.top = `${item.y}px`;
+
+          const sprite = document.createElement("span");
+          sprite.className = "sprite";
+          sprite.textContent = item.emoji;
+
+          button.appendChild(sprite);
+          button.addEventListener("click", () => this.onObjectFound(item, button));
+          this.scene.appendChild(button);
+        }
+
+        onObjectFound(item, element) {
+          if (this.gameOver || item.found) return;
+
+          item.found = true;
+          element.classList.add("found");
+          element.classList.add("hidden");
+
+          this.foundCount += 1;
+          this.renderScore();
+
+          if (this.foundCount === this.items.length) {
+            this.endGame(true);
+          }
+        }
+
+        renderScore() {
+          this.scoreEl.textContent = `Found: ${this.foundCount} / ${this.items.length}`;
+        }
+
+        renderTimer() {
+          this.timerEl.textContent = `Time: ${this.secondsLeft}s`;
+        }
+
+        endGame(win) {
+          this.gameOver = true;
+          clearInterval(this.timerId);
+
+          const overlay = document.createElement("div");
+          overlay.style.position = "absolute";
+          overlay.style.inset = "0";
+          overlay.style.display = "grid";
+          overlay.style.placeItems = "center";
+          overlay.style.fontSize = "clamp(1.4rem, 3vw, 2.3rem)";
+          overlay.style.fontWeight = "800";
+          overlay.style.color = win ? "#d1fae5" : "#fee2e2";
+          overlay.style.background = "rgba(0,0,0,0.34)";
+          overlay.style.backdropFilter = "blur(2px)";
+          overlay.style.zIndex = "10";
+          overlay.textContent = win ? "You found them all!" : "Time's up! Try again.";
+
+          this.scene.appendChild(overlay);
+        }
+      }
+
+      new HiddenMovieGame();
+    </script>
+  </body>
+</html>
