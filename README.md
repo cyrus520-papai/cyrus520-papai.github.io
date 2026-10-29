@@ -3,10 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Achroma | Real Movies, Games & Browser</title>
+    <title>Achroma | Movies, Games & Video</title>
     <meta
       name="description"
-      content="Achroma is a legal entertainment platform with real movie trailers, official games, and a browser launcher to real sites."
+      content="Achroma has a movie library with YouTube trailers embedded inside the site, plus real games and a browser section."
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -18,8 +18,8 @@
       :root {
         --bg: #070b12;
         --bg-2: #0d1420;
-        --panel: rgba(16, 23, 35, 0.82);
-        --panel-strong: rgba(12, 18, 29, 0.9);
+        --panel: rgba(17, 24, 39, 0.82);
+        --panel-strong: rgba(12, 18, 29, 0.92);
         --line: rgba(148, 163, 184, 0.14);
         --text: #edf2ff;
         --text-soft: #dfe7ff;
@@ -29,7 +29,6 @@
         --accent: #22d3ee;
         --success: #34d399;
         --gold: #fbbf24;
-        --danger: #f87171;
         --shadow: 0 30px 80px rgba(2, 6, 23, 0.7);
         --container: 1220px;
       }
@@ -95,6 +94,7 @@
         font-weight: 700;
         cursor: pointer;
         transition: 0.25s ease;
+        text-decoration: none;
       }
 
       .btn-primary {
@@ -387,12 +387,13 @@
         border-color: rgba(168,85,247,0.28);
       }
 
-      .featured-player {
-        margin-bottom: 24px;
+      .video-player-shell {
         background: rgba(15,23,42,0.7);
         border: 1px solid var(--line);
-        border-radius: 26px;
+        border-radius: 28px;
         overflow: hidden;
+        margin-bottom: 24px;
+        box-shadow: var(--shadow);
       }
 
       .video-wrap {
@@ -409,6 +410,24 @@
         border: 0;
       }
 
+      .video-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        padding: 16px 18px 20px;
+      }
+
+      .video-meta h3 {
+        margin: 0;
+        font-size: 1.5rem;
+        letter-spacing: -0.04em;
+      }
+
+      .video-meta span {
+        color: var(--muted);
+      }
+
       .media-grid {
         display: grid;
         grid-template-columns: repeat(5, minmax(0, 1fr));
@@ -422,6 +441,7 @@
         border: 1px solid var(--line);
         background: rgba(15,23,42,0.7);
         transition: transform 0.25s ease, box-shadow 0.25s ease;
+        cursor: pointer;
       }
 
       .card:hover {
@@ -681,7 +701,6 @@
 
       .browser-pane {
         padding: 20px;
-        min-height: 410px;
       }
 
       .browser-placeholder {
@@ -845,12 +864,12 @@
               <h1>Watch. Play. Browse.</h1>
 
               <p>
-                Achroma gives you legal movie trailers, official game storefronts, and a browser launcher to real sites like Steam, YouTube, Epic, Netflix, and more.
+                Achroma gives you embedded YouTube trailers in the app, real game storefronts, and browser launchers for trustworthy entertainment sites.
               </p>
 
               <div class="hero-actions">
                 <a href="#movies" class="btn btn-primary">▶ Watch Movies</a>
-                <a href="#games" class="btn btn-secondary">🎮 Play Games</a>
+                <a href="#games" class="btn btn-secondary">🎮 Explore Games</a>
               </div>
 
               <div class="hero-stats">
@@ -890,7 +909,7 @@
           <div class="section-head">
             <div>
               <span class="eyebrow">Movies</span>
-              <h2>Real movie trailers and official sources.</h2>
+              <h2>Watch trailers in the website.</h2>
             </div>
             <div class="chip-row">
               <span class="chip active">All</span>
@@ -901,14 +920,20 @@
             </div>
           </div>
 
-          <div class="featured-player">
+          <div class="video-player-shell">
             <div class="video-wrap">
               <iframe
-                src="https://www.youtube.com/embed/Way9Dexny3w?si=V4Z7Q4UErS-0Dg0R"
+                id="mainVideo"
+                src="https://www.youtube.com/embed/Way9Dexny3w?autoplay=0&rel=0"
                 title="Featured movie trailer"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                 allowfullscreen>
               </iframe>
+            </div>
+
+            <div class="video-meta">
+              <h3 id="mainVideoTitle">Dune: Part Two</h3>
+              <span id="mainVideoType">Official trailer</span>
             </div>
           </div>
 
@@ -923,7 +948,7 @@
               <span class="eyebrow">Games</span>
               <h2>Real games from official stores.</h2>
             </div>
-            <p>Official store links to Steam, Epic, Minecraft, and other real publishers.</p>
+            <p>Official store links to Steam, Epic, Minecraft, and other trusted publishers.</p>
           </div>
 
           <div id="gameGrid" class="games-grid"></div>
@@ -935,9 +960,9 @@
           <div class="section-head">
             <div>
               <span class="eyebrow">Browser</span>
-              <h2>Open official websites from the app.</h2>
+              <h2>Open official websites directly.</h2>
             </div>
-            <p>This is a browser launcher for real websites, not a pirated media host.</p>
+            <p>This is a browser launcher for trusted sites, not a pirated media host.</p>
           </div>
 
           <div class="browser-shell">
@@ -952,7 +977,8 @@
             </div>
 
             <div class="browser-actions">
-              <button class="browser-btn" data-url="https://www.youtube.com/">YouTube</button>
+              <button class="browser-btn" data-url="https://www.imdb.com/">IMDb</button>
+              <button class="browser-btn" data-url="https://www.rottentomatoes.com/">Rotten Tomatoes</button>
               <button class="browser-btn" data-url="https://store.steampowered.com/">Steam</button>
               <button class="browser-btn" data-url="https://store.epicgames.com/en-US/">Epic Games</button>
               <button class="browser-btn" data-url="https://www.netflix.com/">Netflix</button>
@@ -965,7 +991,7 @@
                 <div>
                   <h3 style="margin:0 0 10px; font-size:1.8rem; letter-spacing:-0.04em;">Launch an official website</h3>
                   <p style="margin:0; max-width:520px; color:var(--muted);">
-                    Choose a real site above to open it in a new tab. This keeps the app legal and lets you browse official movie and games platforms.
+                    Choose a trusted site above to open it in a new tab.
                   </p>
                 </div>
               </div>
@@ -982,13 +1008,13 @@
               <span class="eyebrow">Why Achroma</span>
               <h3>Real entertainment, properly linked.</h3>
               <p>
-                Achroma is designed around official sources: movie trailers, legitimate streaming pages, game stores, and browser launchers to trusted platforms.
+                Achroma is built around official sources: YouTube trailers, trusted game stores, and browser links to real entertainment platforms.
               </p>
 
               <ul class="mini-list">
-                <li>Real movie trailers</li>
+                <li>Embedded YouTube trailers</li>
                 <li>Official game storefronts</li>
-                <li>Legal browser launchers</li>
+                <li>Trusted browser launchers</li>
               </ul>
 
               <a href="#browser" class="btn btn-primary">Open Browser</a>
@@ -1002,8 +1028,8 @@
           <div class="cta-box">
             <div>
               <span class="eyebrow">Official sources</span>
-              <h3>Play real games. Watch real trailers.</h3>
-              <p>Open actual platforms and stay inside legal, trusted sources.</p>
+              <h3>Play real games. Watch trailers inside the site.</h3>
+              <p>No tab breaks for the main movie experience.</p>
             </div>
 
             <div style="display:flex; gap:12px; flex-wrap:wrap;">
@@ -1032,18 +1058,18 @@
 
     <script>
       const movieData = [
-        { title: "Dune: Part Two", subtitle: "Sci‑Fi / Epic", rating: "8.6", meta: "2h 46m", image: "https://images.unsplash.com/photo-1513106580091-1d82408b8cd6?auto=format&fit=crop&w=800&q=80", link: "https://www.youtube.com/watch?v=Way9Dexny3w" },
-        { title: "The Batman", subtitle: "Action / Crime", rating: "8.5", meta: "2h 56m", image: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=800&q=80", link: "https://www.youtube.com/watch?v=mqqft2x_Aa4" },
-        { title: "Oppenheimer", subtitle: "Drama / Biography", rating: "8.6", meta: "3h 0m", image: "https://images.unsplash.com/photo-1497032628192-86f99bcd76bc?auto=format&fit=crop&w=800&q=80", link: "https://www.youtube.com/watch?v=uYPbbksJxIg" },
-        { title: "Interstellar", subtitle: "Sci‑Fi / Adventure", rating: "8.7", meta: "2h 49m", image: "https://images.unsplash.com/photo-1517602302552-471fe67acf66?auto=format&fit=crop&w=800&q=80", link: "https://www.youtube.com/results?search_query=Interstellar+official+trailer" },
-        { title: "Blade Runner 2049", subtitle: "Sci‑Fi / Mystery", rating: "8.0", meta: "2h 44m", image: "https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?auto=format&fit=crop&w=800&q=80", link: "https://www.youtube.com/results?search_query=Blade+Runner+2049+official+trailer" },
-        { title: "Inception", subtitle: "Sci‑Fi / Thriller", rating: "8.8", meta: "2h 28m", image: "https://images.unsplash.com/photo-1516280440614-37939bbacd81?auto=format&fit=crop&w=800&q=80", link: "https://www.youtube.com/results?search_query=Inception+official+trailer" },
-        { title: "Top Gun: Maverick", subtitle: "Action / Drama", rating: "8.3", meta: "2h 11m", image: "https://images.unsplash.com/photo-1527631746610-bca00a040d60?auto=format&fit=crop&w=800&q=80", link: "https://www.youtube.com/watch?v=qSqVVswa420" },
-        { title: "The Dark Knight", subtitle: "Action / Crime", rating: "9.0", meta: "2h 32m", image: "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=800&q=80", link: "https://www.youtube.com/results?search_query=The+Dark+Knight+official+trailer" },
-        { title: "Arrival", subtitle: "Sci‑Fi / Drama", rating: "7.9", meta: "1h 56m", image: "https://images.unsplash.com/photo-1522869635100-9f4c5e86aa37?auto=format&fit=crop&w=800&q=80", link: "https://www.youtube.com/results?search_query=Arrival+official+trailer" },
-        { title: "Mad Max: Fury Road", subtitle: "Action / Adventure", rating: "8.1", meta: "2h 0m", image: "https://images.unsplash.com/photo-1478720568477-152d9b164e26?auto=format&fit=crop&w=800&q=80", link: "https://www.youtube.com/watch?v=hEJnMQG9ev8" },
-        { title: "Gladiator", subtitle: "Action / Drama", rating: "8.5", meta: "2h 35m", image: "https://images.unsplash.com/photo-1497032628192-86f99bcd76bc?auto=format&fit=crop&w=800&q=80", link: "https://www.youtube.com/results?search_query=Gladiator+official+trailer" },
-        { title: "No Time to Die", subtitle: "Action / Spy", rating: "7.3", meta: "2h 43m", image: "https://images.unsplash.com/photo-1516979187457-637abb4f9353?auto=format&fit=crop&w=800&q=80", link: "https://www.youtube.com/results?search_query=No+Time+To+Die+official+trailer" }
+        { title: "Dune: Part Two", subtitle: "Sci‑Fi / Epic", rating: "8.6", meta: "Trailer", image: "https://images.unsplash.com/photo-1513106580091-1d82408b8cd6?auto=format&fit=crop&w=800&q=80", embed: "https://www.youtube.com/embed/Way9Dexny3w?autoplay=0&rel=0" },
+        { title: "The Batman", subtitle: "Action / Crime", rating: "8.5", meta: "Trailer", image: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=800&q=80", embed: "https://www.youtube.com/embed/mqqft2x_Aa4?autoplay=0&rel=0" },
+        { title: "Oppenheimer", subtitle: "Drama / Biography", rating: "8.6", meta: "Trailer", image: "https://images.unsplash.com/photo-1497032628192-86f99bcd76bc?auto=format&fit=crop&w=800&q=80", embed: "https://www.youtube.com/embed/uYPbbksJxIg?autoplay=0&rel=0" },
+        { title: "Interstellar", subtitle: "Sci‑Fi / Adventure", rating: "8.7", meta: "Trailer", image: "https://images.unsplash.com/photo-1517602302552-471fe67acf66?auto=format&fit=crop&w=800&q=80", embed: "https://www.youtube.com/embed/zSWdZVtXT7E?autoplay=0&rel=0" },
+        { title: "Blade Runner 2049", subtitle: "Sci‑Fi / Mystery", rating: "8.0", meta: "Trailer", image: "https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?auto=format&fit=crop&w=800&q=80", embed: "https://www.youtube.com/embed/gCcx85zbxz4?autoplay=0&rel=0" },
+        { title: "Inception", subtitle: "Sci‑Fi / Thriller", rating: "8.8", meta: "Trailer", image: "https://images.unsplash.com/photo-1516280440614-37939bbacd81?auto=format&fit=crop&w=800&q=80", embed: "https://www.youtube.com/embed/YoHD9XEInc0?autoplay=0&rel=0" },
+        { title: "Top Gun: Maverick", subtitle: "Action / Drama", rating: "8.3", meta: "Trailer", image: "https://images.unsplash.com/photo-1527631746610-bca00a040d60?auto=format&fit=crop&w=800&q=80", embed: "https://www.youtube.com/embed/qSqVVswa420?autoplay=0&rel=0" },
+        { title: "The Dark Knight", subtitle: "Action / Crime", rating: "9.0", meta: "Trailer", image: "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=800&q=80", embed: "https://www.youtube.com/embed/EXeTwQWrcwY?autoplay=0&rel=0" },
+        { title: "Arrival", subtitle: "Sci‑Fi / Drama", rating: "7.9", meta: "Trailer", image: "https://images.unsplash.com/photo-1522869635100-9f4c5e86aa37?auto=format&fit=crop&w=800&q=80", embed: "https://www.youtube.com/embed/tFMo3UJ4B4g?autoplay=0&rel=0" },
+        { title: "Mad Max: Fury Road", subtitle: "Action / Adventure", rating: "8.1", meta: "Trailer", image: "https://images.unsplash.com/photo-1478720568477-152d9b164e26?auto=format&fit=crop&w=800&q=80", embed: "https://www.youtube.com/embed/hEJnMQG9ev8?autoplay=0&rel=0" },
+        { title: "Gladiator", subtitle: "Action / Drama", rating: "8.5", meta: "Trailer", image: "https://images.unsplash.com/photo-1497032628192-86f99bcd76bc?auto=format&fit=crop&w=800&q=80", embed: "https://www.youtube.com/embed/owK1qxDselE?autoplay=0&rel=0" },
+        { title: "No Time to Die", subtitle: "Action / Spy", rating: "7.3", meta: "Trailer", image: "https://images.unsplash.com/photo-1516979187457-637abb4f9353?auto=format&fit=crop&w=800&q=80", embed: "https://www.youtube.com/embed/NG4yxDtvA3Q?autoplay=0&rel=0" }
       ];
 
       const gameData = [
@@ -1061,9 +1087,13 @@
         { title: "The Witcher 3", subtitle: "RPG / Adventure", rating: "9.1", meta: "Steam", image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=800&q=80", link: "https://store.steampowered.com/app/292030/The_Witcher_3_Wild_Hunt/" }
       ];
 
+      const mainVideo = document.getElementById("mainVideo");
+      const mainVideoTitle = document.getElementById("mainVideoTitle");
+      const mainVideoType = document.getElementById("mainVideoType");
+
       const movieGrid = document.getElementById("movieGrid");
       movieGrid.innerHTML = movieData.map(item => `
-        <a class="card" href="${item.link}" target="_blank" rel="noreferrer">
+        <div class="card" data-video="${item.embed}" data-title="${item.title}" data-type="${item.subtitle}">
           <div class="poster">
             <img src="${item.image}" alt="${item.title}" />
           </div>
@@ -1075,22 +1105,32 @@
             <h3 class="card-title">${item.title}</h3>
             <div class="sub">${item.subtitle}</div>
           </div>
-        </a>
+        </div>
       `).join("");
+
+      document.querySelectorAll(".card").forEach(card => {
+        card.addEventListener("click", () => {
+          const src = card.getAttribute("data-video");
+          const title = card.getAttribute("data-title");
+          const type = card.getAttribute("data-type");
+          mainVideo.src = src + "&autoplay=1&rel=0";
+          mainVideoTitle.textContent = title;
+          mainVideoType.textContent = type;
+        });
+      });
 
       const gameGrid = document.getElementById("gameGrid");
       gameGrid.innerHTML = gameData.map(item => `
-        <a class="card" href="${item.link}" target="_blank" rel="noreferrer">
-          <div class="poster">
-            <img src="${item.image}" alt="${item.title}" />
-          </div>
-          <div class="card-content">
-            <div class="rating-row">
-              <span class="rating">${item.rating}</span>
-              <span class="duration">${item.meta}</span>
+        <a class="game-card" href="${item.link}" target="_blank" rel="noreferrer">
+          <div class="img" style="background-image:url('${item.image}')"></div>
+          <div class="content">
+            <div class="tiny">
+              <span class="badge">${item.meta}</span>
+              <span class="duration">${item.rating}</span>
             </div>
-            <h3 class="card-title">${item.title}</h3>
-            <div class="sub">${item.subtitle}</div>
+            <h3>${item.title}</h3>
+            <p>${item.subtitle}</p>
+            <span class="btn btn-secondary" style="width: 100%;">Open Store</span>
           </div>
         </a>
       `).join("");
