@@ -3,24 +3,24 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>CinemaWorld Pro</title>
+    <title>SocialStream Hub</title>
     <style>
       :root {
-        --bg: #070b14;
-        --bg-2: #101827;
+        --bg: #070b13;
+        --bg-2: #111827;
         --panel: #111827;
         --panel-2: #172235;
-        --panel-3: #1d2a3c;
-        --soft: #e8edf7;
-        --muted: #aab7ce;
-        --text: #f7f9fc;
+        --panel-3: #1d2b3d;
+        --soft: #edf3ff;
+        --muted: #a8b7d3;
+        --text: #f7f9ff;
         --gold: #f7c96a;
-        --gold-2: #ef8f3e;
-        --blue: #63a4ff;
-        --purple: #7c5fff;
+        --gold-2: #ef8d3d;
+        --blue: #60a5fa;
+        --purple: #8b5cf6;
         --green: #3ad49d;
-        --danger: #fb7185;
-        --shadow: rgba(0, 0, 0, 0.4);
+        --red: #f87171;
+        --shadow: rgba(0, 0, 0, 0.38);
       }
 
       * {
@@ -30,11 +30,11 @@
       html, body {
         margin: 0;
         min-height: 100vh;
-        font-family: Arial, Helvetica, sans-serif;
         background:
-          radial-gradient(circle at top, rgba(99, 164, 255, 0.12), transparent 30%),
+          radial-gradient(circle at top, rgba(96,165,250,0.15), transparent 25%),
           linear-gradient(180deg, var(--bg), var(--bg-2));
         color: var(--text);
+        font-family: Arial, Helvetica, sans-serif;
       }
 
       body {
@@ -42,27 +42,29 @@
         place-items: center;
       }
 
-      button {
+      button, input {
         font: inherit;
       }
 
       .app {
-        width: min(1420px, 96vw);
+        width: min(1460px, 96vw);
         min-height: 92vh;
+        display: grid;
+        grid-template-rows: auto 1fr;
         background: rgba(8, 12, 20, 0.9);
         border: 1px solid rgba(255,255,255,0.08);
-        border-radius: 28px;
-        overflow: hidden;
+        border-radius: 26px;
         box-shadow: 0 30px 70px var(--shadow);
+        overflow: hidden;
       }
 
       .topbar {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        gap: 20px;
-        padding: 18px 22px;
-        background: rgba(17, 24, 39, 0.82);
+        gap: 16px;
+        padding: 18px 24px;
+        background: rgba(18, 24, 35, 0.9);
         border-bottom: 1px solid rgba(255,255,255,0.08);
       }
 
@@ -77,17 +79,17 @@
         height: 38px;
         display: grid;
         place-items: center;
+        background: linear-gradient(135deg, var(--gold), var(--gold-2));
+        color: #111827;
         border-radius: 12px;
         font-weight: 900;
-        color: #111827;
-        background: linear-gradient(135deg, var(--gold), var(--gold-2));
       }
 
-      .brand {
-        font-size: 1.2rem;
+      .brand-name {
+        font-size: 1.18rem;
+        font-weight: 800;
         letter-spacing: 0.08em;
         text-transform: uppercase;
-        font-weight: 800;
       }
 
       .nav {
@@ -97,9 +99,9 @@
         flex-wrap: wrap;
       }
 
-      .nav-chip {
-        background: rgba(255,255,255,0.04);
+      .tab {
         border: 1px solid rgba(255,255,255,0.08);
+        background: rgba(255,255,255,0.04);
         color: var(--muted);
         padding: 8px 14px;
         border-radius: 999px;
@@ -107,267 +109,356 @@
         transition: all 0.12s ease;
       }
 
-      .nav-chip.active {
+      .tab.active {
         color: var(--text);
-        background: linear-gradient(135deg, rgba(99,164,255,0.24), rgba(124,95,255,0.2));
-        border-color: rgba(99,164,255,0.5);
-      }
-
-      .nav-chip:hover {
-        border-color: rgba(255,255,255,0.16);
+        background: linear-gradient(135deg, rgba(96,165,250,0.25), rgba(139,92,246,0.18));
+        border-color: rgba(96,165,250,0.45);
       }
 
       .user-pill {
-        padding: 10px 14px;
-        border-radius: 999px;
-        background: rgba(255,255,255,0.04);
+        background: rgba(255,255,255,0.03);
         border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 999px;
+        padding: 9px 14px;
         color: var(--soft);
       }
 
       .main {
         display: grid;
-        grid-template-columns: minmax(0, 1.8fr) minmax(360px, 0.9fr);
-        min-height: calc(92vh - 76px);
+        grid-template-columns: minmax(0, 1.8fr) minmax(300px, 0.9fr);
+        min-height: 0;
       }
 
       .content {
         padding: 20px;
-        background: linear-gradient(180deg, rgba(17,24,39,0.9), rgba(7,11,18,0.95));
+        background: linear-gradient(180deg, rgba(17,24,39,0.9), rgba(8,12,17,0.95));
+        min-height: 0;
       }
 
-      .hero {
-        position: relative;
-        height: 430px;
-        border-radius: 28px;
-        overflow: hidden;
+      .section {
+        display: none;
+        min-height: 700px;
+      }
+
+      .section.active {
+        display: block;
+      }
+
+      .browser-panel {
+        background: rgba(255,255,255,0.02);
         border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 20px;
+        overflow: hidden;
+      }
+
+      .browser-top {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 14px;
+        background: rgba(255,255,255,0.04);
+        border-bottom: 1px solid rgba(255,255,255,0.06);
+      }
+
+      .traffic {
+        display: flex;
+        gap: 8px;
+      }
+
+      .dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+      }
+
+      .dot.red { background: #ef4444; }
+      .dot.yellow { background: #fbbf24; }
+      .dot.green { background: #34d399; }
+
+      .address-bar {
+        flex: 1;
+        background: rgba(0,0,0,0.16);
+        border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 999px;
+        padding: 9px 14px;
+        color: var(--muted);
+        overflow: auto;
+      }
+
+      .browser-body {
+        display: grid;
+        grid-template-columns: 180px 1fr;
+        min-height: 740px;
+      }
+
+      .sidebar-links {
+        background: rgba(255,255,255,0.02);
+        border-right: 1px solid rgba(255,255,255,0.06);
+        padding: 16px 12px;
+      }
+
+      .sidebar-links .link {
+        display: block;
+        text-decoration: none;
+        color: var(--muted);
+        background: rgba(255,255,255,0.02);
+        border: 1px solid rgba(255,255,255,0.04);
+        border-radius: 12px;
+        padding: 10px 12px;
+        margin-bottom: 10px;
+      }
+
+      .sidebar-links .link.active {
+        color: var(--text);
+        background: rgba(96,165,250,0.12);
+        border-color: rgba(96,165,250,0.3);
+      }
+
+      .browser-page {
+        padding: 18px;
+      }
+
+      .page-hero {
         background:
-          linear-gradient(90deg, rgba(0,0,0,0.72), rgba(0,0,0,0.12)),
-          url("https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?auto=format&fit=crop&w=1600&q=80") center/cover no-repeat;
+          linear-gradient(135deg, rgba(31,41,55,0.8), rgba(15,23,42,0.72)),
+          url("https://images.unsplash.com/photo-1524985069026-dd778a71c7b4?auto=format&fit=crop&w=1200&q=80") center/cover no-repeat;
+        border-radius: 18px;
+        padding: 24px;
+        min-height: 220px;
+        display: flex;
+        align-items: end;
       }
 
-      .hero-glow {
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(180deg, rgba(0,0,0,0.15), rgba(0,0,0,0.55));
+      .page-hero h2 {
+        margin: 0;
+        font-size: clamp(2rem, 3vw, 3.2rem);
+        letter-spacing: -0.04em;
       }
 
-      .hero-inner {
+      .site-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 16px;
+        margin-top: 18px;
+      }
+
+      .site-card {
+        background: rgba(255,255,255,0.02);
+        border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 16px;
+        overflow: hidden;
+      }
+
+      .site-card .image {
+        aspect-ratio: 16 / 9;
+        background-size: cover;
+        background-position: center;
+      }
+
+      .site-card .body {
+        padding: 12px 12px 14px;
+      }
+
+      .site-card h4 {
+        margin: 0 0 6px;
+        font-size: 1rem;
+      }
+
+      .site-card p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.86rem;
+      }
+
+      .movie-layout {
+        display: grid;
+        gap: 20px;
+      }
+
+      .featured-banner {
+        height: 300px;
+        border-radius: 22px;
+        background:
+          linear-gradient(90deg, rgba(0,0,0,0.68), rgba(0,0,0,0.22)),
+          url("https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=1400&q=80") center/cover no-repeat;
+        border: 1px solid rgba(255,255,255,0.08);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .featured-content {
         position: absolute;
-        left: 30px;
-        right: 30px;
-        bottom: 28px;
-        z-index: 1;
+        left: 28px;
+        right: 28px;
+        bottom: 24px;
       }
 
       .eyebrow {
         display: inline-block;
+        padding: 7px 11px;
         border-radius: 999px;
-        background: rgba(255,255,255,0.08);
         border: 1px solid rgba(255,255,255,0.12);
-        color: var(--soft);
-        font-size: 0.74rem;
+        background: rgba(255,255,255,0.08);
+        font-size: 0.72rem;
         letter-spacing: 0.08em;
         text-transform: uppercase;
-        padding: 8px 12px;
+        color: var(--soft);
       }
 
-      .hero h1 {
-        margin: 18px 0 10px;
-        font-size: clamp(2.4rem, 5vw, 4.6rem);
-        letter-spacing: -0.05em;
+      .featured-content h2 {
+        margin: 14px 0 10px;
+        font-size: clamp(2rem, 4vw, 4rem);
         line-height: 0.96;
+        letter-spacing: -0.04em;
       }
 
       .meta-row {
         display: flex;
         gap: 14px;
         flex-wrap: wrap;
-        color: var(--soft);
-        font-size: 0.9rem;
-        margin-bottom: 20px;
+        color: var(--muted);
+        font-size: 0.88rem;
       }
 
-      .hero-actions {
+      .action-row {
+        margin-top: 18px;
         display: flex;
         gap: 12px;
         flex-wrap: wrap;
       }
 
-      .btn {
+      .primary-btn, .secondary-btn, .tiny-btn {
         border: none;
         border-radius: 999px;
-        padding: 12px 18px;
+        padding: 11px 17px;
         font-weight: 800;
         cursor: pointer;
-        transition: transform 0.12s ease, filter 0.12s ease;
       }
 
-      .btn:hover {
-        transform: translateY(-1px);
-        filter: brightness(1.04);
-      }
-
-      .btn.primary {
+      .primary-btn {
         background: linear-gradient(135deg, var(--gold), var(--gold-2));
         color: #111827;
       }
 
-      .btn.secondary {
+      .secondary-btn {
         background: rgba(255,255,255,0.08);
-        color: var(--text);
         border: 1px solid rgba(255,255,255,0.12);
+        color: var(--text);
       }
 
-      .section {
-        margin-top: 26px;
+      .rows {
+        display: grid;
+        gap: 16px;
       }
 
-      .section-head {
+      .row-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 14px;
       }
 
-      .section-head h2 {
+      .row-header h3 {
         margin: 0;
-        font-size: 1.08rem;
-        letter-spacing: 0.08em;
+        font-size: 0.95rem;
         text-transform: uppercase;
+        letter-spacing: 0.08em;
         color: var(--soft);
       }
 
       .more {
         color: var(--gold);
         font-weight: 700;
-        font-size: 0.9rem;
       }
 
-      .cards {
+      .movie-cards {
         display: grid;
         grid-template-columns: repeat(4, minmax(0, 1fr));
         gap: 18px;
       }
 
-      .card {
-        border: 1px solid rgba(255,255,255,0.06);
+      .movie-card {
         background: linear-gradient(180deg, rgba(22,33,50,0.9), rgba(10,15,25,0.95));
-        border-radius: 20px;
+        border: 1px solid rgba(255,255,255,0.06);
+        border-radius: 18px;
         overflow: hidden;
         cursor: pointer;
         transition: transform 0.15s ease, border-color 0.15s ease;
       }
 
-      .card:hover {
+      .movie-card:hover {
         transform: translateY(-2px);
-        border-color: rgba(99,164,255,0.45);
+        border-color: rgba(96,165,250,0.35);
       }
 
-      .poster {
-        position: relative;
-        aspect-ratio: 4 / 5.3;
+      .movie-poster {
+        aspect-ratio: 4 / 5.2;
         background-size: cover;
         background-position: center;
+        position: relative;
       }
 
-      .poster-badge {
+      .movie-badge {
         position: absolute;
-        top: 10px;
         left: 10px;
+        top: 10px;
+        padding: 6px 9px;
         border-radius: 999px;
-        background: rgba(12, 18, 29, 0.7);
-        border: 1px solid rgba(255,255,255,0.12);
-        color: var(--soft);
         font-size: 0.7rem;
+        background: rgba(12,18,29,0.78);
+        color: var(--soft);
+        border: 1px solid rgba(255,255,255,0.12);
         font-weight: 700;
-        padding: 6px 8px;
       }
 
-      .card-body {
+      .movie-info {
         padding: 12px 12px 14px;
       }
 
-      .card-title {
-        font-size: 1rem;
-        font-weight: 800;
+      .movie-info h4 {
         margin: 0 0 6px;
+        font-size: 1rem;
       }
 
-      .card-meta {
+      .movie-info p {
+        margin: 0;
         color: var(--muted);
         font-size: 0.82rem;
       }
 
-      .sidebar {
-        background: linear-gradient(180deg, rgba(23,34,53,0.9), rgba(10,15,25,0.95));
-        border-left: 1px solid rgba(255,255,255,0.08);
-        padding: 18px 18px 16px;
-      }
-
-      .player-panel {
-        background: rgba(0,0,0,0.25);
-        border: 1px solid rgba(255,255,255,0.08);
-        border-radius: 22px;
-        overflow: hidden;
-      }
-
-      video {
-        width: 100%;
-        display: block;
-        height: 260px;
-        background: #000;
-        object-fit: cover;
-      }
-
-      .mini-panel {
-        margin-top: 18px;
-        background: rgba(255,255,255,0.02);
+      .player-card {
+        background: rgba(0,0,0,0.24);
         border: 1px solid rgba(255,255,255,0.08);
         border-radius: 20px;
         overflow: hidden;
       }
 
-      .mini-head {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 12px;
-        padding: 14px 16px;
+      video {
+        width: 100%;
+        height: 260px;
+        display: block;
+        background: #000;
+        object-fit: cover;
+      }
+
+      .game-card {
         background: rgba(255,255,255,0.02);
-        border-bottom: 1px solid rgba(255,255,255,0.06);
+        border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 20px;
+        padding: 16px;
       }
 
-      .mini-head h3 {
-        font-size: 0.9rem;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-        color: var(--soft);
-        margin: 0;
-      }
-
-      .mini-score {
-        padding: 6px 10px;
-        border-radius: 999px;
-        font-size: 0.78rem;
-        font-weight: 700;
-        color: var(--gold);
-        background: rgba(247, 201, 106, 0.12);
-        border: 1px solid rgba(247, 201, 106, 0.35);
-      }
-
-      .game-wrap {
-        padding: 14px;
+      .mini-wrapper {
+        display: grid;
+        gap: 12px;
       }
 
       .mini-scene {
         position: relative;
         width: 100%;
-        height: 260px;
+        height: 290px;
         background:
-          linear-gradient(180deg, rgba(99,164,255,0.12), rgba(0,0,0,0.18)),
-          linear-gradient(180deg, #15253d, #0f1725 32%, #111827 100%);
+          linear-gradient(180deg, rgba(96,165,250,0.12), rgba(0,0,0,0.22)),
+          linear-gradient(180deg, #11213d, #0d1523 35%, #0e1626 100%);
         border: 1px solid rgba(255,255,255,0.08);
         border-radius: 18px;
         overflow: hidden;
@@ -378,7 +469,7 @@
         position: absolute;
         inset: 0;
         background:
-          linear-gradient(transparent 0 76%, rgba(7,11,20,0.82) 76% 100%),
+          linear-gradient(transparent 0 76%, rgba(7,11,20,0.9) 76% 100%),
           linear-gradient(90deg, rgba(255,255,255,0.02) 0 4%, transparent 4% 100%);
         pointer-events: none;
       }
@@ -390,8 +481,8 @@
         transform: translate(-50%, -50%);
         border: none;
         background: transparent;
-        cursor: pointer;
         padding: 0;
+        cursor: pointer;
         user-select: none;
         transition: transform 0.12s ease, filter 0.12s ease;
       }
@@ -413,392 +504,25 @@
         border-radius: 12px;
         background: rgba(255,255,255,0.08);
         border: 2px solid rgba(255,255,255,0.18);
-        box-shadow: 0 8px 16px rgba(0,0,0,0.23);
+        box-shadow: 0 8px 18px rgba(0,0,0,0.25);
         font-size: 1.6rem;
       }
 
       .findable.found .sprite {
         background: rgba(58,212,157,0.18);
         border-color: rgba(58,212,157,0.9);
-        box-shadow: 0 0 18px rgba(58,212,157,0.35);
+        box-shadow: 0 0 18px rgba(58,212,157,0.33);
       }
 
-      .mini-footer {
+      .game-row {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 12px 14px 14px;
-        gap: 10px;
+        gap: 12px;
       }
 
-      .mini-hint {
-        color: var(--muted);
-        font-size: 0.85rem;
-      }
-
-      .small-btn {
-        border: none;
+      .score-badge {
+        padding: 6px 10px;
         border-radius: 999px;
-        padding: 9px 12px;
-        background: rgba(255,255,255,0.06);
-        color: var(--text);
-        border: 1px solid rgba(255,255,255,0.08);
-        cursor: pointer;
-        font-weight: 700;
-      }
-
-      .small-btn.primary {
-        background: linear-gradient(135deg, var(--gold), var(--gold-2));
-        color: #111827;
-        border: none;
-      }
-
-      @media (max-width: 1100px) {
-        .main {
-          grid-template-columns: 1fr;
-        }
-
-        .sidebar {
-          border-left: none;
-          border-top: 1px solid rgba(255,255,255,0.08);
-        }
-      }
-
-      @media (max-width: 900px) {
-        .cards {
-          grid-template-columns: repeat(2, minmax(0, 1fr));
-        }
-      }
-
-      @media (max-width: 620px) {
-        .topbar {
-          flex-direction: column;
-          align-items: flex-start;
-        }
-
-        .nav {
-          width: 100%;
-        }
-
-        .cards {
-          grid-template-columns: 1fr;
-        }
-
-        .hero {
-          height: 350px;
-        }
-
-        .hero-inner {
-          left: 18px;
-          right: 18px;
-          bottom: 18px;
-        }
-      }
-    </style>
-  </head>
-  <body>
-    <div class="app">
-      <header class="topbar">
-        <div class="brand-wrap">
-          <div class="brand-mark">C</div>
-          <div class="brand">CinemaWorld</div>
-        </div>
-
-        <nav class="nav" aria-label="Navigation">
-          <div class="nav-chip active">Home</div>
-          <div class="nav-chip">Movies</div>
-          <div class="nav-chip">TV Shows</div>
-          <div class="nav-chip">New & Popular</div>
-          <div class="nav-chip">My List</div>
-        </nav>
-
-        <div class="user-pill">Guest User</div>
-      </header>
-
-      <div class="main">
-        <main class="content">
-          <section class="hero">
-            <div class="hero-glow"></div>
-            <div class="hero-inner">
-              <div class="eyebrow">Featured Premiere</div>
-              <h1 id="featuredTitle">Night Drift</h1>
-              <div class="meta-row">
-                <span>2026</span>
-                <span>Drama / Sci‑Fi</span>
-                <span>2h 12m</span>
-                <span>4.9/5</span>
-              </div>
-              <div class="hero-actions">
-                <button class="btn primary" id="watchBtn" type="button">Watch Now</button>
-                <button class="btn secondary" type="button">+ My List</button>
-              </div>
-            </div>
-          </section>
-
-          <section class="section">
-            <div class="section-head">
-              <h2>Trending Now</h2>
-              <div class="more">View all</div>
-            </div>
-            <div id="cards" class="cards"></div>
-          </section>
-        </main>
-
-        <aside class="sidebar">
-          <div class="player-panel">
-            <video id="mainVideo" controls playsinline poster="https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=1200&q=80">
-              <source src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4" type="video/mp4" />
-            </video>
-          </div>
-
-          <div class="mini-panel">
-            <div class="mini-head">
-              <h3>Mini Game</h3>
-              <div id="miniScore" class="mini-score">0 / 6</div>
-            </div>
-
-            <div class="game-wrap">
-              <div id="miniScene" class="mini-scene" aria-label="Mini game scene"></div>
-            </div>
-
-            <div class="mini-footer">
-              <div id="miniHint" class="mini-hint">Find the movie clues.</div>
-              <button id="miniRestartBtn" class="small-btn primary" type="button">Restart</button>
-            </div>
-          </div>
-        </aside>
-      </div>
-    </div>
-
-    <script>
-      const catalog = [
-        {
-          id: 1,
-          title: "Night Drift",
-          type: "Movie",
-          year: 2026,
-          rating: 4.9,
-          poster: "https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?auto=format&fit=crop&w=1000&q=80",
-          hero: "https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?auto=format&fit=crop&w=1600&q=80"
-        },
-        {
-          id: 2,
-          title: "Skyline Echo",
-          type: "Series",
-          year: 2025,
-          rating: 4.8,
-          poster: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1000&q=80",
-          hero: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1600&q=80"
-        },
-        {
-          id: 3,
-          title: "Pixel Harbor",
-          type: "Movie",
-          year: 2024,
-          rating: 4.7,
-          poster: "https://images.unsplash.com/photo-1513106580091-1d82408b8cd6?auto=format&fit=crop&w=1000&q=80",
-          hero: "https://images.unsplash.com/photo-1513106580091-1d82408b8cd6?auto=format&fit=crop&w=1600&q=80"
-        },
-        {
-          id: 4,
-          title: "Signal Zero",
-          type: "Series",
-          year: 2026,
-          rating: 4.9,
-          poster: "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=1000&q=80",
-          hero: "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=1600&q=80"
-        },
-        {
-          id: 5,
-          title: "Hidden Orbit",
-          type: "Movie",
-          year: 2025,
-          rating: 4.6,
-          poster: "https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=1000&q=80",
-          hero: "https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=1600&q=80"
-        },
-        {
-          id: 6,
-          title: "Crimson Run",
-          type: "Series",
-          year: 2024,
-          rating: 4.8,
-          poster: "https://images.unsplash.com/photo-1524985069026-dd778a71c7b4?auto=format&fit=crop&w=1000&q=80",
-          hero: "https://images.unsplash.com/photo-1524985069026-dd778a71c7b4?auto=format&fit=crop&w=1600&q=80"
-        }
-      ];
-
-      const cardsContainer = document.getElementById("cards");
-      const featuredTitle = document.getElementById("featuredTitle");
-      const hero = document.querySelector(".hero");
-      const mainVideo = document.getElementById("mainVideo");
-      const watchBtn = document.getElementById("watchBtn");
-
-      function renderCards() {
-        cardsContainer.innerHTML = "";
-
-        catalog.forEach((item) => {
-          const card = document.createElement("div");
-          card.className = "card";
-          card.innerHTML = `
-            <div class="poster" style="background-image: url('${item.poster}')">
-              <div class="poster-badge">${item.type}</div>
-            </div>
-            <div class="card-body">
-              <h3 class="card-title">${item.title}</h3>
-              <div class="card-meta">${item.year} • ${item.rating}/5</div>
-            </div>
-          `;
-
-          card.addEventListener("click", () => {
-            featuredTitle.textContent = item.title;
-            hero.style.background =
-              `linear-gradient(90deg, rgba(0,0,0,0.72), rgba(0,0,0,0.18)), url('${item.hero}') center/cover no-repeat`;
-            mainVideo.poster = item.poster;
-            mainVideo.play();
-          });
-
-          cardsContainer.appendChild(card);
-        });
-      }
-
-      renderCards();
-
-      watchBtn.addEventListener("click", () => {
-        mainVideo.play();
-      });
-
-      class HiddenMovieGame {
-        constructor() {
-          this.scene = document.getElementById("miniScene");
-          this.scoreEl = document.getElementById("miniScore");
-          this.hintEl = document.getElementById("miniHint");
-          this.restartBtn = document.getElementById("miniRestartBtn");
-          this.items = [];
-          this.found = 0;
-          this.sceneSize = { width: 0, height: 0 };
-          this.setup();
-        }
-
-        setup() {
-          this.bindEvents();
-          this.resetSceneSize();
-          this.start();
-        }
-
-        bindEvents() {
-          this.restartBtn.addEventListener("click", () => this.start());
-          window.addEventListener("resize", () => this.resetSceneSize());
-        }
-
-        resetSceneSize() {
-          const rect = this.scene.getBoundingClientRect();
-          this.sceneSize.width = rect.width;
-          this.sceneSize.height = rect.height;
-        }
-
-        start() {
-          this.scene.innerHTML = "";
-          this.found = 0;
-          this.hintEl.textContent = "Find the movie clues.";
-          this.renderScore();
-
-          const clueList = [
-            { name: "Ticket", emoji: "🎟️" },
-            { name: "Popcorn", emoji: "🍿" },
-            { name: "Play", emoji: "▶️" },
-            { name: "Camera", emoji: "🎥" },
-            { name: "Reel", emoji: "🎞️" },
-            { name: "Clapperboard", emoji: "🎬" }
-          ];
-
-          this.items = [];
-          for (let i = 0; i < clueList.length; i++) {
-            const item = clueList[i];
-            let x = 0;
-            let y = 0;
-            let tries = 0;
-
-            do {
-              x = Math.random() * (this.sceneSize.width - 80) + 40;
-              y = Math.random() * (this.sceneSize.height - 80) + 40;
-              tries++;
-            } while (
-              tries < 300 &&
-              this.items.some((existing) => {
-                const dx = x - existing.x;
-                const dy = y - existing.y;
-                return Math.hypot(dx, dy) < 75;
-              })
-            );
-
-            this.items.push({
-              ...item,
-              x,
-              y,
-              found: false
-            });
-
-            this.createObject(this.items[this.items.length - 1]);
-          }
-        }
-
-        createObject(item) {
-          const btn = document.createElement("button");
-          btn.type = "button";
-          btn.className = "findable";
-          btn.style.left = `${item.x}px`;
-          btn.style.top = `${item.y}px`;
-          btn.setAttribute("aria-label", `Find ${item.name}`);
-
-          const sprite = document.createElement("span");
-          sprite.className = "sprite";
-          sprite.textContent = item.emoji;
-
-          btn.appendChild(sprite);
-          btn.addEventListener("click", () => this.onFound(item, btn));
-          this.scene.appendChild(btn);
-        }
-
-        onFound(item, element) {
-          if (item.found) return;
-
-          item.found = true;
-          element.classList.add("found");
-          element.classList.add("hidden");
-
-          this.found += 1;
-          this.renderScore();
-
-          if (this.found === this.items.length) {
-            this.hintEl.textContent = "You found all clues!";
-            this.showOverlay();
-          } else {
-            this.hintEl.textContent = `Nice! ${this.found} found so far.`;
-          }
-        }
-
-        renderScore() {
-          this.scoreEl.textContent = `${this.found} / ${this.items.length}`;
-        }
-
-        showOverlay() {
-          const overlay = document.createElement("div");
-          overlay.style.position = "absolute";
-          overlay.style.inset = "0";
-          overlay.style.display = "grid";
-          overlay.style.placeItems = "center";
-          overlay.style.background = "rgba(0,0,0,0.4)";
-          overlay.style.backdropFilter = "blur(2px)";
-          overlay.style.fontWeight = "800";
-          overlay.style.fontSize = "clamp(1.4rem, 2vw, 2.2rem)";
-          overlay.style.color = "#d1fae5";
-          overlay.textContent = "You found all clues!";
-          this.scene.appendChild(overlay);
-        }
-      }
-
-      new HiddenMovieGame();
-    </script>
-  </body>
-</html>
+        background: rgba(247, 201,*
+
