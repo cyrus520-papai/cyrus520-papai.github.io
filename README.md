@@ -40,7 +40,7 @@
             </p>
 
             <div class="hero-actions">
-              <button class="primary-btn">Start exploring</button>
+              <button class="primary-btn<true>">Start exploring</button>
               <button class="secondary-btn">Join community</button>
             </div>
 
